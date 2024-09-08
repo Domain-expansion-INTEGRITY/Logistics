@@ -3,7 +3,7 @@ package com.domain_expansion.integrity.user.domain.model;
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
 
-import com.domain_expansion.integrity.user.common.entity.BaseEntity;
+import com.domain_expansion.integrity.user.common.entity.BaseDateEntity;
 import com.domain_expansion.integrity.user.presentation.request.UserCreateRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,7 +22,7 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 @Table(name = "p_user")
 @NoArgsConstructor(access = PROTECTED)
-public class User extends BaseEntity {
+public class User extends BaseDateEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
