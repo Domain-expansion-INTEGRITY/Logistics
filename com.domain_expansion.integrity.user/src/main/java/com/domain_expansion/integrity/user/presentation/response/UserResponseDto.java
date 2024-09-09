@@ -19,7 +19,7 @@ public record UserResponseDto(
         return UserResponseDto.builder()
             .username(user.getUsername())
             .role(user.getRole())
-            .phoneNumber(user.getPhoneNumber())
+            .phoneNumber(user.getPhoneNumber().getPhoneNumber())
             .slackId(user.getSlackId())
             .build();
 
