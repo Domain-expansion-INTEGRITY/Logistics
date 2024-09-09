@@ -37,12 +37,27 @@ public class Company extends BaseEntity {
     private Boolean isDelete;
 
     @Builder(access = AccessLevel.PROTECTED)
-    public Company(Long userId, String hubId, String name, CompanyType companyType, CompanyAddress companyAddress) {
+    public Company(String companyId,Long userId, String hubId, String name, CompanyType companyType, CompanyAddress companyAddress) {
+        this.companyId = companyId;
         this.userId = userId;
         this.hubId = hubId;
         this.name = name;
         this.companyType = companyType;
         this.companyAddress = companyAddress;
+    }
+
+    public static Company from(
+            String companyId,Long userId, String hubId, String name, CompanyType companyType, CompanyAddress companyAddress
+    )
+    {
+        return Company.builder()
+                .companyId(companyId)
+                .userId(userId)
+                .hubId(hubId)
+                .name(name)
+                .companyType(companyType)
+                .companyAddress(companyAddress)
+                .build();
     }
 
 }
