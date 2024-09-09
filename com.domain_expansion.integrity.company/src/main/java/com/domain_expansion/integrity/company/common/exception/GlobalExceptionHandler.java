@@ -13,14 +13,6 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(value = ProductException.class)
-    public ResponseEntity<? extends CommonResponse> handleProductException(ProductException e) {
-
-        e.printStackTrace();
-
-        return ResponseEntity.status(e.getHttpStatus()).body(ErrorResponse.of(e.getMessage()));
-    }
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<? extends CommonResponse> handleValidException(MethodArgumentNotValidException e) {
 
