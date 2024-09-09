@@ -17,11 +17,12 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "p_order")
+@Table(name = "p_order_product")
 @NoArgsConstructor(access = PROTECTED)
 public class OrderProduct {
 
     @Id
+    @Column(name = "order_product_id")
     private String orderProductId;
 
     @Embedded

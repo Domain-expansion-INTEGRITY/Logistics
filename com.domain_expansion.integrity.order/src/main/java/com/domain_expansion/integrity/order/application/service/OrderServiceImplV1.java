@@ -7,12 +7,6 @@ import com.domain_expansion.integrity.order.domain.service.OrderDomainService;
 import com.domain_expansion.integrity.order.presentation.request.OrderCreateRequestDto;
 import com.domain_expansion.integrity.order.presentation.request.OrderUpdateRequestDto;
 import com.domain_expansion.integrity.order.presentation.response.OrderResponseDto;
-import com.domain_expansion.integrity.product.domain.mapper.ProductMapper;
-import com.domain_expansion.integrity.product.domain.repository.ProductRepository;
-import com.domain_expansion.integrity.product.domain.service.ProductDomainService;
-import com.domain_expansion.integrity.product.presentation.request.ProductCreateRequestDto;
-import com.domain_expansion.integrity.product.presentation.request.ProductUpdateRequestDto;
-import com.domain_expansion.integrity.product.presentation.response.ProductResponseDto;
 import com.github.ksuid.Ksuid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,6 +29,8 @@ public class OrderServiceImplV1 implements OrderService {
         String productId = Ksuid.newKsuid().toString();
 
         Order order = orderMapper.orderCreateRequestDtoAndOrderIdToOrder(requestDto, productId);
+
+        // TODO 배송 동시에 생성하기
 
         return OrderResponseDto.from(orderDomainService.addOrderProductAndSave(order, requestDto.productList()));
     }

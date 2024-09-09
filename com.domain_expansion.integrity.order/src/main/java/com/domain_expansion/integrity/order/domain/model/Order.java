@@ -23,6 +23,7 @@ import lombok.NoArgsConstructor;
 public class Order extends BaseDateEntity {
 
     @Id
+    @Column(name = "order_id")
     private String orderId;
 
     @Column(nullable = false)
@@ -34,7 +35,8 @@ public class Order extends BaseDateEntity {
     @Column
     private String buyerCompanyId;
 
-    @OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true)
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private Set<OrderProduct> orderProducts = new HashSet<>();
 
     @Builder(access = PRIVATE)
