@@ -4,7 +4,9 @@ import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
 
 import com.domain_expansion.integrity.user.common.entity.BaseDateEntity;
+import com.domain_expansion.integrity.user.domain.model.vo.UserPhoneNumber;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -27,31 +29,31 @@ public class User extends BaseDateEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String username;
 
-    @Column
+    @Column(nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column
+    @Column(nullable = false)
     private UserRole role;
 
-    @Column(name = "phone_number", unique = true)
-    private String phoneNumber;
+    @Embedded
+    @Column(name = "phone_number", unique = true, nullable = false)
+    private UserPhoneNumber phoneNumber;
 
-    @Column(name = "slack_id", unique = true)
+    @Column(name = "slack_id", unique = true, nullable = false)
     private String slackId;
 
     @ColumnDefault(value = "false")
-    @Column(name = "is_delete")
+    @Column(name = "is_delete", nullable = false)
     private boolean isDelete;
 
     @Builder(access = PRIVATE)
-    public User(String username, String password, UserRole role, String phoneNumber,
+    public User(String username, UserRole role, UserPhoneNumber phoneNumber,
         String slackId) {
         this.username = username;
-        this.password = password;
         this.role = role;
         this.phoneNumber = phoneNumber;
         this.slackId = slackId;
@@ -64,7 +66,7 @@ public class User extends BaseDateEntity {
         return User.builder()
             .username(username)
             .role(role)
-            .phoneNumber(phoneNumber)
+            .phoneNumber(new UserPhoneNumber(phoneNumber))
             .slackId(slackId)
             .build();
     }
@@ -72,9 +74,8 @@ public class User extends BaseDateEntity {
     /**
      * 비밀번호 생성
      */
-
-    public void setPassword(String encodedPassword) {
-        this.password = password;
+    public void updatePassword(String encodedPassword) {
+        this.password = encodedPassword;
     }
 
 

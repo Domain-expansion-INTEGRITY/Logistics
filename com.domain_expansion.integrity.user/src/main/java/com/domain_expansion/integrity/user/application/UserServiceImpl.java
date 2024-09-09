@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.createDtoToUser(requestDto);
 
         // 비밀번호 설정
-        user.setPassword(passwordEncoder.encode(requestDto.password()));
+        user.updatePassword(passwordEncoder.encode(requestDto.password()));
         User savedUser = userRepository.save(user);
 
         return savedUser.getId();
