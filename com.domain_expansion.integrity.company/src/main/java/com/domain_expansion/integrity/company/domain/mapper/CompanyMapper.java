@@ -3,6 +3,7 @@ package com.domain_expansion.integrity.company.domain.mapper;
 import com.domain_expansion.integrity.company.domain.model.Company;
 import com.domain_expansion.integrity.company.domain.model.vo.CompanyAddress;
 import com.domain_expansion.integrity.company.prsentation.request.CompanyCreateRequestDto;
+import com.domain_expansion.integrity.company.prsentation.request.CompanyUpdateRequestDto;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,4 +19,5 @@ public class CompanyMapper {
                 new CompanyAddress(requestDto.address())
         );
     }
+
 }
