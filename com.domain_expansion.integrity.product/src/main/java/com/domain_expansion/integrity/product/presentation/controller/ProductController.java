@@ -23,7 +23,6 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<? extends CommonResponse> createProduct(
-            // TODO 여기에 유저 인증 들어가야 되는데 뭘 넣어야 할지 아직 모르겠습니다.
             @Valid @RequestBody
             ProductCreateRequestDto requestDto
     ) {
