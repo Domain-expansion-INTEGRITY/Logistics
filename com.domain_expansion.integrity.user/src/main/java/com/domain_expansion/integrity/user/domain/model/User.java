@@ -4,7 +4,6 @@ import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
 
 import com.domain_expansion.integrity.user.common.entity.BaseDateEntity;
-import com.domain_expansion.integrity.user.presentation.request.UserCreateRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -61,14 +60,21 @@ public class User extends BaseDateEntity {
     /**
      * 유저 생성
      */
-    public static User from(UserCreateRequestDto requestDto, String encodedPassword) {
+    public static User from(String username, UserRole role, String phoneNumber, String slackId) {
         return User.builder()
-            .username(requestDto.username())
-            .password(encodedPassword)
-            .role(requestDto.role())
-            .phoneNumber(requestDto.phoneNumber())
-            .slackId(requestDto.slackId())
+            .username(username)
+            .role(role)
+            .phoneNumber(phoneNumber)
+            .slackId(slackId)
             .build();
+    }
+
+    /**
+     * 비밀번호 생성
+     */
+
+    public void setPassword(String encodedPassword) {
+        this.password = password;
     }
 
 
