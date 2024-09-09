@@ -1,6 +1,6 @@
 package com.domain_expansion.integrity.company.application.service;
 
-import com.domain_expansion.integrity.company.application.service.mapper.CompanyMapper;
+import com.domain_expansion.integrity.company.domain.mapper.CompanyMapper;
 import com.domain_expansion.integrity.company.domain.model.Company;
 import com.domain_expansion.integrity.company.domain.repository.CompanyRepository;
 import com.domain_expansion.integrity.company.prsentation.request.CompanyCreateRequestDto;
