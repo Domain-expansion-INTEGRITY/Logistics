@@ -1,6 +1,7 @@
 package com.domain_expansion.integrity.slack.presentation;
 
 import com.domain_expansion.integrity.slack.application.SlackService;
+import com.domain_expansion.integrity.slack.common.aop.DefaultPageSize;
 import com.domain_expansion.integrity.slack.common.message.SuccessMessage;
 import com.domain_expansion.integrity.slack.common.response.SuccessResponse;
 import com.domain_expansion.integrity.slack.presentation.request.SlackCreateRequestDto;
@@ -37,10 +38,12 @@ public class SlackController {
     /**
      * slack 메세지 전체 조회
      */
+    @DefaultPageSize
     @GetMapping
     public SuccessResponse<?> findSlackMessageList(
         @PageableDefault(value = 10, size = 10, page = 0) Pageable pageable
     ) {
+        
         //TODO: 관리자 전용
         Page<SlackResponseDto> slackList = slackService.findSlackList(pageable);
 
