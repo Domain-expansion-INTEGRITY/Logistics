@@ -23,13 +23,13 @@ public class Slack extends BaseDateEntity {
     @Column(name = "slack_id")
     private String id;
 
-    @Column(name = "receive_id")
+    @Column(name = "receive_id", nullable = false)
     private Long receiveId;
 
-    @Column
+    @Column(nullable = false)
     private String message;
 
-    @Column(name = "send_time")
+    @Column(name = "send_time", nullable = false)
     private LocalDateTime sendTime;
 
     @Builder(access = AccessLevel.PRIVATE)
