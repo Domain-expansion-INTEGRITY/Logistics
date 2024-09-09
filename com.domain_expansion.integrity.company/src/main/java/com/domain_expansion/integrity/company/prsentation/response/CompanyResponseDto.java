@@ -1,4 +1,4 @@
-package com.domain_expansion.integrity.company.prsentation.controller.response;
+package com.domain_expansion.integrity.company.prsentation.response;
 
 import com.domain_expansion.integrity.company.domain.model.Company;
 import com.domain_expansion.integrity.company.domain.model.CompanyType;

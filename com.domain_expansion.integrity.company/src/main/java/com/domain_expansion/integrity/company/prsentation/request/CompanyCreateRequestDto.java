@@ -1,4 +1,4 @@
-package com.domain_expansion.integrity.company.prsentation.controller.request;
+package com.domain_expansion.integrity.company.prsentation.request;
 
 import com.domain_expansion.integrity.company.domain.model.CompanyType;
 import jakarta.validation.constraints.NotBlank;
