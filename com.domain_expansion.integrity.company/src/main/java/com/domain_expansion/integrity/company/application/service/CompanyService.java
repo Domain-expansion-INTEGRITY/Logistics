@@ -1,9 +1,10 @@
 package com.domain_expansion.integrity.company.application.service;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.domain_expansion.integrity.company.prsentation.request.CompanyCreateRequestDto;
+import com.domain_expansion.integrity.company.prsentation.response.CompanyResponseDto;
 
-@Service
-@RequiredArgsConstructor
-public class CompanyService {
+
+public interface CompanyService {
+
+    public CompanyResponseDto createCompany(CompanyCreateRequestDto createRequestDto);
 }

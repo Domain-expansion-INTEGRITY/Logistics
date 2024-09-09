@@ -2,7 +2,10 @@ package com.domain_expansion.integrity.company.prsentation.controller;
 
 import static com.domain_expansion.integrity.company.common.message.SuccessMessage.*;
 import com.domain_expansion.integrity.company.application.service.CompanyService;
+import com.domain_expansion.integrity.company.common.response.SuccessResponse;
 import com.domain_expansion.integrity.company.domain.model.Company;
+import com.domain_expansion.integrity.company.prsentation.request.CompanyCreateRequestDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -19,12 +22,13 @@ public class CompanyController {
 
     /***
      * 업체 등록
-     * @param company
+     * @param createRequestDto
      * @return
      */
     @PostMapping
-    public ResponseEntity<?> createCompany(@RequestBody Company company) {
-        return ResponseEntity.status(SUCCESS_CREATE_COMPANY.getHttpStatus()).body(null);
+    public SuccessResponse<?> createCompany(@RequestBody CompanyCreateRequestDto createRequestDto) {
+        return SuccessResponse.of(SUCCESS_CREATE_COMPANY.getMessage(),
+                companyService.createCompany(createRequestDto));
     }
 
     /***
