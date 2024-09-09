@@ -1,8 +1,8 @@
 package com.domain_expansion.integrity.company.common.exception;
 
-import com.domain_expansion.integrity.product.common.exception.ProductException;
-import com.domain_expansion.integrity.product.common.response.CommonResponse;
-import com.domain_expansion.integrity.product.common.response.ErrorResponse;
+import com.domain_expansion.integrity.company.common.exception.CompanyException;
+import com.domain_expansion.integrity.company.common.response.CommonResponse;
+import com.domain_expansion.integrity.company.common.response.ErrorResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;

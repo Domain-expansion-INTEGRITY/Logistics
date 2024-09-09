@@ -21,7 +21,7 @@ public class CompanyServiceImpl implements CompanyService{
     public CompanyResponseDto createCompany(CompanyCreateRequestDto createRequestDto)
     {
         //TODO : hub ID가 존재하는지 검증 필요
-        
+
         Company company = companyMapper.CompanyCreateDtoToCompany(createRequestDto);
 
         Company newCompany = companyRepository.save(company);

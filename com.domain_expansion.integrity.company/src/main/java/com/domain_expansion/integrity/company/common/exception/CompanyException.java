@@ -1,6 +1,6 @@
 package com.domain_expansion.integrity.company.common.exception;
 
-import com.domain_expansion.integrity.product.common.message.ExceptionMessage;
+import com.domain_expansion.integrity.company.common.message.ExceptionMessage;
 import org.springframework.http.HttpStatus;
 
 public class CompanyException extends RuntimeException {
