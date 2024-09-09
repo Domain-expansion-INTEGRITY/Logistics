@@ -15,7 +15,7 @@ import org.springframework.util.StringUtils;
 @Embeddable
 public class UserPhoneNumber {
 
-    public static String PHONE_NUMBER_PATTERN = "^010-\\d{3,4}-\\d{4}$";
+    public final static String PHONE_NUMBER_PATTERN = "^010-\\d{3,4}-\\d{4}$";
 
     @Column(name = "phone_number", unique = true, nullable = false)
     private String phoneNumber;
