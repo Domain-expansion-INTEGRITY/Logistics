@@ -5,7 +5,6 @@ import com.domain_expansion.integrity.company.application.service.CompanyService
 import com.domain_expansion.integrity.company.common.response.SuccessResponse;
 import com.domain_expansion.integrity.company.domain.model.Company;
 import com.domain_expansion.integrity.company.prsentation.request.CompanyCreateRequestDto;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;

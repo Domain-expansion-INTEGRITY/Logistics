@@ -1,4 +1,4 @@
-package com.domain_expansion.integrity.company.domain.mapper;
+package com.domain_expansion.integrity.company.application.mapper;
 
 import com.domain_expansion.integrity.company.domain.model.Company;
 import com.domain_expansion.integrity.company.domain.model.vo.CompanyAddress;
