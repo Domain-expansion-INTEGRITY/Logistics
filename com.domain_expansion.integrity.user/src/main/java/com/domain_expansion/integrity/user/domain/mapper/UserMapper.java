@@ -1,4 +1,4 @@
-package com.domain_expansion.integrity.user.application.mapper;
+package com.domain_expansion.integrity.user.domain.mapper;
 
 import com.domain_expansion.integrity.user.domain.model.User;
 import com.domain_expansion.integrity.user.presentation.request.UserCreateRequestDto;

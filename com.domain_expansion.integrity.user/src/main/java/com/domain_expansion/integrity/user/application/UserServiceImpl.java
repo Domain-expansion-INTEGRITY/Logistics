@@ -1,8 +1,8 @@
 package com.domain_expansion.integrity.user.application;
 
-import com.domain_expansion.integrity.user.application.mapper.UserMapper;
 import com.domain_expansion.integrity.user.common.exception.UserException;
 import com.domain_expansion.integrity.user.common.message.ExceptionMessage;
+import com.domain_expansion.integrity.user.domain.mapper.UserMapper;
 import com.domain_expansion.integrity.user.domain.model.User;
 import com.domain_expansion.integrity.user.domain.repository.UserRepository;
 import com.domain_expansion.integrity.user.domain.service.UserDomainService;
