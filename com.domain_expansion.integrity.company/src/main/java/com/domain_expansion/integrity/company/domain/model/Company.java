@@ -36,7 +36,7 @@ public class Company extends BaseEntity {
     @Column(name = "is_delete")
     private Boolean isDelete;
 
-    @Builder(access = AccessLevel.PROTECTED)
+    @Builder(access = AccessLevel.PRIVATE)
     public Company(String companyId,Long userId, String hubId, String name, CompanyType companyType, CompanyAddress companyAddress) {
         this.companyId = companyId;
         this.userId = userId;
