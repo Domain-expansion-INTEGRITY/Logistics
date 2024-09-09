@@ -21,14 +21,14 @@ public class Company extends BaseEntity {
     @Column(name = "hub_id")
     private String hubId;
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
     @Enumerated(EnumType.STRING)
-    @Column
+    @Column(nullable = false)
     private CompanyType companyType;
 
-    @Column(name = "address")
+    @Column(name = "address",nullable = false)
     @Embedded
     private CompanyAddress companyAddress;
 
