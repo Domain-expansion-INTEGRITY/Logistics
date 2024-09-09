@@ -9,22 +9,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+
 @Embeddable
 @Getter
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class HubLatitude {
+public class HubStock {
 
-    private double latitude;
+    private Integer stock;
 
-    public HubLatitude(double latitude) {
+    public HubStock(Integer stock) {
 
-        if(latitude < -180 || latitude > 180) {
-            throw new HubException(ExceptionMessage.LATITUDE_MUST_BETWEEN_90_MINUS_90);
+        if(stock <= 0 ) {
+            throw new HubException(ExceptionMessage.STOCK_MUST_NOT_MINUS);
         }
 
-        this.latitude = latitude;
+        this.stock = stock;
     }
-
 }
