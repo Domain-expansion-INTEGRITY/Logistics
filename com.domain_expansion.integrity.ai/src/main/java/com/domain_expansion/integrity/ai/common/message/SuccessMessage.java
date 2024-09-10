@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum SuccessMessage {
 
     SUCCESS_CREATE_AI(HttpStatus.CREATED, "AI 생성에 성공하였습니다."),
+    SUCCESS_FIND_AI(HttpStatus.OK, "AI 조회에 성공하였습니다."),
     ;
 
     private final HttpStatus httpStatus;

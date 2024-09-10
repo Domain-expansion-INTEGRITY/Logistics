@@ -1,5 +1,7 @@
 package com.domain_expansion.integrity.ai.presentation;
 
+import com.domain_expansion.integrity.ai.application.aiHistory.AiService;
+import com.domain_expansion.integrity.ai.common.message.SuccessMessage;
 import com.domain_expansion.integrity.ai.common.response.SuccessResponse;
 import com.domain_expansion.integrity.ai.presentation.request.AiCreateRequestDto;
 import com.domain_expansion.integrity.ai.presentation.response.AiResponseDto;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AiController {
 
+    private final AiService aiService;
+
     /**
      * ai 응답 생성
      */
@@ -25,7 +29,8 @@ public class AiController {
         @RequestBody AiCreateRequestDto requestDto
     ) {
 
-        return SuccessResponse.of("", null);
+        AiResponseDto ai = aiService.createAi(requestDto);
+        return SuccessResponse.of(SuccessMessage.SUCCESS_CREATE_AI.getMessage(), ai);
     }
 
 

@@ -26,6 +26,7 @@ public class AiServiceImpl implements AiService {
     private final AiMapper aiMapper;
 
 
+    @Transactional
     @Override
     public AiResponseDto createAi(AiCreateRequestDto requestDto) {
 
@@ -45,7 +46,7 @@ public class AiServiceImpl implements AiService {
 
         AiHistory savedAi = aiRepository.save(ai);
 
-        return AiResponseDto.from(ai, requestDto.userId());
+        return AiResponseDto.from(savedAi, requestDto.userId());
     }
 
     private AiPrompt findByIdAndCheck(PromptType promptType) {
