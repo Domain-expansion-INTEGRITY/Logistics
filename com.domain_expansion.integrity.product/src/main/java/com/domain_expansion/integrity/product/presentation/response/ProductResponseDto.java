@@ -17,8 +17,8 @@ public record ProductResponseDto (
     public static ProductResponseDto from(Product product) {
 
         return ProductResponseDto.builder()
-                .companyId(product.getCompanyId())
-                // .companyName() 이거는 어떻게 할까용 하하
+                .companyId(product.getCompany().getCompanyId())
+                .companyName(product.getCompany().getCompanyName())
                 .productId(product.getProductId())
                 .productName(product.getName().getValue())
                 .stock(product.getStock().getValue())

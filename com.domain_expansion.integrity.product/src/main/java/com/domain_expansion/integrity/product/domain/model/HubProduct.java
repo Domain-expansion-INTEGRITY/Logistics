@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "p_product")
+@Table(name = "p_hub_product")
 @NoArgsConstructor(access = PROTECTED)
 public class HubProduct extends BaseDateEntity {
 
