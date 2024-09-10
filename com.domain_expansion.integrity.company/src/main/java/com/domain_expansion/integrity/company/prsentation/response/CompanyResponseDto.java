@@ -20,7 +20,7 @@ public record CompanyResponseDto(
                 .companyId(company.getCompanyId())
                 .userId(company.getUserId())
                 .companyType(company.getCompanyType())
-                .address(company.getCompanyAddress().getAddress())
+                .address(company.getCompanyAddress())
                 .name(company.getName())
                 .hubId(company.getHubId()).build();
     }
