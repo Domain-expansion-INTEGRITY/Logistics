@@ -4,13 +4,12 @@ import static com.domain_expansion.integrity.company.common.message.SuccessMessa
 import com.domain_expansion.integrity.company.application.service.CompanyService;
 import com.domain_expansion.integrity.company.common.response.CommonResponse;
 import com.domain_expansion.integrity.company.common.response.SuccessResponse;
-import com.domain_expansion.integrity.company.domain.model.Company;
+import com.domain_expansion.integrity.company.domain.model.CompanyType;
 import com.domain_expansion.integrity.company.prsentation.request.CompanyCreateRequestDto;
 import com.domain_expansion.integrity.company.prsentation.request.CompanyUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,7 +37,7 @@ public class CompanyController {
      * @return
      */
     @GetMapping("/{company_id}")
-    public ResponseEntity<?> findCompanyById(@PathVariable("company_id") String companyId) {
+    public ResponseEntity<?  extends CommonResponse> findCompanyById(@PathVariable("company_id") String companyId) {
         return ResponseEntity.status(SUCCESS_GET_COMPANY.getHttpStatus())
                 .body(SuccessResponse.of(SUCCESS_GET_COMPANY.getMessage(), companyService.getCompany(companyId)));
     }
@@ -49,10 +48,12 @@ public class CompanyController {
      * @return
      */
     @GetMapping
-    public ResponseEntity<?> findAllCompany(
-
+    public ResponseEntity<?  extends CommonResponse> findAllCompany(
+            @RequestParam(required = false) String companyName,
+            @RequestParam(required = false) CompanyType companyType,
             @PageableDefault(page = 0, size = 10) Pageable pageable) {
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        return ResponseEntity.status(SUCCESS_GET_COMPANY.getHttpStatus()).body(
+                SuccessResponse.of(SUCCESS_GET_COMPANY.getMessage(), companyService.getCompanies(companyName,companyType,pageable)));
     }
 
     /***
@@ -62,7 +63,7 @@ public class CompanyController {
      * @return
      */
     @PatchMapping("{company_id}")
-    public ResponseEntity<?> updateCompany(@PathVariable("company_id") String companyId
+    public ResponseEntity<?  extends CommonResponse> updateCompany(@PathVariable("company_id") String companyId
             , @RequestBody CompanyUpdateRequestDto requestDto) {
         return ResponseEntity.status(SUCCESS_DELETE_COMPANY.getHttpStatus())
                 .body(SuccessResponse.of(SUCCESS_DELETE_COMPANY.getMessage(), companyService.updateCompany(requestDto,companyId)));
@@ -74,7 +75,7 @@ public class CompanyController {
      * @return
      */
     @DeleteMapping("{company_id}")
-    public ResponseEntity<?> deleteCompany(@PathVariable("company_id") String companyId) {
+    public ResponseEntity<?  extends CommonResponse> deleteCompany(@PathVariable("company_id") String companyId) {
 
         companyService.deleteCompany(companyId);
 

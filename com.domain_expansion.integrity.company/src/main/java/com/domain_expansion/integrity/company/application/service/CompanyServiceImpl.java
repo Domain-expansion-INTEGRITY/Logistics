@@ -6,7 +6,8 @@ import com.domain_expansion.integrity.company.application.mapper.CompanyMapper;
 import com.domain_expansion.integrity.company.common.exception.CompanyException;
 import com.domain_expansion.integrity.company.common.message.ExceptionMessage;
 import com.domain_expansion.integrity.company.domain.model.Company;
-import com.domain_expansion.integrity.company.domain.repository.CompanyRepository;
+import com.domain_expansion.integrity.company.domain.model.CompanyType;
+import com.domain_expansion.integrity.company.infrastructure.repository.JpaCompanyRepository;
 import com.domain_expansion.integrity.company.prsentation.request.CompanyCreateRequestDto;
 import com.domain_expansion.integrity.company.prsentation.request.CompanyUpdateRequestDto;
 import com.domain_expansion.integrity.company.prsentation.response.CompanyResponseDto;
@@ -23,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class CompanyServiceImpl implements CompanyService{
 
-    private final CompanyRepository companyRepository;
+    private final JpaCompanyRepository companyRepository;
     private final CompanyMapper companyMapper;
     private final HubClient hubClient;
 
@@ -66,8 +67,8 @@ public class CompanyServiceImpl implements CompanyService{
     }
 
     @Override
-    public Page<CompanyResponseDto> getCompanies(Pageable pageable) {
-        return null;
+    public Page<CompanyResponseDto> getCompanies(String companyName, CompanyType type,Pageable pageable) {
+        return companyRepository.searchCompanies(companyName,type,pageable);
     }
 
     /***
