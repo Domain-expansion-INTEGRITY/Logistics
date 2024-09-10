@@ -2,6 +2,7 @@ package com.domain_expansion.integrity.hub.domain.model.vo.hub;
 
 import com.domain_expansion.integrity.hub.common.exception.HubException;
 import com.domain_expansion.integrity.hub.common.message.ExceptionMessage;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -16,6 +17,7 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class HubLongitude {
 
+    @Column(nullable = false)
     private double longitude;
 
     public HubLongitude(double longitude) {
