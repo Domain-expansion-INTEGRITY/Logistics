@@ -1,6 +1,5 @@
 package com.domain_expansion.integrity.hub.domain.model.vo.hub.converter;
 
-import com.domain_expansion.integrity.hub.domain.model.vo.hub.HubAddress;
 import com.domain_expansion.integrity.hub.domain.model.vo.hub.HubLatitude;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;

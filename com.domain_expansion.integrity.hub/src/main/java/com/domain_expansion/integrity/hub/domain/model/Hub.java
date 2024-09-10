@@ -1,7 +1,6 @@
 package com.domain_expansion.integrity.hub.domain.model;
 
 import com.domain_expansion.integrity.hub.common.entity.BaseEntity;
-import com.domain_expansion.integrity.hub.domain.model.vo.hub.HubAddress;
 import com.domain_expansion.integrity.hub.domain.model.vo.hub.HubLatitude;
 import com.domain_expansion.integrity.hub.domain.model.vo.hub.HubLongitude;
 import jakarta.persistence.Column;
@@ -25,13 +24,14 @@ public class Hub extends BaseEntity {
     @Column(name = "hub_id")
     private String hubId;
 
-    @Column(name = "user_id")
+    @Column(name = "user_id",nullable = false)
     private Long userId;
 
+    @Column(nullable = false)
     private String name;
 
-    @Embedded
-    private HubAddress hubAddress;
+    @Column(nullable = false)
+    private String address;
 
     @Embedded
     private HubLatitude hubLatitude;
@@ -44,23 +44,23 @@ public class Hub extends BaseEntity {
     private Boolean isDeleted;
 
     @Builder(access = AccessLevel.PRIVATE)
-    public Hub(String hubId, Long userId, String name,HubAddress hubAddress,HubLatitude hubLatitude,HubLongitude hubLongitude) {
+    public Hub(String hubId, Long userId, String name,String address,HubLatitude hubLatitude,HubLongitude hubLongitude) {
         this.hubId = hubId;
         this.userId = userId;
         this.name = name;
-        this.hubAddress = hubAddress;
+        this.address = address;
         this.hubLatitude = hubLatitude;
         this.hubLongitude = hubLongitude;
     }
 
     public static Hub from(
-            String hubId, Long userId, String name,HubAddress hubAddress,HubLatitude hubLatitude,HubLongitude hubLongitude)
+            String hubId, Long userId, String name,String address,HubLatitude hubLatitude,HubLongitude hubLongitude)
     {
         return Hub.builder()
                 .hubId(hubId)
                 .userId(userId)
                 .name(name)
-                .hubAddress(hubAddress)
+                .address(address)
                 .hubLatitude(hubLatitude)
                 .hubLongitude(hubLongitude)
                 .build();
