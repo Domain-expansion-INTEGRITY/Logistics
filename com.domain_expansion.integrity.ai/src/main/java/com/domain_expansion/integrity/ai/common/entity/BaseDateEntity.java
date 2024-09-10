@@ -22,7 +22,7 @@ public abstract class BaseDateEntity {
 
     @Column(name = "created_by", updatable = false)
     @CreatedBy
-    protected String createdUser;
+    protected Long createdUser;
 
     @Column(name = "updated_at")
     @LastModifiedDate
@@ -30,13 +30,13 @@ public abstract class BaseDateEntity {
 
     @Column(name = "updated_by")
     @LastModifiedBy
-    protected String updatedUser;
+    protected Long updatedUser;
 
     @Column(name = "deleted_at")
     protected LocalDateTime deletedAt;
 
     @Column(name = "deleted_by")
-    protected String deletedUser;
+    protected Long deletedUser;
 
     public void deleteEntity() {
         this.deletedAt = LocalDateTime.now();
