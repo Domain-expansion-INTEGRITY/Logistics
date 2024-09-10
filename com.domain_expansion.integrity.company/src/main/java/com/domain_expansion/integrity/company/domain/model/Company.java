@@ -29,12 +29,11 @@ public class Company extends BaseEntity {
     private CompanyType companyType;
 
     @Column(name = "address",nullable = false)
-    @Embedded
     private String companyAddress;
 
     @ColumnDefault(value = "false")
     @Column(name = "is_delete")
-    private Boolean isDelete;
+    private Boolean isDelete = false;
 
     @Builder(access = AccessLevel.PRIVATE)
     public Company(String companyId,Long userId, String hubId, String name, CompanyType companyType, String companyAddress) {
