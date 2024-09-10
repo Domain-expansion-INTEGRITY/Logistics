@@ -48,5 +48,5 @@ public class DeliveryHistory extends BaseDateEntity {
     private Integer duration;
 
     @Column(nullable = false)
-    private Integer isDelete;
+    private Boolean isDelete;
 }

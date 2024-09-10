@@ -58,5 +58,5 @@ public class HubDeliveryHistory extends BaseDateEntity {
     private Integer duration;
 
     @Column(nullable = false)
-    private Integer isDelete;
+    private Boolean isDelete;
 }
