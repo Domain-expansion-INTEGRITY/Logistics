@@ -20,14 +20,14 @@ public class HubDeliveryMan extends BaseEntity {
 
     @Id
     @Column(name = "hub_delivery_man_id")
-    String hubDeliveryManId;
+    private String hubDeliveryManId;
 
     @ManyToOne
     @JoinColumn(name = "hub_id",nullable = false)
-    Hub hubId;
+    private Hub hub;
 
     @OneToOne
     @JoinColumn(name = "delivery_man_id",nullable = false)
-    DeliveryMan deliveryMan;
+    private DeliveryMan deliveryMan;
 
 }

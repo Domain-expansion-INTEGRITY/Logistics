@@ -20,7 +20,7 @@ public class HubRoute extends BaseEntity {
 
     @Id
     @Column(name = "hub_route_id")
-    String hubRouteId;
+    private String hubRouteId;
 
     @ManyToOne
     @JoinColumn(name = "start_hub_id", nullable = false)
@@ -31,11 +31,11 @@ public class HubRoute extends BaseEntity {
     private Hub endHub;
 
     @Column(nullable = false)
-    Integer duration;
+    private Integer duration;
 
     @ColumnDefault(value = "false")
     @Column(name = "is_delete")
-    Boolean isDeleted;
+    private Boolean isDelete;
 
 
 }

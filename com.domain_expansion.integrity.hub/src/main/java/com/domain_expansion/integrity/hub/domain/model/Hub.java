@@ -39,9 +39,9 @@ public class Hub extends BaseEntity {
     @Embedded
     private HubLongitude hubLongitude;
 
-    @Column(name = "is_deleted")
+    @Column(name = "is_delete")
     @ColumnDefault(value = "false")
-    private Boolean isDeleted;
+    private Boolean isDelete;
 
     @Builder(access = AccessLevel.PRIVATE)
     public Hub(String hubId, Long userId, String name,String address,HubLatitude hubLatitude,HubLongitude hubLongitude) {

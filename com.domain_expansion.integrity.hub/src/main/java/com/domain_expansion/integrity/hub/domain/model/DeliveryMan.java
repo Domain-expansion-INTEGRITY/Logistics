@@ -18,13 +18,13 @@ public class DeliveryMan extends BaseEntity {
 
     @Id
     @Column(name = "delivery_man_id")
-    String deliveryManId;
+    private String deliveryManId;
 
     @Column(name = "user_id")
-    Long user_id;
+    private Long userId;
 
     @Column(name = "is_delete")
     @ColumnDefault(value = "false")
-    Boolean isDelete;
+    private Boolean isDelete;
 
 }

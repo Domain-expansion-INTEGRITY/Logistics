@@ -37,7 +37,7 @@ public class HubStockRequest {
 
     @ManyToOne
     @JoinColumn(name = "hub_id", nullable = false)
-    private Hub hubId;
+    private Hub hub;
 
     public void setStatus(StockRequestStatus status) {
         this.status = status;
