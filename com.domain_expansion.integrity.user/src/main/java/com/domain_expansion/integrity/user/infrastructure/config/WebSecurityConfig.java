@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @RequiredArgsConstructor
-@EnableWebSecurity
+@EnableMethodSecurity
 @Configuration
 public class WebSecurityConfig {
 
@@ -36,7 +36,9 @@ public class WebSecurityConfig {
                         PathRequest.toStaticResources().atCommonLocations())
                     .permitAll() // resources 접근 허용 설정
                     .requestMatchers("/api/v1/users/**")
-                    .permitAll() // users 접근 허용 설정
+                    .permitAll() // users Rest api 접근 허용 설정
+                    .requestMatchers("/users/**")
+                    .permitAll() // userEndpoint 접근 허용
                     .anyRequest()
                     .authenticated() // 나머지는 막아둠
         );

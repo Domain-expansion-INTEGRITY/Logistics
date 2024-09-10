@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 public enum ExceptionMessage {
     //TODO: 에러 메시지 작성
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다"),
-
+    INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "잘못된 비밀번호 입니다."),
     INVALID_PHONE_NUMBER_INPUT(HttpStatus.BAD_REQUEST, "잘못된 휴대전화 번호 입니다."),
     ;
 
