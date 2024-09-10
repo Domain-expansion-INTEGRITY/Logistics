@@ -7,7 +7,8 @@ import com.domain_expansion.integrity.company.common.exception.CompanyException;
 import com.domain_expansion.integrity.company.common.message.ExceptionMessage;
 import com.domain_expansion.integrity.company.domain.model.Company;
 import com.domain_expansion.integrity.company.domain.model.CompanyType;
-import com.domain_expansion.integrity.company.infrastructure.repository.JpaCompanyRepository;
+import com.domain_expansion.integrity.company.domain.repository.CompanyRepository;
+import com.domain_expansion.integrity.company.infrastructure.repository.CompanyQueryRepository;
 import com.domain_expansion.integrity.company.prsentation.request.CompanyCreateRequestDto;
 import com.domain_expansion.integrity.company.prsentation.request.CompanyUpdateRequestDto;
 import com.domain_expansion.integrity.company.prsentation.response.CompanyResponseDto;
@@ -24,7 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class CompanyServiceImpl implements CompanyService{
 
-    private final JpaCompanyRepository companyRepository;
+    private final CompanyRepository companyRepository;
+    private final CompanyQueryRepository companyQueryRepository;
     private final CompanyMapper companyMapper;
     private final HubClient hubClient;
 
@@ -53,7 +55,8 @@ public class CompanyServiceImpl implements CompanyService{
 
         Company existedCompany = isExistsCompany(companyId);
 
-        existedCompany.deleteCompany();
+        //existedCompany.deleteCompany();
+        companyRepository.deleteById(companyId);
 
     }
 
@@ -68,7 +71,7 @@ public class CompanyServiceImpl implements CompanyService{
 
     @Override
     public Page<CompanyResponseDto> getCompanies(String companyName, CompanyType type,Pageable pageable) {
-        return companyRepository.searchCompanies(companyName,type,pageable);
+        return companyQueryRepository.searchCompanies(companyName,type,pageable);
     }
 
     /***

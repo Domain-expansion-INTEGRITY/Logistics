@@ -5,11 +5,15 @@ import com.domain_expansion.integrity.company.prsentation.request.CompanyUpdateR
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "p_company")
+@SQLDelete(sql = "UPDATE p_company SET deleted_at = CURRENT_TIMESTAMP, is_delete = true WHERE company_id = ?")
+@SQLRestriction("is_delete = false")
 public class Company extends BaseEntity {
 
     @Id

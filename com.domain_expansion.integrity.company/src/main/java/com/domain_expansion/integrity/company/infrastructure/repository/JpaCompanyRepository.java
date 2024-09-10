@@ -6,4 +6,5 @@ import com.domain_expansion.integrity.company.domain.repository.CompanyRepositor
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface JpaCompanyRepository extends JpaRepository<Company,String>, CompanyRepository{
+
 }

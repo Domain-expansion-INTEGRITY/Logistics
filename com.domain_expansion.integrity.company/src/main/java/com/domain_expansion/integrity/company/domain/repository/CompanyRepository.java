@@ -10,4 +10,6 @@ public interface CompanyRepository {
     Optional<Company> findByCompanyIdAndIsDeleteFalse(String id);
 
     Company save(Company company);
+
+    void deleteById(String companyId);
 }
