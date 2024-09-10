@@ -8,6 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -33,8 +35,9 @@ public class HubStockRequest {
     @Column(name = "product_id", nullable = false)
     private String productId;
 
-    @Column(name = "hub_id", nullable = false)
-    private String hubId;
+    @ManyToOne
+    @JoinColumn(name = "hub_id", nullable = false)
+    private Hub hubId;
 
     public void setStatus(StockRequestStatus status) {
         this.status = status;
