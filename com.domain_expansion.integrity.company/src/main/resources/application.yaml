@@ -3,17 +3,10 @@ spring:
     name: company-service
 
   datasource:
-    url: ${DEV_DB_URL}
-    username: ${DEV_DB_USERNAME}
-    password: ${DEV_DB_PASSWORD}
+    url: jdbc:postgresql://localhost:5432/company
+    username: postgres
+    password: 11223344
     driver-class-name: org.postgresql.Driver
-
-  data:
-    redis:
-      host: localhost
-      port: 6379
-      username: ${DEV_REDIS_USERNAME}
-      password: ${DEV_REDIS_PASSWORD}
 
   jpa:
     hibernate:
@@ -29,4 +22,12 @@ eureka:
       defaultZone: http://localhost:19090/eureka/
 
 server:
-  port: 19095
+  port: 19094
+
+management:
+  zipkin:
+    tracing:
+      endpoint: "http://localhost:9411/api/v2/spans"
+  tracing:
+    sampling:
+      probability: 1.0
