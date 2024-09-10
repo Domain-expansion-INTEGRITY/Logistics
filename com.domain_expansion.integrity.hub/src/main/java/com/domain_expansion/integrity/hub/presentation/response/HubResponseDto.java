@@ -21,7 +21,7 @@ public record HubResponseDto(
                 .hubId(hub.getHubId())
                 .userId(hub.getUserId())
                 .name(hub.getName())
-                .address(hub.getHubAddress().getAddress())
+                .address(hub.getAddress())
                 .latitude(hub.getHubLatitude().getLatitude())
                 .longitude(hub.getHubLongitude().getLongitude())
                 .build();

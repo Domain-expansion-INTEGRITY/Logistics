@@ -12,7 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
 
+@Repository
 @RequiredArgsConstructor
 public class CompanyQueryRepositoryImpl implements CompanyQueryRepository {
 
@@ -41,6 +43,8 @@ public class CompanyQueryRepositoryImpl implements CompanyQueryRepository {
         if(type != null) {
             builder.and(qCompany.companyType.eq(type));
         }
+
+        builder.and(qCompany.isDelete.eq(false));
 
         JPAQuery<Company> query = jpaQueryFactory.selectFrom(qCompany)
                 .where(builder)

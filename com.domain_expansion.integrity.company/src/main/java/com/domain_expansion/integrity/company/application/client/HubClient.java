@@ -5,9 +5,9 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "hub-service")
+@FeignClient(name = "hub-service",url = "http://localhost:19093")
 public interface HubClient {
 
-    @GetMapping("api/v1/hubs/{hub_id}")
+    @GetMapping("/api/v1/hubs/{hub_id}")
     HubResponseDto findHubById(@PathVariable String hub_id);
 }
