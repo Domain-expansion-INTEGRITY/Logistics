@@ -16,7 +16,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Entity @Table(name = "p_product")
+@Entity
+@Table(name = "p_product")
 @NoArgsConstructor(access = PROTECTED)
 public class Product {
 
@@ -39,13 +40,15 @@ public class Product {
         this.companyId = companyId;
     }
 
-    public static Product from(ProductCreateRequestDto requestDto) {
+    public static Product from(
+            String productId, ProductName productName, ProductStock productStock, String companyId
+    ) {
 
         return Product.builder()
-                .productId(Ksuid.newKsuid().toString()) // 이게 맞는 지는 잘 모르겠어용
-                .name(new ProductName(requestDto.productName()))
-                .stock(new ProductStock(requestDto.stock()))
-                .companyId(requestDto.companyId())
+                .productId(productId)
+                .name(productName)
+                .stock(productStock)
+                .companyId(companyId)
                 .build();
     }
 }
