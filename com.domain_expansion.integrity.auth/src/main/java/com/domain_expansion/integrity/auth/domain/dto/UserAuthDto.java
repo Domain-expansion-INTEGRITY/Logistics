@@ -1,6 +1,7 @@
-package com.domain_expansion.integrity.auth.domain;
+package com.domain_expansion.integrity.auth.domain.dto;
 
 import com.domain_expansion.integrity.auth.application.client.response.UserResponseDto;
+import com.domain_expansion.integrity.auth.domain.UserRole;
 
 public record UserAuthDto(
     String username,

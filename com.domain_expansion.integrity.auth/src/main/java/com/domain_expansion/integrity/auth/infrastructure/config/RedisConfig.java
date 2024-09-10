@@ -1,7 +1,7 @@
 package com.domain_expansion.integrity.auth.infrastructure.config;
 
 import com.domain_expansion.integrity.auth.common.property.RedisProperty;
-import com.domain_expansion.integrity.auth.domain.UserAuthDto;
+import com.domain_expansion.integrity.auth.domain.dto.UserAuthDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

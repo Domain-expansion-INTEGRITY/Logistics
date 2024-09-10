@@ -1,7 +1,7 @@
 package com.domain_expansion.integrity.auth.domain.redis;
 
 import com.domain_expansion.integrity.auth.common.jwt.JwtUtils;
-import com.domain_expansion.integrity.auth.domain.UserAuthDto;
+import com.domain_expansion.integrity.auth.domain.dto.UserAuthDto;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;

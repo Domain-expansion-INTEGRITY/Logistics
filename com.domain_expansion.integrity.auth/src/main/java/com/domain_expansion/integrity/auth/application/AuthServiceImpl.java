@@ -4,8 +4,9 @@ import com.domain_expansion.integrity.auth.application.client.UserClient;
 import com.domain_expansion.integrity.auth.application.client.request.UserLoginRequestDto;
 import com.domain_expansion.integrity.auth.application.client.response.UserResponseDto;
 import com.domain_expansion.integrity.auth.common.jwt.JwtUtils;
-import com.domain_expansion.integrity.auth.domain.UserAuthDto;
+import com.domain_expansion.integrity.auth.domain.dto.UserAuthDto;
 import com.domain_expansion.integrity.auth.domain.redis.RedisDomainService;
+import com.domain_expansion.integrity.auth.presentation.request.AuthLoginRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +22,11 @@ public class AuthServiceImpl implements AuthService {
      * 로그인 처리 및 Jwt Token 생성
      */
     @Override
-    public String checkLoginOfUser(UserLoginRequestDto requestDto) {
+    public String checkLoginOfUser(AuthLoginRequestDto requestDto) {
 
-        UserResponseDto userInfo = userClient.loginUser(requestDto);
+        // User 로그인에 맞춰서 변환 후 요청을 보낸다
+        UserResponseDto userInfo = userClient.loginUser(
+            UserLoginRequestDto.from(requestDto.username(), requestDto.password()));
 
         //user auth 정보 redis에 저장
         redisDomainService.setUserData(UserAuthDto.from(userInfo));
