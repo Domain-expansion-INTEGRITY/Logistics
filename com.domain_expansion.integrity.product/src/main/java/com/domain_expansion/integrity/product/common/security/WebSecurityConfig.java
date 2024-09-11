@@ -67,7 +67,6 @@ public class WebSecurityConfig {
         return http.build();
     }
 
-
     // CORS 설정을 위한 Bean 추가
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -83,6 +82,5 @@ public class WebSecurityConfig {
         source.registerCorsConfiguration("/**", configuration); // 모든 경로에 대해 CORS 설정 적용
         return source;
     }
-
 
 }
