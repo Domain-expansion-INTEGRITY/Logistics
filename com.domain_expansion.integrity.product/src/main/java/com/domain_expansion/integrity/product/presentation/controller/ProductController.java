@@ -10,14 +10,18 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 import com.domain_expansion.integrity.product.application.service.ProductService;
 import com.domain_expansion.integrity.product.common.aop.DefaultPageSize;
 import com.domain_expansion.integrity.product.common.response.CommonResponse;
+import com.domain_expansion.integrity.product.common.security.UserDetailsImpl;
 import com.domain_expansion.integrity.product.presentation.request.ProductCreateRequestDto;
 import com.domain_expansion.integrity.product.presentation.request.ProductSearchCondition;
 import com.domain_expansion.integrity.product.presentation.request.ProductUpdateRequestDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,10 +30,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/api/v1/products")
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class ProductController {
@@ -37,14 +41,17 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ROLE_MASTER', 'ROLE_HUB_COMPANY')")
     public ResponseEntity<? extends CommonResponse> createProduct(
             @Valid @RequestBody
-            ProductCreateRequestDto requestDto
+            ProductCreateRequestDto requestDto,
+            @AuthenticationPrincipal
+            UserDetailsImpl userDetails
     ) {
 
         return ResponseEntity.status(SUCCESS_CREATE_PRODUCT.getHttpStatus())
                 .body(success(SUCCESS_CREATE_PRODUCT.getMessage(),
-                        productService.createProduct(requestDto)));
+                        productService.createProduct(requestDto, userDetails)));
     }
 
     @GetMapping("/{productId}")
@@ -73,6 +80,7 @@ public class ProductController {
     }
 
     @PatchMapping("/{productId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_HUB_COMPANY', 'ROLE_HUB_MANAGER')")
     public ResponseEntity<? extends CommonResponse> updateProduct(
             @Valid @RequestBody
             ProductUpdateRequestDto requestDto,
@@ -86,6 +94,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{productId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_HUB_COMPANY')")
     public ResponseEntity<? extends CommonResponse> deleteProduct(
             @PathVariable
             String productId
