@@ -2,6 +2,7 @@ package com.domain_expansion.integrity.auth.infrastructure.config;
 
 import com.domain_expansion.integrity.auth.common.property.RedisProperty;
 import com.domain_expansion.integrity.auth.domain.dto.UserAuthDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +10,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
 @RequiredArgsConstructor
@@ -38,13 +40,21 @@ public class RedisConfig {
 
         redisTemplate.setConnectionFactory(redisConnectionFactory());
 
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.findAndRegisterModules();
+        objectMapper.deactivateDefaultTyping();
+
+        // Jackson2JsonRedisSerializer 설정
+        Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(
+            objectMapper, Object.class);
+
         // Serializer 설정
         redisTemplate.setKeySerializer(RedisSerializer.string());
-        redisTemplate.setValueSerializer(RedisSerializer.json());
+        redisTemplate.setValueSerializer(serializer);
 
         // Hash Serializer 설정
         redisTemplate.setHashKeySerializer(RedisSerializer.string());
-        redisTemplate.setHashValueSerializer(RedisSerializer.json());
+        redisTemplate.setHashValueSerializer(serializer);
 
         return redisTemplate;
     }
