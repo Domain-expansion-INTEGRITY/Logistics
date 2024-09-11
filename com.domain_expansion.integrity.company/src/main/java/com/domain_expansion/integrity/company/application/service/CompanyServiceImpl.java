@@ -17,7 +17,6 @@ import com.domain_expansion.integrity.company.prsentation.response.CompanyRespon
 import com.domain_expansion.integrity.company.prsentation.response.CompanyValidateResponseDto;
 import com.github.ksuid.Ksuid;
 import feign.FeignException;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
