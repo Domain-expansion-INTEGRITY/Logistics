@@ -3,6 +3,7 @@ package com.domain_expansion.integrity.company.infrastructure.repository;
 import com.domain_expansion.integrity.company.domain.model.Company;
 import com.domain_expansion.integrity.company.domain.model.CompanyType;
 import com.domain_expansion.integrity.company.domain.model.QCompany;
+import com.domain_expansion.integrity.company.domain.repository.CompanyQueryRepository;
 import com.domain_expansion.integrity.company.prsentation.response.CompanyResponseDto;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -22,7 +23,6 @@ public class CompanyQueryRepositoryImpl implements CompanyQueryRepository {
 
     /***
      * created_at 기준으로 내림차순설정
-     * TODO : 추후 접근권한 별로 검색조건 추가
      * @param companyName
      * @param type
      * @param pageable

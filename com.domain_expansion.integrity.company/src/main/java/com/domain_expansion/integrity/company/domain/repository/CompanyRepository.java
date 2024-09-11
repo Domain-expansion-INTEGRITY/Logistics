@@ -12,4 +12,6 @@ public interface CompanyRepository {
     Company save(Company company);
 
     void deleteById(String companyId);
+
+    Optional<Company> findByCompanyIdAndHubIdAndIsDeleteFalse(String companyId,String hubId);
 }

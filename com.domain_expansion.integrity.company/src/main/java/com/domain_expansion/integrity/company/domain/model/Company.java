@@ -12,7 +12,6 @@ import org.hibernate.annotations.SQLRestriction;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "p_company")
-@SQLDelete(sql = "UPDATE p_company SET deleted_at = CURRENT_TIMESTAMP, is_delete = true WHERE company_id = ?")
 @SQLRestriction("is_delete = false")
 public class Company extends BaseEntity {
 
@@ -63,7 +62,9 @@ public class Company extends BaseEntity {
                 .build();
     }
 
-    public void deleteCompany() {
+    public void deleteCompany(Long userId)
+    {
+        setDeletedBy(userId);
         this.isDelete = true;
     }
 

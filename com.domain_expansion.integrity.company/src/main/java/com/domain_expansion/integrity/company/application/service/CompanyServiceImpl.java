@@ -3,17 +3,21 @@ package com.domain_expansion.integrity.company.application.service;
 import com.domain_expansion.integrity.company.application.client.HubClient;
 import com.domain_expansion.integrity.company.application.client.response.HubResponseDto;
 import com.domain_expansion.integrity.company.application.mapper.CompanyMapper;
+import com.domain_expansion.integrity.company.application.shared.RoleConstants;
 import com.domain_expansion.integrity.company.common.exception.CompanyException;
 import com.domain_expansion.integrity.company.common.message.ExceptionMessage;
 import com.domain_expansion.integrity.company.domain.model.Company;
 import com.domain_expansion.integrity.company.domain.model.CompanyType;
 import com.domain_expansion.integrity.company.domain.repository.CompanyRepository;
-import com.domain_expansion.integrity.company.infrastructure.repository.CompanyQueryRepository;
+import com.domain_expansion.integrity.company.domain.repository.CompanyQueryRepository;
+import com.domain_expansion.integrity.company.common.security.UserDetailsImpl;
 import com.domain_expansion.integrity.company.prsentation.request.CompanyCreateRequestDto;
 import com.domain_expansion.integrity.company.prsentation.request.CompanyUpdateRequestDto;
 import com.domain_expansion.integrity.company.prsentation.response.CompanyResponseDto;
+import com.domain_expansion.integrity.company.prsentation.response.CompanyValidateResponseDto;
 import com.github.ksuid.Ksuid;
 import feign.FeignException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -51,13 +55,27 @@ public class CompanyServiceImpl implements CompanyService{
 
     @Transactional
     @Override
-    public void deleteCompany(String companyId) {
+    public void deleteCompany(String companyId, UserDetailsImpl userDetails) {
+
+        String role =  userDetails.getRole();
+
+        Long userId = Long.valueOf(userDetails.getUserId());
 
         Company existedCompany = isExistsCompany(companyId);
 
-        //existedCompany.deleteCompany();
-        companyRepository.deleteById(companyId);
-
+        if(RoleConstants.ROLE_HUB_MANAGER.equals(role))
+        {
+            if(isHaveAuthorized(existedCompany.getCompanyId(),userId))
+            {
+                existedCompany.deleteCompany(userId);
+            }else {
+                throw new CompanyException(ExceptionMessage.NOT_AUTHORIZED);
+            }
+        }
+        else
+        {
+            existedCompany.deleteCompany(userId);
+        }
     }
 
     @Override
@@ -69,21 +87,34 @@ public class CompanyServiceImpl implements CompanyService{
 
     }
 
+    /***
+     * 업체명과 업체타입으러 검색가능
+     * @param companyName
+     * @param type
+     * @param pageable
+     * @return
+     */
     @Override
     public Page<CompanyResponseDto> getCompanies(String companyName, CompanyType type,Pageable pageable) {
         return companyQueryRepository.searchCompanies(companyName,type,pageable);
     }
 
-    /***
-     * 허브업체 : 자신의 업체만 수정 가능
-     * 허브 관리자 : 자신의 허브에 소속된 업체만 관리 가능
-     * @param requestDto
-     * @param companyId
-     * @return
-     */
+    @Override
+    public CompanyValidateResponseDto validateUser(String companyId, Long userId) {
+
+        Company company = companyRepository.findByCompanyIdAndIsDeleteFalse(companyId).orElseThrow(
+                () -> new CompanyException(ExceptionMessage.NOT_FOUND_COMPANY_ID)
+        );
+
+        boolean result = userId.equals(company.getUserId());
+
+        return CompanyValidateResponseDto.of(result);
+    }
+
     @Transactional
     @Override
-    public CompanyResponseDto updateCompany(CompanyUpdateRequestDto requestDto, String companyId) {
+    public CompanyResponseDto updateCompany(CompanyUpdateRequestDto requestDto, String companyId,
+            UserDetailsImpl userDetails) {
 
         if(isHubExists(requestDto.hubId())){
             throw new CompanyException(ExceptionMessage.NOT_FOUND_HUB_ID);
@@ -91,9 +122,53 @@ public class CompanyServiceImpl implements CompanyService{
 
         Company existedCompany = isExistsCompany(companyId);
 
-        existedCompany.updateWith(requestDto);
+        String role =  userDetails.getRole();
+
+        Long userId = Long.valueOf(userDetails.getUserId());
+
+        if(RoleConstants.ROLE_HUB_COMPANY.equals(role)){
+
+            if(userId.equals(existedCompany.getUserId()))
+            {
+                existedCompany.updateWith(requestDto);
+            }else {
+                throw new CompanyException(ExceptionMessage.NOT_AUTHORIZED);
+            }
+
+        }else if(RoleConstants.ROLE_HUB_MANAGER.equals(role))
+        {
+            if(isHaveAuthorized(existedCompany.getCompanyId(),userId))
+            {
+                //해당 업체에 대해 수정
+                existedCompany.updateWith(requestDto);
+            }else {
+                throw new CompanyException(ExceptionMessage.NOT_AUTHORIZED);
+            }
+
+        }else{
+            existedCompany.updateWith(requestDto);
+        }
 
         return CompanyResponseDto.from(existedCompany);
+
+    }
+
+    /***
+     *  허브관리자인 경우자신의 허브에 소속된 업체인지 검증
+     */
+    private boolean isHaveAuthorized(String companyId, Long userId)
+    {
+        try{
+
+            HubResponseDto dto = hubClient.findHubByUserId(userId);
+
+            return companyRepository.findByCompanyIdAndHubIdAndIsDeleteFalse(companyId,dto.getHubId()).isPresent();
+
+        }catch (FeignException.NotFound e) {
+            return false;
+        }catch (FeignException e) {
+            throw new RuntimeException("허브 정보를 확인하는 도중 문제가 발생했습니다.");
+        }
 
     }
 
@@ -118,6 +193,11 @@ public class CompanyServiceImpl implements CompanyService{
 
     }
 
+    /***
+     * 해당 업체가 존재하는지 검증
+     * @param companyId
+     * @return
+     */
     private Company isExistsCompany(String companyId) {
 
         return companyRepository.findByCompanyIdAndIsDeleteFalse(companyId).orElseThrow(

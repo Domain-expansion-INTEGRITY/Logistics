@@ -3,6 +3,7 @@ package com.domain_expansion.integrity.company.application.client.response;
 
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record HubResponseDto(
@@ -14,4 +15,7 @@ public record HubResponseDto(
         double longitude
 ) {
 
+    public String getHubId(){
+        return hubId;
+    }
 }

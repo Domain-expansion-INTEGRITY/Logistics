@@ -39,4 +39,9 @@ public abstract class BaseEntity {
     @Column(name = "deleted_by")
     protected Long deletedBy;
 
+    public void setDeletedBy(Long deletedBy) {
+        this.deletedBy = deletedBy;
+        this.deletedAt = LocalDateTime.now();
+    }
+
 }
