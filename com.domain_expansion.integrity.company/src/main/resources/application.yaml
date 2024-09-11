@@ -31,3 +31,10 @@ management:
   tracing:
     sampling:
       probability: 1.0
+logging:
+  level:
+    org.springframework.security: DEBUG
+
+jwt:
+  secret:
+    key: 7Leo7JeF7Leo7JeF7Leo7JeF7Leo7JeF7Leo7JeF7Leo7JeF7Leo7JeF7Leo7JeF7Leo7JeF7Leo7JeF7Leo7JeF7Leo7JeF7Leo7JeF7Leo7JeF7Leo7JeF
