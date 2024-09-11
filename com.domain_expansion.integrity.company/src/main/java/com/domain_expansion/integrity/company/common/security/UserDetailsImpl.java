@@ -7,24 +7,24 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class UserDetailsImpl implements UserDetails {
 
-    private String userId;
+    private Long userId;
     private Collection<? extends GrantedAuthority> authorities;
     private String role;
 
 
-    public UserDetailsImpl(String userId, Collection<? extends GrantedAuthority> authorities, String repRole) {
+    public UserDetailsImpl(Long userId, Collection<? extends GrantedAuthority> authorities, String repRole) {
         this.userId = userId;
         this.authorities = authorities;
         this.role = repRole;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
     @Override
     public String getUsername() {
-        return userId;
+        return String.valueOf(userId);
     }
 
     public String getRole() {

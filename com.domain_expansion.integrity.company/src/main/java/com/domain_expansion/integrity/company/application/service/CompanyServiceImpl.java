@@ -38,7 +38,7 @@ public class CompanyServiceImpl implements CompanyService{
     public CompanyResponseDto createCompany(CompanyCreateRequestDto createRequestDto)
     {
 
-        if(isHubExists(createRequestDto.hubId())){
+        if(isHubExists(createRequestDto.hubId()) == false){
             throw new CompanyException(ExceptionMessage.NOT_FOUND_HUB_ID);
         }
 
@@ -58,7 +58,7 @@ public class CompanyServiceImpl implements CompanyService{
 
         String role =  userDetails.getRole();
 
-        Long userId = Long.valueOf(userDetails.getUserId());
+        Long userId = userDetails.getUserId();
 
         Company existedCompany = isExistsCompany(companyId);
 
@@ -101,12 +101,7 @@ public class CompanyServiceImpl implements CompanyService{
     @Override
     public CompanyValidateResponseDto validateUser(String companyId, Long userId) {
 
-        Company company = companyRepository.findByCompanyIdAndIsDeleteFalse(companyId).orElseThrow(
-                () -> new CompanyException(ExceptionMessage.NOT_FOUND_COMPANY_ID)
-        );
-
-        boolean result = userId.equals(company.getUserId());
-
+        boolean result = companyRepository.findByCompanyIdAndUserIdAndIsDeleteFalse(companyId,userId).isPresent();
         return CompanyValidateResponseDto.of(result);
     }
 
@@ -115,7 +110,7 @@ public class CompanyServiceImpl implements CompanyService{
     public CompanyResponseDto updateCompany(CompanyUpdateRequestDto requestDto, String companyId,
             UserDetailsImpl userDetails) {
 
-        if(isHubExists(requestDto.hubId())){
+        if(isHubExists(requestDto.hubId()) == false){
             throw new CompanyException(ExceptionMessage.NOT_FOUND_HUB_ID);
         }
 
@@ -123,7 +118,7 @@ public class CompanyServiceImpl implements CompanyService{
 
         String role =  userDetails.getRole();
 
-        Long userId = Long.valueOf(userDetails.getUserId());
+        Long userId = userDetails.getUserId();
 
         if(RoleConstants.ROLE_HUB_COMPANY.equals(role)){
 
@@ -180,9 +175,9 @@ public class CompanyServiceImpl implements CompanyService{
 
         try{
 
-            HubResponseDto responseDto = hubClient.findHubById(hubId);
+            hubClient.findHubById(hubId);
 
-            return responseDto == null ? false : true;
+            return true;
 
         }catch (FeignException.NotFound e) {
             return false;

@@ -9,9 +9,9 @@ public interface CompanyRepository {
 
     Optional<Company> findByCompanyIdAndIsDeleteFalse(String id);
 
-    Company save(Company company);
+    Optional<Company> findByCompanyIdAndUserIdAndIsDeleteFalse(String id,Long userId);
 
-    void deleteById(String companyId);
+    Company save(Company company);
 
     Optional<Company> findByCompanyIdAndHubIdAndIsDeleteFalse(String companyId,String hubId);
 }

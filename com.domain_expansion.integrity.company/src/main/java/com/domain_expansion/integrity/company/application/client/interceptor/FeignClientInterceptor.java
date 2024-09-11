@@ -3,11 +3,9 @@ package com.domain_expansion.integrity.company.application.client.interceptor;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-@Component
 public class FeignClientInterceptor implements RequestInterceptor {
 
     @Override
