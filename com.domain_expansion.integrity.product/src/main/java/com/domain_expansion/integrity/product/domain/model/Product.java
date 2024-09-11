@@ -27,8 +27,8 @@ import org.hibernate.annotations.SQLRestriction;
 @Getter
 @Entity
 @Table(name = "p_product")
-@SQLRestriction("is_deleted IS FALSE")
-@SQLDelete(sql = "UPDATE p_product SET deleted_at = CURRENT_TIMESTAMP, is_deleted = true WHERE product_id = ?")
+@SQLRestriction("is_delete IS FALSE")
+@SQLDelete(sql = "UPDATE p_product SET deleted_at = CURRENT_TIMESTAMP, is_delete = true WHERE product_id = ?")
 @NoArgsConstructor(access = PROTECTED)
 public class Product extends BaseDateEntity {
 
@@ -42,14 +42,14 @@ public class Product extends BaseDateEntity {
     private ProductStock stock;
 
     @Embedded
-    private CompanyInfo company; // 이걸 어떻게 할 지 고민해야해용
+    private CompanyInfo company;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private Set<HubProduct> hubProducts;
 
     @Column(nullable = false)
     @ColumnDefault(value = "false")
-    private Boolean isDeleted;
+    private Boolean isDelete;
 
     @Builder(access = PRIVATE)
     public Product(String productId, ProductName name, ProductStock stock, CompanyInfo company) {
@@ -57,7 +57,7 @@ public class Product extends BaseDateEntity {
         this.name = name;
         this.stock = stock;
         this.company = company;
-        this.isDeleted = false;
+        this.isDelete = false;
     }
 
     public static Product from(

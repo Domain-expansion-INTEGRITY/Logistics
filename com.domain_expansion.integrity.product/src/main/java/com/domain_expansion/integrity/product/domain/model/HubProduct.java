@@ -33,7 +33,7 @@ public class HubProduct extends BaseDateEntity {
     private ProductStock stock;
 
     @Column(nullable = false)
-    private Boolean isDeleted;
+    private Boolean isDelete;
 
     public void setProduct(Product product) {
 
