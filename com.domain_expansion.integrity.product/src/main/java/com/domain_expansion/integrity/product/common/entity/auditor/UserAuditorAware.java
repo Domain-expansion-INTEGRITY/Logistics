@@ -19,6 +19,6 @@ public class UserAuditorAware implements AuditorAware<Long> {
             return Optional.empty();
         }
 
-        return Optional.of(Long.valueOf(((UserDetailsImpl)authentication.getPrincipal()).getUserId()));
+        return Optional.of(((UserDetailsImpl)authentication.getPrincipal()).getUserId());
     }
 }

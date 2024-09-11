@@ -47,7 +47,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     public void setAuthentication(Claims claims) {
 
-        String userId = claims.getSubject();
+        Long userId = Long.valueOf(claims.getSubject());
         String roles = claims.get(JwtUtils.AUTHORIZATION_KEY).toString();
 
         List<SimpleGrantedAuthority> authorities = Arrays.stream(roles.split(","))
