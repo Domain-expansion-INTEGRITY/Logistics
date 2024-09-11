@@ -41,7 +41,7 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ROLE_MASTER', 'ROLE_HUB_COMPANY')")
+    @PreAuthorize("hasAnyRole('ROLE_MASTER', 'ROLE_HUB_COMPANY', 'ROLE_HUB_MANAGER')")
     public ResponseEntity<? extends CommonResponse> createProduct(
             @Valid @RequestBody
             ProductCreateRequestDto requestDto,
