@@ -51,7 +51,7 @@ public class ProductServiceImplV1 implements ProductService {
         CompanyInfo companyInfo = new CompanyInfo(company.getBody().getData().companyId(),
                 company.getBody().getData().name());
 
-        String productId = Ksuid.newKsuid().toString();
+        String productId = productDomainService.createProductId();
 
         return ProductResponseDto.from(
                 productRepository.save(productMapper.toProduct(requestDto, productId, companyInfo))
