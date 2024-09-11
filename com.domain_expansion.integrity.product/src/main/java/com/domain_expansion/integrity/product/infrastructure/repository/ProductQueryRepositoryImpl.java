@@ -63,16 +63,14 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
 
     private List<OrderSpecifier> getOrderSpecifiers(Sort sort) {
 
-        List<OrderSpecifier> orders = new ArrayList<>();
-
-        sort.stream().forEach(o -> {
+        List<OrderSpecifier> orders = sort.stream().map(o -> {
             com.querydsl.core.types.Order direction =
                     o.isAscending() ? com.querydsl.core.types.Order.ASC
                             : com.querydsl.core.types.Order.DESC;
             String property = o.getProperty();
             PathBuilder<Product> orderByExpression = new PathBuilder<>(Product.class, "product");
-            orders.add(new OrderSpecifier(direction, orderByExpression.get(property)));
-        });
+            return new OrderSpecifier(direction, orderByExpression.get(property));
+        }).toList();
 
         return orders;
     }
