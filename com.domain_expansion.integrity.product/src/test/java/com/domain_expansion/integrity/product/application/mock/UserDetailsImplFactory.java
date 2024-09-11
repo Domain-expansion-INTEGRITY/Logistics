@@ -8,48 +8,28 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 public class UserDetailsImplFactory {
 
-    public static UserDetailsImpl createMasterUserDetails() {
-
-        String role = UserRole.MASTER.getRole();
-
-        UserDetailsImpl userDetails = new UserDetailsImpl(
+    private static UserDetailsImpl createUserDetails(String role) {
+        return new UserDetailsImpl(
                 1L,
                 Arrays.stream(role.split(","))
                         .map(r -> new SimpleGrantedAuthority(r.trim()))
                         .collect(Collectors.toList()),
                 role
         );
+    }
 
-        return userDetails;
+    public static UserDetailsImpl createMasterUserDetails() {
+
+        return createUserDetails(UserRole.MASTER.getRole());
     }
 
     public static UserDetailsImpl createHubManagerUserDetails() {
 
-        String role = UserRole.HUB_MANAGER.getRole();
-
-        UserDetailsImpl userDetails = new UserDetailsImpl(
-                1L,
-                Arrays.stream(role.split(","))
-                        .map(r -> new SimpleGrantedAuthority(r.trim()))
-                        .collect(Collectors.toList()),
-                role
-        );
-
-        return userDetails;
+        return createUserDetails(UserRole.HUB_MANAGER.getRole());
     }
 
     public static UserDetailsImpl createHubCompanyUserDetails() {
 
-        String role = UserRole.HUB_COMPANY.getRole();
-
-        UserDetailsImpl userDetails = new UserDetailsImpl(
-                1L,
-                Arrays.stream(role.split(","))
-                        .map(r -> new SimpleGrantedAuthority(r.trim()))
-                        .collect(Collectors.toList()),
-                role
-        );
-
-        return userDetails;
+        return createUserDetails(UserRole.HUB_COMPANY.getRole());
     }
 }
