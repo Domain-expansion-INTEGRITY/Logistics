@@ -1,12 +1,15 @@
 package com.domain_expansion.integrity.product.application.service;
 
-import static com.domain_expansion.integrity.product.common.message.ExceptionMessage.NOT_FOUND_COMPANY;
+import static com.domain_expansion.integrity.product.common.message.ExceptionMessage.GUARD;
 import static com.domain_expansion.integrity.product.common.message.ExceptionMessage.NOT_FOUND_PRODUCT;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import com.domain_expansion.integrity.product.application.client.CompanyClient;
+import com.domain_expansion.integrity.product.application.client.HubClient;
 import com.domain_expansion.integrity.product.application.client.response.CompanyResponseData;
+import com.domain_expansion.integrity.product.application.client.response.ValidateUserResponseData;
 import com.domain_expansion.integrity.product.common.exception.ProductException;
+import com.domain_expansion.integrity.product.common.filter.UserRole;
+import com.domain_expansion.integrity.product.common.security.UserDetailsImpl;
 import com.domain_expansion.integrity.product.domain.mapper.ProductMapper;
 import com.domain_expansion.integrity.product.domain.model.Product;
 import com.domain_expansion.integrity.product.domain.model.info.CompanyInfo;
@@ -35,18 +38,49 @@ public class ProductServiceImplV1 implements ProductService {
     private final ProductQueryRepository productQueryRepository;
     private final ProductMapper productMapper;
     private final CompanyClient companyClient;
+    private final HubClient hubClient;
 
     @Override
-    public ProductResponseDto createProduct(ProductCreateRequestDto requestDto) {
+    public ProductResponseDto createProduct(ProductCreateRequestDto requestDto,
+            UserDetailsImpl userDetails) {
 
-        ResponseEntity<CompanyResponseData> company = companyClient.getCompany(requestDto.companyId());
-        CompanyInfo companyInfo = new CompanyInfo(company.getBody().getData().companyId(), company.getBody().getData().name());
+        validateUser(userDetails, requestDto.companyId());
+
+        ResponseEntity<CompanyResponseData> company = companyClient.getCompany(
+                requestDto.companyId());
+        CompanyInfo companyInfo = new CompanyInfo(company.getBody().getData().companyId(),
+                company.getBody().getData().name());
 
         String productId = Ksuid.newKsuid().toString();
 
         return ProductResponseDto.from(
                 productRepository.save(productMapper.toProduct(requestDto, productId, companyInfo))
         );
+    }
+
+    private void validateUser(UserDetailsImpl userDetails, String companyId) {
+        if (!userDetails.getRole().equals(UserRole.MASTER.getRole())) {
+
+            if (userDetails.getRole().equals(UserRole.HUB_MANAGER.getRole())) {
+                ResponseEntity<CompanyResponseData> companyResponse = companyClient.getCompany(companyId);
+                String hubId = companyResponse.getBody().getData().hubId();
+                ResponseEntity<ValidateUserResponseData> hubResponse = hubClient.validateUser(
+                        userDetails.getUserId(), hubId);
+                if (!hubResponse.getBody().getData().isOwner()) {
+                    throw new ProductException(GUARD);
+                }
+            } else if (userDetails.getRole().equals(UserRole.HUB_COMPANY.getRole())) {
+                ResponseEntity<ValidateUserResponseData> response = companyClient.validateUser(
+                        userDetails.getUserId(), companyId);
+
+                if (!response.getBody().getData().isOwner()) {
+                    throw new ProductException(GUARD);
+                }
+
+            } else {
+                throw new ProductException(GUARD);
+            }
+        }
     }
 
     @Override
@@ -60,17 +94,21 @@ public class ProductServiceImplV1 implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ProductResponseDto> getProductsByCondition(Pageable pageable, ProductSearchCondition searchCondition) {
+    public Page<ProductResponseDto> getProductsByCondition(Pageable pageable,
+            ProductSearchCondition searchCondition) {
 
         return productQueryRepository.findAllByCondition(pageable, searchCondition)
                 .map(ProductResponseDto::from);
     }
 
     @Override
-    public ProductResponseDto updateProduct(ProductUpdateRequestDto requestDto, String productId) {
+    public ProductResponseDto updateProduct(ProductUpdateRequestDto requestDto, String productId,
+            UserDetailsImpl userDetails) {
 
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductException(NOT_FOUND_PRODUCT));
+
+        validateUser(userDetails, product.getCompany().getCompanyId());
 
         product.updateProduct(requestDto);
 
@@ -78,7 +116,12 @@ public class ProductServiceImplV1 implements ProductService {
     }
 
     @Override
-    public void deleteProduct(String productId) {
+    public void deleteProduct(String productId, UserDetailsImpl userDetails) {
+
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductException(NOT_FOUND_PRODUCT));
+
+        validateUser(userDetails, product.getCompany().getCompanyId());
 
         productRepository.deleteById(productId);
     }

@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum ExceptionMessage {
 
+    GUARD(UNAUTHORIZED, "권한이 없습니다."),
+
     NOT_FOUND_PRODUCT(NOT_FOUND, "상품을 찾을 수 없습니다."),
     NOT_FOUND_COMPANY(NOT_FOUND, "업체를 찾을 수 없습니다."),
 

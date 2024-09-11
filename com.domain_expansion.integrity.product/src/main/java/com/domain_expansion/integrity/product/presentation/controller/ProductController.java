@@ -85,22 +85,26 @@ public class ProductController {
             @Valid @RequestBody
             ProductUpdateRequestDto requestDto,
             @PathVariable
-            String productId
+            String productId,
+            @AuthenticationPrincipal
+            UserDetailsImpl userDetails
     ) {
 
         return ResponseEntity.status(SUCCESS_UPDATE_PRODUCT.getHttpStatus())
                 .body(success(SUCCESS_UPDATE_PRODUCT.getMessage(),
-                        productService.updateProduct(requestDto, productId)));
+                        productService.updateProduct(requestDto, productId, userDetails)));
     }
 
     @DeleteMapping("/{productId}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_HUB_COMPANY')")
     public ResponseEntity<? extends CommonResponse> deleteProduct(
             @PathVariable
-            String productId
+            String productId,
+            @AuthenticationPrincipal
+            UserDetailsImpl userDetails
     ) {
 
-        productService.deleteProduct(productId);
+        productService.deleteProduct(productId, userDetails);
 
         return ResponseEntity.status(SUCCESS_CREATE_PRODUCT.getHttpStatus())
                 .body(success(SUCCESS_CREATE_PRODUCT.getMessage()));
