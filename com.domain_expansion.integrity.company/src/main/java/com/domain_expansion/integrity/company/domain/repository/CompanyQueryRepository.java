@@ -1,4 +1,4 @@
-package com.domain_expansion.integrity.company.infrastructure.repository;
+package com.domain_expansion.integrity.company.domain.repository;
 
 import com.domain_expansion.integrity.company.domain.model.CompanyType;
 import com.domain_expansion.integrity.company.prsentation.response.CompanyResponseDto;
