@@ -37,13 +37,13 @@ public class JwtUtils {
         key = Keys.hmacShaKeyFor(bytes);
     }
 
-    public String createToken(String username, UserRole role) {
+    public String createToken(Long userId, UserRole role) {
         Date date = new Date();
 
         return BEARER_PREFIX +
             Jwts.builder()
-                .subject(username) // 사용자 식별자값(ID)
-                .claim(AUTHORIZATION_KEY, role) // 사용자 권한
+                .subject(String.valueOf(userId)) // 사용자 식별자값(ID)
+                .claim(AUTHORIZATION_KEY, role.getAuthority()) // 사용자 권한
                 .expiration(new Date(date.getTime() + TOKEN_TIME)) // 만료 시간
                 .issuedAt(date) // 발급일
                 .signWith(key) // 암호화

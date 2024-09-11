@@ -31,6 +31,6 @@ public class AuthServiceImpl implements AuthService {
         //user auth 정보 redis에 저장
         redisDomainService.setUserData(UserAuthDto.from(userInfo));
 
-        return jwtUtils.createToken(userInfo.username(), userInfo.role());
+        return jwtUtils.createToken(userInfo.userId(), userInfo.role());
     }
 }

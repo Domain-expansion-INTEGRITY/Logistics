@@ -1,17 +1,22 @@
 package com.domain_expansion.integrity.auth.domain.dto;
 
 import com.domain_expansion.integrity.auth.application.client.response.UserResponseDto;
-import com.domain_expansion.integrity.auth.domain.UserRole;
 
 public record UserAuthDto(
+    Long userId,
     String username,
-    UserRole roles
+    String role
 ) {
+
+    public static String getRedisKey(Long userId) {
+        return "auth-" + userId;
+    }
 
     public static UserAuthDto from(UserResponseDto responseDto) {
         return new UserAuthDto(
+            responseDto.userId(),
             responseDto.username(),
-            responseDto.role()
+            responseDto.role().getAuthority()
         );
     }
 }
