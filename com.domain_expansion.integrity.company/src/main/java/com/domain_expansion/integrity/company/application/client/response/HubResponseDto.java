@@ -15,7 +15,4 @@ public record HubResponseDto(
         double longitude
 ) {
 
-    public String getHubId(){
-        return hubId;
-    }
 }

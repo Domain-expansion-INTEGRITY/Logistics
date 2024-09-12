@@ -152,7 +152,7 @@ public class CompanyServiceImpl implements CompanyService{
 
         HubResponseDto dto = hubClient.findHubByUserId(userId);
 
-        return companyRepository.findByCompanyIdAndHubIdAndIsDeleteFalse(companyId,dto.getHubId()).isPresent();
+        return companyRepository.findByCompanyIdAndHubIdAndIsDeleteFalse(companyId,dto.hubId()).isPresent();
     }
 
     /***
