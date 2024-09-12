@@ -9,6 +9,7 @@ import com.domain_expansion.integrity.hub.common.security.UserDetailsImpl;
 import com.domain_expansion.integrity.hub.presentation.request.HubCreateRequestDto;
 import com.domain_expansion.integrity.hub.presentation.request.HubSearchCondition;
 import com.domain_expansion.integrity.hub.presentation.request.HubUpdateRequestDto;
+import com.domain_expansion.integrity.hub.presentation.response.HubResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.*;
@@ -78,12 +79,31 @@ public class HubController {
 
     }
 
+    /**
+     * 유저 검증
+     * @param hub_id
+     * @param userId
+     * @return
+     */
     @GetMapping("/{hub_id}/validate")
     public ResponseEntity<?  extends CommonResponse>  validateHub(@PathVariable String hub_id,
             @RequestParam Long userId){
         return ResponseEntity.status(SUCCESS_GET_HUB.getHttpStatus())
-                .body(SuccessResponse.success(SUCCESS_GET_HUB.getMessage()));
+                .body(SuccessResponse.success(SUCCESS_GET_HUB.getMessage(),hubService.validateUserInHub(hub_id,userId)));
 
     }
+
+    /***
+     * 허브의 관리자 ID를 추출
+     * @param user_id
+     * @return
+     */
+    @GetMapping("/users/{user_id}")
+    public ResponseEntity<?  extends CommonResponse>  findHubByUserId(@PathVariable Long user_id)
+    {
+        return ResponseEntity.status(SUCCESS_GET_HUB.getHttpStatus())
+                .body(SuccessResponse.success(SUCCESS_GET_HUB.getMessage(),hubService.getHubByUserId(user_id)));
+    }
+
 
 }

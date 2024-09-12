@@ -12,6 +12,7 @@ import com.domain_expansion.integrity.hub.presentation.request.HubUpdateRequestD
 import com.domain_expansion.integrity.hub.presentation.response.HubCreateResponseDto;
 import com.domain_expansion.integrity.hub.presentation.response.HubDeliverManResponseDto;
 import com.domain_expansion.integrity.hub.presentation.response.HubResponseDto;
+import com.domain_expansion.integrity.hub.presentation.response.HubValidateResponseDto;
 import com.github.ksuid.Ksuid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -96,6 +97,26 @@ public class HubServiceImpl implements HubService{
         );
 
         hub.updateWith(requestDto);
+
+        return HubResponseDto.from(hub);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public HubValidateResponseDto validateUserInHub(String hubId, Long userId) {
+
+        boolean result = hubRepository.findByHubIdAndUserId(hubId,userId).isPresent();
+
+        return new HubValidateResponseDto(result);
+
+    }
+
+    @Override
+    public HubResponseDto getHubByUserId(Long userId) {
+
+        Hub hub = hubRepository.findByUserId(userId).orElseThrow(
+                () -> new HubException(ExceptionMessage.NOT_FOUND_HUB_ID)
+        );
 
         return HubResponseDto.from(hub);
     }

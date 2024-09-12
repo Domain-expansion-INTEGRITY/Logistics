@@ -2,6 +2,7 @@ package com.domain_expansion.integrity.hub.application.service;
 
 import com.domain_expansion.integrity.hub.presentation.request.HubSearchCondition;
 import com.domain_expansion.integrity.hub.presentation.response.HubResponseDto;
+import com.domain_expansion.integrity.hub.presentation.response.HubValidateResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -11,4 +12,7 @@ public interface HubReadService {
 
     Page<HubResponseDto> getAllHubs(HubSearchCondition searchCondition,Pageable pageable);
 
+    HubValidateResponseDto validateUserInHub(String hubId, Long userId);
+
+    HubResponseDto getHubByUserId(Long userId);
 }

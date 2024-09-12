@@ -9,5 +9,7 @@ public interface HubRepository{
 
     Hub save(Hub hub);
 
+    Optional<Hub> findByHubIdAndUserId(String hubId, Long userId);
 
+    Optional<Hub> findByUserId(Long userId);
 }
