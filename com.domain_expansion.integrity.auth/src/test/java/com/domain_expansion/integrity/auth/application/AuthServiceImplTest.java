@@ -9,6 +9,7 @@ import com.domain_expansion.integrity.auth.application.client.UserClient;
 import com.domain_expansion.integrity.auth.application.client.request.UserLoginRequestDto;
 import com.domain_expansion.integrity.auth.application.client.response.UserResponseDto;
 import com.domain_expansion.integrity.auth.common.jwt.JwtUtils;
+import com.domain_expansion.integrity.auth.common.response.SuccessResponse;
 import com.domain_expansion.integrity.auth.domain.UserRole;
 import com.domain_expansion.integrity.auth.domain.redis.RedisDomainService;
 import com.domain_expansion.integrity.auth.presentation.request.AuthLoginRequestDto;
@@ -61,7 +62,8 @@ class AuthServiceImplTest {
             when(userResponseMock.role()).thenReturn(UserRole.HUB_COMPANY);
             when(userResponseMock.username()).thenReturn(authLoginRequestDto.username());
 
-            when(userClient.loginUser(requestDto)).thenReturn(userResponseMock);
+            when(userClient.loginUser(requestDto)).thenReturn(
+                SuccessResponse.of("", userResponseMock));
 
             // when
             String token = authService.checkLoginOfUser(authLoginRequestDto);

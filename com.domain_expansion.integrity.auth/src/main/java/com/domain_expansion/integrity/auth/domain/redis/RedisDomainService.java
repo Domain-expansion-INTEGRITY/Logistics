@@ -35,7 +35,7 @@ public class RedisDomainService {
             UserAuthDto.class);
     }
 
-    public void deleteUserData(String username) {
-        redisTemplate.delete(username);
+    public void deleteUserData(Long userId) {
+        redisTemplate.delete(UserAuthDto.getRedisKey(userId));
     }
 }

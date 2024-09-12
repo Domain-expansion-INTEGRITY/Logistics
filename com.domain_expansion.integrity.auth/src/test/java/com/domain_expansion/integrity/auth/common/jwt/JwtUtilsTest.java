@@ -42,6 +42,8 @@ class JwtUtilsTest {
 
         // then
         Assertions.assertThat(String.valueOf(userId)).isEqualTo(bodyFromJwt.getSubject());
+        Assertions.assertThat(UserRole.MASTER.getAuthority())
+            .isEqualTo(bodyFromJwt.get(JwtUtils.AUTHORIZATION_KEY));
 
     }
 
