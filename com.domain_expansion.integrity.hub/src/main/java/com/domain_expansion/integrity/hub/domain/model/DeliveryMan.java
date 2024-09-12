@@ -1,6 +1,6 @@
 package com.domain_expansion.integrity.hub.domain.model;
 
-import com.domain_expansion.integrity.hub.common.entity.BaseEntity;
+import com.domain_expansion.integrity.hub.common.entity.BaseDateEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -14,7 +14,7 @@ import org.hibernate.annotations.ColumnDefault;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "p_delivery_man")
-public class DeliveryMan extends BaseEntity {
+public class DeliveryMan extends BaseDateEntity {
 
     @Id
     @Column(name = "delivery_man_id")

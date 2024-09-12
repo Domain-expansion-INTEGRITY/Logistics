@@ -1,6 +1,6 @@
 package com.domain_expansion.integrity.hub.domain.model;
 
-import com.domain_expansion.integrity.hub.common.entity.BaseEntity;
+import com.domain_expansion.integrity.hub.common.entity.BaseDateEntity;
 import com.domain_expansion.integrity.hub.domain.model.vo.hub.HubLatitude;
 import com.domain_expansion.integrity.hub.domain.model.vo.hub.HubLongitude;
 import jakarta.persistence.Column;
@@ -12,13 +12,14 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
 @Table(name = "p_hub")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Hub extends BaseEntity {
+@SQLRestriction("is_delete = false")
+public class Hub extends BaseDateEntity {
 
     @Id
     @Column(name = "hub_id")
@@ -40,8 +41,7 @@ public class Hub extends BaseEntity {
     private HubLongitude hubLongitude;
 
     @Column(name = "is_delete")
-    @ColumnDefault(value = "false")
-    private Boolean isDelete;
+    private Boolean isDelete = false;
 
     @Builder(access = AccessLevel.PRIVATE)
     public Hub(String hubId, Long userId, String name,String address,HubLatitude hubLatitude,HubLongitude hubLongitude) {
@@ -64,5 +64,11 @@ public class Hub extends BaseEntity {
                 .hubLatitude(hubLatitude)
                 .hubLongitude(hubLongitude)
                 .build();
+    }
+
+    public void deleteHub(Long userId)
+    {
+        super.setDeletedValue(userId);
+        isDelete = true;
     }
 }
