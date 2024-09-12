@@ -1,5 +1,7 @@
 package com.domain_expansion.integrity.auth.common.jwt;
 
+import com.domain_expansion.integrity.auth.common.exception.AuthException;
+import com.domain_expansion.integrity.auth.common.message.ExceptionMessage;
 import com.domain_expansion.integrity.auth.domain.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -55,8 +57,7 @@ public class JwtUtils {
             return tokenValue.substring(7);
         }
 
-        // 필요하면 예외처리
-        return null;
+        throw new AuthException(ExceptionMessage.UNAUTHORIZED);
     }
 
     /**
