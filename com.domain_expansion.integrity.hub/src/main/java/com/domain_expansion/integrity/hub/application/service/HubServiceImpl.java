@@ -1,6 +1,8 @@
 package com.domain_expansion.integrity.hub.application.service;
 
 import com.domain_expansion.integrity.hub.application.mapper.HubMapper;
+import com.domain_expansion.integrity.hub.common.exception.HubException;
+import com.domain_expansion.integrity.hub.common.message.ExceptionMessage;
 import com.domain_expansion.integrity.hub.domain.model.Hub;
 import com.domain_expansion.integrity.hub.domain.repository.HubRepository;
 import com.domain_expansion.integrity.hub.presentation.request.HubCreateRequestDto;
@@ -8,6 +10,7 @@ import com.domain_expansion.integrity.hub.presentation.request.HubUpdateRequestD
 import com.domain_expansion.integrity.hub.presentation.response.HubCreateResponseDto;
 import com.domain_expansion.integrity.hub.presentation.response.HubResponseDto;
 import com.github.ksuid.Ksuid;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -55,5 +58,13 @@ public class HubServiceImpl implements HubService{
     @Override
     public HubResponseDto updateHub(HubUpdateRequestDto requestDto) {
         return null;
+    }
+
+    @Override
+    public HubResponseDto getHubByUserId(Long userId) {
+
+        return HubResponseDto.from(hubRepository.findByUserId(userId).orElseThrow(
+                () -> new HubException(ExceptionMessage.NOT_FOUND_HUB)
+        ));
     }
 }

@@ -63,4 +63,24 @@ public class Order extends BaseDateEntity {
         this.orderProducts.add(orderProduct);
         orderProduct.setOrder(this);
     }
+
+    public void clearOrderProducts() {
+
+        orderProducts.clear();
+    }
+
+    public void delete() {
+        this.isDelete = true;
+        super.deleteEntity();
+    }
+
+    public boolean validateByCompanyId(String companyId) {
+
+        return sellerCompanyId.equals(companyId) || buyerCompanyId.equals(companyId);
+    }
+
+    public boolean validateByCompanyIds(Set<String> companyIdsSet) {
+
+        return companyIdsSet.contains(sellerCompanyId) && companyIdsSet.contains(buyerCompanyId);
+    }
 }

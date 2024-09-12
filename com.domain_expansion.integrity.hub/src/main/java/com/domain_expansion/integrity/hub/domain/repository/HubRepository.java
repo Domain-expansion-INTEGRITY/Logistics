@@ -9,5 +9,5 @@ public interface HubRepository{
 
     Hub save(Hub hub);
 
-
+    Optional<Hub> findByUserId(Long userId);
 }

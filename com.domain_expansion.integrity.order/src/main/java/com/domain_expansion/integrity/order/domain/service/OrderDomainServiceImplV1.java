@@ -49,7 +49,37 @@ public class OrderDomainServiceImplV1 implements OrderDomainService {
             );
         }
 
-
         return orderRepository.save(order);
+    }
+
+    @Override
+    public String createOrderId() {
+
+        return Ksuid.newKsuid().toString();
+    }
+
+    @Override
+    public Order updateOrder(List<OrderProductRequestDto> requestDtos, Order order) {
+
+        order.clearOrderProducts();
+
+        for (OrderProductRequestDto orderProductRequestDto : requestDtos) {
+            ProductResponse productResponse = productClient.getProductById(orderProductRequestDto.productId());
+            String orderProductId = Ksuid.newKsuid().toString();
+
+            order.addOrderProduct(
+                    new OrderProduct(
+                            orderProductId,
+                            new ProductInfo(
+                                    productResponse.getProductResponseDto().productId(),
+                                    productResponse.getProductResponseDto().productName()
+                            ),
+                            order,
+                            orderProductRequestDto.count()
+                    )
+            );
+        }
+
+        return order;
     }
 }
