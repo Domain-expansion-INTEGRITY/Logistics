@@ -7,12 +7,15 @@ import com.domain_expansion.integrity.user.domain.model.User;
 import com.domain_expansion.integrity.user.domain.repository.UserRepository;
 import com.domain_expansion.integrity.user.domain.service.UserDomainService;
 import com.domain_expansion.integrity.user.presentation.request.UserCreateRequestDto;
+import com.domain_expansion.integrity.user.presentation.request.UserLoginRequestDto;
 import com.domain_expansion.integrity.user.presentation.response.UserResponseDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
@@ -71,10 +74,35 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * 유저 로그인 확인
+     */
+    @Override
+    public UserResponseDto findUserByUsernameAndPassword(UserLoginRequestDto requestDto) {
+
+        // 유저 갖고 옴
+        User user = findUserByUsernameAndCheck(requestDto.username());
+
+        //비밀번호 확인
+        if (!passwordEncoder.matches(requestDto.password(), user.getPassword())) {
+            throw new UserException(ExceptionMessage.INVALID_PASSWORD);
+        }
+
+        return UserResponseDto.from(user);
+    }
+
+    /**
      * 유저 아이디가 존재하는 지 확인
      */
     private User findUserByIdAndCheck(Long userId) {
         return userRepository.findById(userId)
+            .orElseThrow(() -> new UserException(ExceptionMessage.USER_NOT_FOUND));
+    }
+
+    /**
+     * 유저 이름이 존재하는 지 확인
+     */
+    private User findUserByUsernameAndCheck(String username) {
+        return userRepository.findByUsername(username)
             .orElseThrow(() -> new UserException(ExceptionMessage.USER_NOT_FOUND));
     }
 }
