@@ -1,11 +1,10 @@
 package com.domain_expansion.integrity.company.domain.model;
 
-import com.domain_expansion.integrity.company.common.entity.BaseEntity;
+import com.domain_expansion.integrity.company.common.entity.BaseDateEntity;
 import com.domain_expansion.integrity.company.prsentation.request.CompanyUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
@@ -13,7 +12,7 @@ import org.hibernate.annotations.SQLRestriction;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "p_company")
 @SQLRestriction("is_delete = false")
-public class Company extends BaseEntity {
+public class Company extends BaseDateEntity {
 
     @Id
     private String companyId;
@@ -64,7 +63,7 @@ public class Company extends BaseEntity {
 
     public void deleteCompany(Long userId)
     {
-        setDeletedBy(userId);
+        super.setDeletedBy(userId);
         this.isDelete = true;
     }
 

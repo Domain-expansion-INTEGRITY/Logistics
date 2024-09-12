@@ -1,8 +1,6 @@
 package com.domain_expansion.integrity.company.infrastructure.config;
 
-import com.domain_expansion.integrity.company.common.entity.BaseEntity;
 import com.domain_expansion.integrity.company.common.security.UserDetailsImpl;
-import jakarta.persistence.PreRemove;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.AuditorAware;
