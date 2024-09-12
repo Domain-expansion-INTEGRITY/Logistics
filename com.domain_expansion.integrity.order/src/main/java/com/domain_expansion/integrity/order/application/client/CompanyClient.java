@@ -15,4 +15,7 @@ public interface CompanyClient {
 
     @GetMapping("/api/v1/companies/hub/{hubId}")
     ResponseEntity<CompaniesResponseData> getCompaniesByHubId(@PathVariable("hubId") String hubId);
+
+    @GetMapping("/api/v1/companies/{companyId}")
+    ResponseEntity<CompanyResponseData> getCompany(@PathVariable("companyId") String companyId);
 }

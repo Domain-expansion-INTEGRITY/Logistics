@@ -2,6 +2,7 @@ package com.domain_expansion.integrity.order.application.service;
 
 import com.domain_expansion.integrity.order.application.client.CompanyClient;
 import com.domain_expansion.integrity.order.application.client.HubClient;
+import com.domain_expansion.integrity.order.application.client.constant.CompanyType;
 import com.domain_expansion.integrity.order.application.client.response.CompaniesResponseData;
 import com.domain_expansion.integrity.order.application.client.response.CompaniesResponseData.CompaniesResponseDto;
 import com.domain_expansion.integrity.order.application.client.response.CompanyResponseData;
@@ -44,6 +45,20 @@ public class OrderServiceImplV1 implements OrderService {
     public OrderResponseDto createOrder(OrderCreateRequestDto requestDto) {
 
         String productId = orderDomainService.createOrderId();
+
+        ResponseEntity<CompanyResponseData> companyBySellerCompanyId = companyClient.getCompany(
+                requestDto.sellerCompanyId());
+
+        ResponseEntity<CompanyResponseData> companyByBuyerCompanyId = companyClient.getCompany(
+                requestDto.buyerCompanyId());
+
+        if (!companyBySellerCompanyId.getBody().getData().type().equals(CompanyType.RECEIVING_COMPANY.name())) {
+            throw new OrderException(ExceptionMessage.IS_NOT_SELLER);
+        }
+
+        if (!companyByBuyerCompanyId.getBody().getData().type().equals(CompanyType.RECEIVING_COMPANY.name())) {
+            throw new OrderException(ExceptionMessage.IS_NOT_BUYER);
+        }
 
         Order order = orderMapper.toOrder(requestDto, productId);
 
