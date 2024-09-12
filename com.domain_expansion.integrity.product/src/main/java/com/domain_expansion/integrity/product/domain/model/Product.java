@@ -21,14 +21,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 @Getter
 @Entity
 @Table(name = "p_product")
 @SQLRestriction("is_delete IS FALSE")
-@SQLDelete(sql = "UPDATE p_product SET deleted_at = CURRENT_TIMESTAMP, is_delete = true WHERE product_id = ?")
 @NoArgsConstructor(access = PROTECTED)
 public class Product extends BaseDateEntity {
 
@@ -81,5 +79,10 @@ public class Product extends BaseDateEntity {
     public void updateProduct(ProductUpdateRequestDto requestDto) {
 
         this.name = new ProductName(requestDto.productName());
+    }
+
+    public void delete() {
+        this.isDelete = true;
+        super.deleteEntity();
     }
 }

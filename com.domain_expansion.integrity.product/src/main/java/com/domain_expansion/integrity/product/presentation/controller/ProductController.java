@@ -1,6 +1,7 @@
 package com.domain_expansion.integrity.product.presentation.controller;
 
 import static com.domain_expansion.integrity.product.common.message.SuccessMessage.SUCCESS_CREATE_PRODUCT;
+import static com.domain_expansion.integrity.product.common.message.SuccessMessage.SUCCESS_DELETE_PRODUCT;
 import static com.domain_expansion.integrity.product.common.message.SuccessMessage.SUCCESS_GET_PRODUCT;
 import static com.domain_expansion.integrity.product.common.message.SuccessMessage.SUCCESS_GET_PRODUCTS;
 import static com.domain_expansion.integrity.product.common.message.SuccessMessage.SUCCESS_UPDATE_PRODUCT;
@@ -80,7 +81,7 @@ public class ProductController {
     }
 
     @PatchMapping("/{productId}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_HUB_COMPANY', 'ROLE_HUB_MANAGER')")
+    @PreAuthorize("hasAnyRole('ROLE_MASTER', 'ROLE_HUB_COMPANY', 'ROLE_HUB_MANAGER')")
     public ResponseEntity<? extends CommonResponse> updateProduct(
             @Valid @RequestBody
             ProductUpdateRequestDto requestDto,
@@ -96,7 +97,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{productId}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_HUB_COMPANY')")
+    @PreAuthorize("hasAnyRole('ROLE_MASTER', 'ROLE_HUB_COMPANY')")
     public ResponseEntity<? extends CommonResponse> deleteProduct(
             @PathVariable
             String productId,
@@ -106,7 +107,7 @@ public class ProductController {
 
         productService.deleteProduct(productId, userDetails);
 
-        return ResponseEntity.status(SUCCESS_CREATE_PRODUCT.getHttpStatus())
-                .body(success(SUCCESS_CREATE_PRODUCT.getMessage()));
+        return ResponseEntity.status(SUCCESS_DELETE_PRODUCT.getHttpStatus())
+                .body(success(SUCCESS_DELETE_PRODUCT.getMessage()));
     }
 }

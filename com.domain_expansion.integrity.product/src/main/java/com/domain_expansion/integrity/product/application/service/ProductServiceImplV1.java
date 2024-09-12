@@ -123,6 +123,6 @@ public class ProductServiceImplV1 implements ProductService {
 
         validateUser(userDetails, product.getCompany().getCompanyId());
 
-        productRepository.deleteById(productId);
+        product.delete();
     }
 }

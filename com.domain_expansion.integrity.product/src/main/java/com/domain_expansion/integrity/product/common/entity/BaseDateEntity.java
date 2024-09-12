@@ -1,9 +1,11 @@
 package com.domain_expansion.integrity.product.common.entity;
 
+import com.domain_expansion.integrity.product.common.entity.auditor.UserAuditorAware;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -38,9 +40,10 @@ public abstract class BaseDateEntity {
     @Column(name = "deleted_by")
     protected Long deletedUser;
 
-    public void deleteEntity() {
+    protected void deleteEntity() {
         this.deletedAt = LocalDateTime.now();
-        //TODO: 이것도 audit으로 넣어줄 수 있음
-        this.deletedUser = null;
+        UserAuditorAware userAuditorAware = new UserAuditorAware();
+        Optional<Long> currentAuditor = userAuditorAware.getCurrentAuditor();
+        this.deletedUser = currentAuditor.get();
     }
 }
