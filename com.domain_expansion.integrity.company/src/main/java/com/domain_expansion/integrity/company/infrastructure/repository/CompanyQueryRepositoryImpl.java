@@ -4,6 +4,7 @@ import com.domain_expansion.integrity.company.domain.model.Company;
 import com.domain_expansion.integrity.company.domain.model.CompanyType;
 import com.domain_expansion.integrity.company.domain.model.QCompany;
 import com.domain_expansion.integrity.company.domain.repository.CompanyQueryRepository;
+import com.domain_expansion.integrity.company.prsentation.request.CompanySearchCondition;
 import com.domain_expansion.integrity.company.prsentation.response.CompanyResponseDto;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -23,16 +24,17 @@ public class CompanyQueryRepositoryImpl implements CompanyQueryRepository {
 
     /***
      * created_at 기준으로 내림차순설정
-     * @param companyName
-     * @param type
      * @param pageable
      * @return
      */
     @Override
-    public Page<CompanyResponseDto> searchCompanies(String companyName, CompanyType type,
+    public Page<CompanyResponseDto> searchCompanies(CompanySearchCondition searchCondition,
             Pageable pageable) {
 
         QCompany qCompany = QCompany.company;
+
+        String companyName = searchCondition.companyName();
+        CompanyType type = searchCondition.companyType();
 
         BooleanBuilder builder = new BooleanBuilder();
 

@@ -4,9 +4,9 @@ import static com.domain_expansion.integrity.company.common.message.SuccessMessa
 import com.domain_expansion.integrity.company.application.service.CompanyService;
 import com.domain_expansion.integrity.company.common.response.CommonResponse;
 import com.domain_expansion.integrity.company.common.response.SuccessResponse;
-import com.domain_expansion.integrity.company.domain.model.CompanyType;
 import com.domain_expansion.integrity.company.common.security.UserDetailsImpl;
 import com.domain_expansion.integrity.company.prsentation.request.CompanyCreateRequestDto;
+import com.domain_expansion.integrity.company.prsentation.request.CompanySearchCondition;
 import com.domain_expansion.integrity.company.prsentation.request.CompanyUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -62,11 +62,10 @@ public class CompanyController {
             + "T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_HUB_MANAGER)")
     @GetMapping
     public ResponseEntity<?  extends CommonResponse> findAllCompany(
-            @RequestParam(required = false) String companyName,
-            @RequestParam(required = false) CompanyType companyType,
+            @ModelAttribute CompanySearchCondition searchCondition,
             @PageableDefault(page = 0, size = 10) Pageable pageable) {
         return ResponseEntity.status(SUCCESS_GET_COMPANY.getHttpStatus()).body(
-                SuccessResponse.of(SUCCESS_GET_COMPANY.getMessage(), companyService.getCompanies(companyName,companyType,pageable)));
+                SuccessResponse.of(SUCCESS_GET_COMPANY.getMessage(), companyService.getCompanies(searchCondition,pageable)));
     }
 
     /***

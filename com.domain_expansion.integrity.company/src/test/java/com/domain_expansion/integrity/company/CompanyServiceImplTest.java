@@ -13,6 +13,7 @@ import com.domain_expansion.integrity.company.domain.model.CompanyType;
 import com.domain_expansion.integrity.company.domain.repository.CompanyQueryRepository;
 import com.domain_expansion.integrity.company.domain.repository.CompanyRepository;
 import com.domain_expansion.integrity.company.prsentation.request.CompanyCreateRequestDto;
+import com.domain_expansion.integrity.company.prsentation.request.CompanySearchCondition;
 import com.domain_expansion.integrity.company.prsentation.request.CompanyUpdateRequestDto;
 import com.domain_expansion.integrity.company.prsentation.response.CompanyResponseDto;
 import com.domain_expansion.integrity.company.prsentation.response.CompanyValidateResponseDto;
@@ -320,9 +321,14 @@ class CompanyServiceImplTest {
             Page<Company> companyPage = new PageImpl<>(List.of(company));
             Page<CompanyResponseDto> lists = companyPage.map(CompanyResponseDto::from);
 
-            given(companyQueryRepository.searchCompanies("test",CompanyType.PRODUCING_COMPANY,pageable)).willReturn(lists);
+            CompanySearchCondition searchCondition = new CompanySearchCondition(
+                    "test",
+                    CompanyType.PRODUCING_COMPANY
 
-            Page<CompanyResponseDto> result = companyService.getCompanies("test",CompanyType.PRODUCING_COMPANY,pageable);
+            );
+            given(companyQueryRepository.searchCompanies(searchCondition,pageable)).willReturn(lists);
+
+            Page<CompanyResponseDto> result = companyService.getCompanies(searchCondition,pageable);
 
             assertNotNull(result);
             assertEquals(result.getContent().size(),1);

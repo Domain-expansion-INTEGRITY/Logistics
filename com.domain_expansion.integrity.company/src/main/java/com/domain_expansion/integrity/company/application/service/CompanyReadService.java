@@ -1,6 +1,6 @@
 package com.domain_expansion.integrity.company.application.service;
 
-import com.domain_expansion.integrity.company.domain.model.CompanyType;
+import com.domain_expansion.integrity.company.prsentation.request.CompanySearchCondition;
 import com.domain_expansion.integrity.company.prsentation.response.CompanyResponseDto;
 import com.domain_expansion.integrity.company.prsentation.response.CompanyValidateResponseDto;
 import org.springframework.data.domain.Page;
@@ -10,7 +10,7 @@ public interface CompanyReadService {
 
     CompanyResponseDto getCompany(String companyId);
 
-    Page<CompanyResponseDto> getCompanies(String companyName, CompanyType type, Pageable pageable);
+    Page<CompanyResponseDto> getCompanies(CompanySearchCondition searchCondition, Pageable pageable);
 
     CompanyValidateResponseDto validateUser(String companyId, Long userId);
 }

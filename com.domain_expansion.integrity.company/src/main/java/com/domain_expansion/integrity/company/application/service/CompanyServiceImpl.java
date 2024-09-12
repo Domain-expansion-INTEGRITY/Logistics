@@ -7,11 +7,11 @@ import com.domain_expansion.integrity.company.application.shared.RoleConstants;
 import com.domain_expansion.integrity.company.common.exception.CompanyException;
 import com.domain_expansion.integrity.company.common.message.ExceptionMessage;
 import com.domain_expansion.integrity.company.domain.model.Company;
-import com.domain_expansion.integrity.company.domain.model.CompanyType;
 import com.domain_expansion.integrity.company.domain.repository.CompanyRepository;
 import com.domain_expansion.integrity.company.domain.repository.CompanyQueryRepository;
 import com.domain_expansion.integrity.company.common.security.UserDetailsImpl;
 import com.domain_expansion.integrity.company.prsentation.request.CompanyCreateRequestDto;
+import com.domain_expansion.integrity.company.prsentation.request.CompanySearchCondition;
 import com.domain_expansion.integrity.company.prsentation.request.CompanyUpdateRequestDto;
 import com.domain_expansion.integrity.company.prsentation.response.CompanyResponseDto;
 import com.domain_expansion.integrity.company.prsentation.response.CompanyValidateResponseDto;
@@ -94,8 +94,8 @@ public class CompanyServiceImpl implements CompanyService{
      * @return
      */
     @Override
-    public Page<CompanyResponseDto> getCompanies(String companyName, CompanyType type,Pageable pageable) {
-        return companyQueryRepository.searchCompanies(companyName,type,pageable);
+    public Page<CompanyResponseDto> getCompanies(CompanySearchCondition searchCondition,Pageable pageable) {
+        return companyQueryRepository.searchCompanies(searchCondition,pageable);
     }
 
     @Override
