@@ -4,7 +4,6 @@ import com.domain_expansion.integrity.auth.domain.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import jakarta.annotation.PostConstruct;
 import java.util.Base64;
 import java.util.Date;
 import javax.crypto.SecretKey;
@@ -25,14 +24,14 @@ public class JwtUtils {
     // Token 식별자
     public static final String BEARER_PREFIX = "Bearer ";
 
-    public static final long TOKEN_TIME = 60 * 60 * 1000L; // 60분
+    public static final long TOKEN_TIME = 24 * 60 * 60 * 1000L; // 60분
 
-    @Value("${jwt.secret.key}")
+
     private String secretKey;
     private SecretKey key;
 
-    @PostConstruct
-    public void init() {
+    public JwtUtils(@Value("${jwt.secret.key}") String secretKey) {
+        this.secretKey = secretKey;
         byte[] bytes = Base64.getDecoder().decode(secretKey);
         key = Keys.hmacShaKeyFor(bytes);
     }

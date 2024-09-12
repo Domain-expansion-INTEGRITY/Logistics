@@ -30,7 +30,9 @@ public class AuthController {
 
         response.addHeader(JwtUtils.AUTHORIZATION_HEADER, jwtToken);
 
-        return SuccessResponse.of(SuccessMessage.SUCCESS_LOGIN_USER.getMessage(), jwtToken);
+        // TODO: 테스트를 위해서 잠깐 bearer 안붙임
+        return SuccessResponse.of(SuccessMessage.SUCCESS_LOGIN_USER.getMessage(),
+            jwtToken.substring(7));
     }
 
 }
