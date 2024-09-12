@@ -9,8 +9,6 @@ import com.domain_expansion.integrity.company.common.security.UserDetailsImpl;
 import com.domain_expansion.integrity.company.prsentation.request.CompanyCreateRequestDto;
 import com.domain_expansion.integrity.company.prsentation.request.CompanyUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/companies")
 public class CompanyController {
 
-    private static final Logger log = LoggerFactory.getLogger(CompanyController.class);
     private final CompanyService companyService;
 
     /***
@@ -50,7 +47,7 @@ public class CompanyController {
     @GetMapping("/{company_id}")
     public ResponseEntity<?  extends CommonResponse> findCompanyById(@PathVariable("company_id") String companyId,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        log.info(userDetails.getAuthorities().toString());
+
         return ResponseEntity.status(SUCCESS_GET_COMPANY.getHttpStatus())
                 .body(SuccessResponse.of(SUCCESS_GET_COMPANY.getMessage(), companyService.getCompany(companyId)));
     }
