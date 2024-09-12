@@ -3,11 +3,10 @@ spring:
     name: company-service
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/company
-    username: postgres
-    password: 11223344
+    url: ${COMPANY_DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
-
   jpa:
     hibernate:
       ddl-auto: update
