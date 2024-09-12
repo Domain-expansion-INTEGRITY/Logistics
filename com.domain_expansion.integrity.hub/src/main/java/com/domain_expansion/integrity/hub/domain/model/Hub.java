@@ -3,11 +3,14 @@ package com.domain_expansion.integrity.hub.domain.model;
 import com.domain_expansion.integrity.hub.common.entity.BaseDateEntity;
 import com.domain_expansion.integrity.hub.domain.model.vo.hub.HubLatitude;
 import com.domain_expansion.integrity.hub.domain.model.vo.hub.HubLongitude;
+import com.domain_expansion.integrity.hub.presentation.request.HubUpdateRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,6 +43,9 @@ public class Hub extends BaseDateEntity {
     @Embedded
     private HubLongitude hubLongitude;
 
+    @OneToMany(mappedBy = "hub")
+    private List<HubDeliveryMan> deliveryMans;
+
     @Column(name = "is_delete")
     private Boolean isDelete = false;
 
@@ -70,5 +76,34 @@ public class Hub extends BaseDateEntity {
     {
         super.setDeletedValue(userId);
         isDelete = true;
+    }
+
+    public void updateWith(HubUpdateRequestDto requestDto) {
+
+        if(requestDto.userId() != null)
+        {
+            this.userId = requestDto.userId();
+        }
+
+        if(requestDto.name() != null)
+        {
+            this.name = requestDto.name();
+        }
+
+        if(requestDto.address() != null)
+        {
+            this.address = requestDto.address();
+        }
+
+        if(requestDto.latitude() != null)
+        {
+            this.hubLatitude = new HubLatitude(requestDto.latitude());
+        }
+
+        if(requestDto.longitude() != null)
+        {
+            this.hubLongitude = new HubLongitude(requestDto.longitude());
+        }
+
     }
 }

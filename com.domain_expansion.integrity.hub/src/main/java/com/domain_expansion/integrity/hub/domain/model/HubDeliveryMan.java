@@ -30,4 +30,5 @@ public class HubDeliveryMan extends BaseDateEntity {
     @JoinColumn(name = "delivery_man_id",nullable = false)
     private DeliveryMan deliveryMan;
 
+
 }

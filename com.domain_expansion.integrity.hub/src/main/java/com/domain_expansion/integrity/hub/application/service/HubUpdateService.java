@@ -4,5 +4,5 @@ import com.domain_expansion.integrity.hub.presentation.request.HubUpdateRequestD
 import com.domain_expansion.integrity.hub.presentation.response.HubResponseDto;
 
 public interface HubUpdateService {
-    HubResponseDto updateHub(HubUpdateRequestDto requestDto);
+    HubResponseDto updateHub(HubUpdateRequestDto requestDto,String hubId);
 }

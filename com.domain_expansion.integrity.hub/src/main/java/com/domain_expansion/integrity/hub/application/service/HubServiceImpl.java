@@ -1,15 +1,22 @@
 package com.domain_expansion.integrity.hub.application.service;
 
 import com.domain_expansion.integrity.hub.application.mapper.HubMapper;
+import com.domain_expansion.integrity.hub.common.exception.HubException;
+import com.domain_expansion.integrity.hub.common.message.ExceptionMessage;
 import com.domain_expansion.integrity.hub.domain.model.Hub;
+import com.domain_expansion.integrity.hub.domain.repository.HubQueryRepository;
 import com.domain_expansion.integrity.hub.domain.repository.HubRepository;
 import com.domain_expansion.integrity.hub.presentation.request.HubCreateRequestDto;
 import com.domain_expansion.integrity.hub.presentation.request.HubSearchCondition;
 import com.domain_expansion.integrity.hub.presentation.request.HubUpdateRequestDto;
 import com.domain_expansion.integrity.hub.presentation.response.HubCreateResponseDto;
+import com.domain_expansion.integrity.hub.presentation.response.HubDeliverManResponseDto;
 import com.domain_expansion.integrity.hub.presentation.response.HubResponseDto;
 import com.github.ksuid.Ksuid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,6 +30,8 @@ public class HubServiceImpl implements HubService{
     private final HubRepository hubRepository;
 
     private final HubMapper hubMapper;
+
+    private final HubQueryRepository hubQueryRepository;
 
     /***
      * 허브 관리자만 가능
@@ -44,22 +53,50 @@ public class HubServiceImpl implements HubService{
     }
 
     @Override
-    public void deleteHub(String hubId) {
+    public void deleteHub(String hubId,Long userId) {
+
+        Hub hub = hubRepository.findById(hubId).orElseThrow(
+                () -> new HubException(ExceptionMessage.NOT_FOUND_HUB_ID)
+        );
+
+        hub.deleteHub(userId);
 
     }
 
+    @Transactional(readOnly = true)
     @Override
     public HubResponseDto getHubById(String hubId) {
-        return null;
+
+        Hub hub = hubRepository.findById(hubId).orElseThrow(
+                () -> new HubException(ExceptionMessage.NOT_FOUND_HUB_ID)
+        );
+
+        List<HubDeliverManResponseDto> deliveryManLists = hub.getDeliveryMans().stream()
+                .map(delivery -> new HubDeliverManResponseDto(
+                        delivery.getHubDeliveryManId(),
+                        delivery.getDeliveryMan().getUserId()
+                )).toList();
+
+        return HubResponseDto.from(hub,deliveryManLists);
     }
 
+    @Cacheable(cacheNames = "HubsAll",key = "'allHubs'")
+    @Transactional(readOnly = true)
     @Override
     public Page<HubResponseDto> getAllHubs(HubSearchCondition searchCondition,Pageable pageable) {
-        return null;
+        return hubQueryRepository.searchHubs(searchCondition,pageable);
     }
 
+    @CacheEvict(value = "HubsAll", key = "'allHubs'")
     @Override
-    public HubResponseDto updateHub(HubUpdateRequestDto requestDto) {
-        return null;
+    public HubResponseDto updateHub(HubUpdateRequestDto requestDto, String hudId) {
+
+        Hub hub = hubRepository.findById(hudId).orElseThrow(
+                () -> new HubException(ExceptionMessage.NOT_FOUND_HUB_ID)
+        );
+
+        hub.updateWith(requestDto);
+
+        return HubResponseDto.from(hub);
     }
 }

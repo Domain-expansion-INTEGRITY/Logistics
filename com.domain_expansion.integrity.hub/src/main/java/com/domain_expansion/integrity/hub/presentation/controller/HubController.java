@@ -5,6 +5,7 @@ import static com.domain_expansion.integrity.hub.common.message.SuccessMessage.*
 import com.domain_expansion.integrity.hub.common.response.SuccessResponse;
 import com.domain_expansion.integrity.hub.common.response.CommonResponse;
 import com.domain_expansion.integrity.hub.application.service.HubService;
+import com.domain_expansion.integrity.hub.common.security.UserDetailsImpl;
 import com.domain_expansion.integrity.hub.presentation.request.HubCreateRequestDto;
 import com.domain_expansion.integrity.hub.presentation.request.HubSearchCondition;
 import com.domain_expansion.integrity.hub.presentation.request.HubUpdateRequestDto;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -57,20 +59,22 @@ public class HubController {
 
     @PreAuthorize("hasAnyRole(T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_MASTER)")
     @PatchMapping("/{hub_id}")
-    public ResponseEntity<?  extends CommonResponse> updateHub(@PathVariable HubUpdateRequestDto requestDto){
+    public ResponseEntity<?  extends CommonResponse> updateHub(@RequestBody HubUpdateRequestDto requestDto,
+            @PathVariable String hub_id){
         return ResponseEntity.status(SUCCESS_UPDATE_HUB.getHttpStatus())
-                .body(SuccessResponse.success(SUCCESS_UPDATE_HUB.getMessage(), hubService.updateHub(requestDto)));
+                .body(SuccessResponse.success(SUCCESS_UPDATE_HUB.getMessage(), hubService.updateHub(requestDto,hub_id)));
 
     }
 
     @PreAuthorize("hasAnyRole(T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_MASTER)")
     @DeleteMapping("/{hub_id}")
-    public ResponseEntity<?  extends CommonResponse>  deleteHub(@PathVariable String hub_id){
+    public ResponseEntity<?  extends CommonResponse>  deleteHub(@PathVariable String hub_id,
+            @AuthenticationPrincipal UserDetailsImpl userDetails){
 
-        hubService.deleteHub(hub_id);
+        hubService.deleteHub(hub_id,userDetails.getUserId());
 
-        return ResponseEntity.status(SUCCESS_UPDATE_HUB.getHttpStatus())
-                .body(SuccessResponse.success(SUCCESS_UPDATE_HUB.getMessage()));
+        return ResponseEntity.status(SUCCESS_DELETE_HUBS.getHttpStatus())
+                .body(SuccessResponse.success(SUCCESS_DELETE_HUBS.getMessage()));
 
     }
 
