@@ -16,7 +16,6 @@ import com.domain_expansion.integrity.company.prsentation.request.CompanyUpdateR
 import com.domain_expansion.integrity.company.prsentation.response.CompanyResponseDto;
 import com.domain_expansion.integrity.company.prsentation.response.CompanyValidateResponseDto;
 import com.github.ksuid.Ksuid;
-import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -88,8 +87,6 @@ public class CompanyServiceImpl implements CompanyService{
 
     /***
      * 업체명과 업체타입으러 검색가능
-     * @param companyName
-     * @param type
      * @param pageable
      * @return
      */
@@ -152,18 +149,10 @@ public class CompanyServiceImpl implements CompanyService{
      */
     private boolean isHaveAuthorized(String companyId, Long userId)
     {
-        try{
 
-            HubResponseDto dto = hubClient.findHubByUserId(userId);
+        HubResponseDto dto = hubClient.findHubByUserId(userId);
 
-            return companyRepository.findByCompanyIdAndHubIdAndIsDeleteFalse(companyId,dto.getHubId()).isPresent();
-
-        }catch (FeignException.NotFound e) {
-            return false;
-        }catch (FeignException e) {
-            throw new RuntimeException("허브 정보를 확인하는 도중 문제가 발생했습니다.");
-        }
-
+        return companyRepository.findByCompanyIdAndHubIdAndIsDeleteFalse(companyId,dto.getHubId()).isPresent();
     }
 
     /***
@@ -173,17 +162,8 @@ public class CompanyServiceImpl implements CompanyService{
      */
     private boolean isHubExists(String hubId) {
 
-        try{
-
-            hubClient.findHubById(hubId);
-
-            return true;
-
-        }catch (FeignException.NotFound e) {
-            return false;
-        }catch (FeignException e) {
-            throw new RuntimeException("허브 정보를 확인하는 도중 문제가 발생했습니다.");
-        }
+        hubClient.findHubById(hubId);
+        return true;
 
     }
 
