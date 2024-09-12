@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class BaseEntity {
+public abstract class BaseDateEntity {
 
     @Column(name = "created_at", updatable = false)
     @CreatedDate
@@ -38,5 +38,10 @@ public abstract class BaseEntity {
 
     @Column(name = "deleted_by")
     protected Long deletedBy;
+
+    public void setDeletedBy(Long deletedBy) {
+        this.deletedBy = deletedBy;
+        this.deletedAt = LocalDateTime.now();
+    }
 
 }

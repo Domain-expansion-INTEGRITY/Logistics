@@ -1,16 +1,18 @@
 package com.domain_expansion.integrity.company.domain.model;
 
-import com.domain_expansion.integrity.company.common.entity.BaseEntity;
-import com.domain_expansion.integrity.company.domain.model.vo.CompanyAddress;
+import com.domain_expansion.integrity.company.common.entity.BaseDateEntity;
+import com.domain_expansion.integrity.company.prsentation.request.CompanyUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "p_company")
-public class Company extends BaseEntity {
+@SQLRestriction("is_delete = false")
+public class Company extends BaseDateEntity {
 
     @Id
     private String companyId;
@@ -29,15 +31,14 @@ public class Company extends BaseEntity {
     private CompanyType companyType;
 
     @Column(name = "address",nullable = false)
-    @Embedded
-    private CompanyAddress companyAddress;
+    private String companyAddress;
 
     @ColumnDefault(value = "false")
     @Column(name = "is_delete")
-    private Boolean isDelete;
+    private Boolean isDelete = false;
 
     @Builder(access = AccessLevel.PRIVATE)
-    public Company(String companyId,Long userId, String hubId, String name, CompanyType companyType, CompanyAddress companyAddress) {
+    public Company(String companyId,Long userId, String hubId, String name, CompanyType companyType, String companyAddress) {
         this.companyId = companyId;
         this.userId = userId;
         this.hubId = hubId;
@@ -47,7 +48,7 @@ public class Company extends BaseEntity {
     }
 
     public static Company from(
-            String companyId,Long userId, String hubId, String name, CompanyType companyType, CompanyAddress companyAddress
+            String companyId,Long userId, String hubId, String name, CompanyType companyType, String companyAddress
     )
     {
         return Company.builder()
@@ -60,4 +61,32 @@ public class Company extends BaseEntity {
                 .build();
     }
 
+    public void deleteCompany(Long userId)
+    {
+        super.setDeletedBy(userId);
+        this.isDelete = true;
+    }
+
+    public void updateWith(CompanyUpdateRequestDto requestDto) {
+
+        if( requestDto.hubId() != null)
+        {
+            this.hubId = requestDto.hubId();
+        }
+
+        if( requestDto.name() != null)
+        {
+            this.name = requestDto.name();
+        }
+
+        if( requestDto.companyType() != null)
+        {
+            this.companyType = requestDto.companyType();
+        }
+
+        if( requestDto.address() != null)
+        {
+            this.companyAddress = requestDto.address();
+        }
+    }
 }
