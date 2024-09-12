@@ -13,7 +13,7 @@ public class UserRoleConverter implements Converter<String, UserRole> {
         try {
             return UserRole.valueOf(source);
         } catch (Exception e) {
-            throw new UserException(ExceptionMessage.INVALID_PASSWORD);
+            throw new UserException(ExceptionMessage.INVALID_INPUT);
         }
 
 

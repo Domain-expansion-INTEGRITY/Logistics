@@ -12,7 +12,6 @@ import com.domain_expansion.integrity.user.presentation.request.UserLoginRequest
 import com.domain_expansion.integrity.user.presentation.request.UserSearchCondition;
 import com.domain_expansion.integrity.user.presentation.request.UserUpdateRequestDto;
 import com.domain_expansion.integrity.user.presentation.response.UserResponseDto;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -69,7 +68,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public Page<UserResponseDto> findUserList(Pageable pageable,
-        
+
         UserSearchCondition searchCondition) {
         Page<User> userList = userQueryRepository.findAllUserByCondition(pageable, searchCondition);
 
@@ -84,11 +83,12 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto updateUserById(Long userId, UserUpdateRequestDto requestDto) {
         User userInfo = findUserByIdAndCheck(userId);
 
-        List<User> checkUserList = userDomainService.checkPhoneNumber(userId,
+        Long count = userDomainService.checkPhoneNumber(userId,
             requestDto.phoneNumber(),
             requestDto.slackId());
 
-        if (!checkUserList.isEmpty()) {
+        // count 확인
+        if (count > 0) {
             throw new UserException(ExceptionMessage.ALREADY_EXIST_DATA);
         }
 

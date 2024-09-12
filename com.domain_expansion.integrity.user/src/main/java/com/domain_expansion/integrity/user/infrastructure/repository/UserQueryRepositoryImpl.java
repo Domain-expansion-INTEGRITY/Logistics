@@ -29,7 +29,7 @@ public class UserQueryRepositoryImpl implements UserQueryRepository {
     private final JPAQueryFactory query;
 
     @Override
-    public List<User> checkExistFieldInfo(Long userId, String phoneNumber, String slackId) {
+    public Long checkExistFieldInfo(Long userId, String phoneNumber, String slackId) {
 
         BooleanBuilder builder = new BooleanBuilder();
         if (StringUtils.hasText(phoneNumber)) {
@@ -41,10 +41,11 @@ public class UserQueryRepositoryImpl implements UserQueryRepository {
         }
 
         return query
-            .select(user)
+            .select(user.count())
             .from(user)
             .where(builder.and(user.id.ne(userId)))
-            .fetch();
+            .fetchOne();
+
     }
 
     @Override
