@@ -4,6 +4,7 @@ import com.domain_expansion.integrity.hub.application.mapper.HubMapper;
 import com.domain_expansion.integrity.hub.domain.model.Hub;
 import com.domain_expansion.integrity.hub.domain.repository.HubRepository;
 import com.domain_expansion.integrity.hub.presentation.request.HubCreateRequestDto;
+import com.domain_expansion.integrity.hub.presentation.request.HubSearchCondition;
 import com.domain_expansion.integrity.hub.presentation.request.HubUpdateRequestDto;
 import com.domain_expansion.integrity.hub.presentation.response.HubCreateResponseDto;
 import com.domain_expansion.integrity.hub.presentation.response.HubResponseDto;
@@ -23,6 +24,11 @@ public class HubServiceImpl implements HubService{
 
     private final HubMapper hubMapper;
 
+    /***
+     * 허브 관리자만 가능
+     * @param requestDto
+     * @return
+     */
     @Override
     public HubCreateResponseDto createHub(HubCreateRequestDto requestDto)
     {
@@ -48,7 +54,7 @@ public class HubServiceImpl implements HubService{
     }
 
     @Override
-    public Page<HubResponseDto> getAllHubs(Pageable pageable) {
+    public Page<HubResponseDto> getAllHubs(HubSearchCondition searchCondition,Pageable pageable) {
         return null;
     }
 

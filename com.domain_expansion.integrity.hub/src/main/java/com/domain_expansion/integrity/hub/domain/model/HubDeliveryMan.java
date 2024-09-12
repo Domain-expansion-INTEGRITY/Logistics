@@ -1,6 +1,6 @@
 package com.domain_expansion.integrity.hub.domain.model;
 
-import com.domain_expansion.integrity.hub.common.entity.BaseEntity;
+import com.domain_expansion.integrity.hub.common.entity.BaseDateEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "p_hub_delivery_man")
-public class HubDeliveryMan extends BaseEntity {
+public class HubDeliveryMan extends BaseDateEntity {
 
     @Id
     @Column(name = "hub_delivery_man_id")
