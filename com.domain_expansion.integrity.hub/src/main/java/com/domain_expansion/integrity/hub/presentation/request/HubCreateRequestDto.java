@@ -4,6 +4,7 @@ public record HubCreateRequestDto(
         Long userId,
         String name,
         String address,
+        double index,
         double latitude,
         double longitude
 ) {

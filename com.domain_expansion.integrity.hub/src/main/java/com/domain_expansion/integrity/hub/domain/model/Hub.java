@@ -4,12 +4,14 @@ import com.domain_expansion.integrity.hub.common.entity.BaseDateEntity;
 import com.domain_expansion.integrity.hub.domain.model.vo.hub.HubLatitude;
 import com.domain_expansion.integrity.hub.domain.model.vo.hub.HubLongitude;
 import com.domain_expansion.integrity.hub.presentation.request.HubUpdateRequestDto;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -46,8 +48,14 @@ public class Hub extends BaseDateEntity {
     @Embedded
     private HubLongitude hubLongitude;
 
-    @OneToMany(mappedBy = "hub")
-    private List<HubDeliveryMan> deliveryMans;
+    @OneToMany(mappedBy = "hub",cascade = CascadeType.ALL ,orphanRemoval = true)
+    private List<HubDeliveryMan> deliveryMans = new ArrayList<>();
+
+    @OneToMany(mappedBy = "startHub", cascade = CascadeType.ALL)
+    private List<HubRoute> startRoutes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "endHub", cascade = CascadeType.ALL)
+    private List<HubRoute> endRoutes = new ArrayList<>();
 
     @Column(name = "is_delete")
     private Boolean isDelete = false;

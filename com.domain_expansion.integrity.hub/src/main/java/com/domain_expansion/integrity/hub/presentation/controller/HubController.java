@@ -4,12 +4,11 @@ import static com.domain_expansion.integrity.hub.common.message.SuccessMessage.*
 
 import com.domain_expansion.integrity.hub.common.response.SuccessResponse;
 import com.domain_expansion.integrity.hub.common.response.CommonResponse;
-import com.domain_expansion.integrity.hub.application.service.HubService;
+import com.domain_expansion.integrity.hub.application.service.hub.HubService;
 import com.domain_expansion.integrity.hub.common.security.UserDetailsImpl;
 import com.domain_expansion.integrity.hub.presentation.request.HubCreateRequestDto;
 import com.domain_expansion.integrity.hub.presentation.request.HubSearchCondition;
 import com.domain_expansion.integrity.hub.presentation.request.HubUpdateRequestDto;
-import com.domain_expansion.integrity.hub.presentation.response.HubResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.*;
@@ -34,7 +33,7 @@ public class HubController {
 
     private final HubService hubService;
 
-    @PreAuthorize("hasAnyRole(T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_MASTER)")
+    @PreAuthorize("hasAnyRole(T(com.domain_expansion.integrity.hub.application.shared.RoleConstants).ROLE_MASTER)")
     @PostMapping
     public ResponseEntity<?  extends CommonResponse> createHub(@RequestBody HubCreateRequestDto requestDto){
 
@@ -58,7 +57,7 @@ public class HubController {
 
     }
 
-    @PreAuthorize("hasAnyRole(T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_MASTER)")
+    @PreAuthorize("hasAnyRole(T(com.domain_expansion.integrity.hub.application.shared.RoleConstants).ROLE_MASTER)")
     @PatchMapping("/{hub_id}")
     public ResponseEntity<?  extends CommonResponse> updateHub(@RequestBody HubUpdateRequestDto requestDto,
             @PathVariable String hub_id){
@@ -67,7 +66,7 @@ public class HubController {
 
     }
 
-    @PreAuthorize("hasAnyRole(T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_MASTER)")
+    @PreAuthorize("hasAnyRole(T(com.domain_expansion.integrity.hub.application.shared.RoleConstants).ROLE_MASTER)")
     @DeleteMapping("/{hub_id}")
     public ResponseEntity<?  extends CommonResponse>  deleteHub(@PathVariable String hub_id,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
@@ -92,18 +91,5 @@ public class HubController {
                 .body(SuccessResponse.success(SUCCESS_GET_HUB.getMessage(),hubService.validateUserInHub(hub_id,userId)));
 
     }
-
-    /***
-     * 허브의 관리자 ID를 추출
-     * @param user_id
-     * @return
-     */
-    @GetMapping("/users/{user_id}")
-    public ResponseEntity<?  extends CommonResponse>  findHubByUserId(@PathVariable Long user_id)
-    {
-        return ResponseEntity.status(SUCCESS_GET_HUB.getHttpStatus())
-                .body(SuccessResponse.success(SUCCESS_GET_HUB.getMessage(),hubService.getHubByUserId(user_id)));
-    }
-
 
 }
