@@ -8,9 +8,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
@@ -33,9 +33,28 @@ public class HubRoute extends BaseDateEntity {
     @Column(nullable = false)
     private Integer duration;
 
-    @ColumnDefault(value = "false")
+    @Column(nullable = false)
+    private Integer distance;
+
     @Column(name = "is_delete")
-    private Boolean isDelete;
+    private Boolean isDelete = false;
 
+    @Builder(access = AccessLevel.PRIVATE)
+    public HubRoute(String hubRouteId, Hub startHub, Hub endHub, Integer duration, Integer distance, Boolean isDelete) {
+        this.hubRouteId = hubRouteId;
+        this.startHub = startHub;
+        this.endHub = endHub;
+        this.duration = duration;
+        this.distance = distance;
+    }
 
+    public static HubRoute from(String hubRouteId, Hub startHub, Hub endHub, Integer duration,Integer distance) {
+        return HubRoute.builder()
+                .hubRouteId(hubRouteId)
+                .startHub(startHub)
+                .endHub(endHub)
+                .duration(duration)
+                .distance(distance)
+                .build();
+    }
 }

@@ -37,6 +37,9 @@ public class Hub extends BaseDateEntity {
     @Column(nullable = false)
     private String address;
 
+    @Column(nullable = false)
+    private double index; //허브간 이동순서를 정의
+
     @Embedded
     private HubLatitude hubLatitude;
 
@@ -50,23 +53,25 @@ public class Hub extends BaseDateEntity {
     private Boolean isDelete = false;
 
     @Builder(access = AccessLevel.PRIVATE)
-    public Hub(String hubId, Long userId, String name,String address,HubLatitude hubLatitude,HubLongitude hubLongitude) {
+    public Hub(String hubId, Long userId, String name,String address,double index,HubLatitude hubLatitude,HubLongitude hubLongitude) {
         this.hubId = hubId;
         this.userId = userId;
         this.name = name;
+        this.index = index;
         this.address = address;
         this.hubLatitude = hubLatitude;
         this.hubLongitude = hubLongitude;
     }
 
     public static Hub from(
-            String hubId, Long userId, String name,String address,HubLatitude hubLatitude,HubLongitude hubLongitude)
+            String hubId, Long userId, String name,String address,double index,HubLatitude hubLatitude,HubLongitude hubLongitude)
     {
         return Hub.builder()
                 .hubId(hubId)
                 .userId(userId)
                 .name(name)
                 .address(address)
+                .index(index)
                 .hubLatitude(hubLatitude)
                 .hubLongitude(hubLongitude)
                 .build();
