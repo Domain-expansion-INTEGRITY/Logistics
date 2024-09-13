@@ -82,12 +82,12 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto updateUserById(Long userId, UserUpdateRequestDto requestDto) {
         User userInfo = findUserByIdAndCheck(userId);
 
-        Long count = userDomainService.checkPhoneNumber(userId,
+        Boolean isExist = userDomainService.checkPhoneNumber(userId,
             requestDto.phoneNumber(),
             requestDto.slackId());
 
         // count 확인
-        if (count > 0) {
+        if (isExist) {
             throw new UserException(ExceptionMessage.ALREADY_EXIST_DATA);
         }
 

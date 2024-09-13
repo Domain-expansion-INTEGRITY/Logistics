@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface UserQueryRepository {
 
-    Long checkExistFieldInfo(Long userId, String phoneNumber, String slackId);
+    Boolean checkExistFieldInfo(Long userId, String phoneNumber, String slackId);
 
     Page<User> findAllUserByCondition(Pageable pageable, UserSearchCondition searchCondition);
 
