@@ -1,4 +1,4 @@
-package com.domain_expansion.integrity.hub.application.service;
+package com.domain_expansion.integrity.hub.application.service.hub;
 
 import com.domain_expansion.integrity.hub.presentation.request.HubUpdateRequestDto;
 import com.domain_expansion.integrity.hub.presentation.response.HubResponseDto;
