@@ -11,5 +11,8 @@ public interface HubRepository{
 
     Optional<Hub> findByHubIdAndUserId(String hubId, Long userId);
 
-    Optional<Hub> findByUserId(Long userId);
+    //List<Hub> saveAll(Collection<Hub> hubs);
+
+    Optional<Hub> findByStartRoutes_HubRouteId(String hubRouteId);
+
 }

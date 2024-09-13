@@ -14,5 +14,4 @@ public interface HubReadService {
 
     HubValidateResponseDto validateUserInHub(String hubId, Long userId);
 
-    HubResponseDto getHubByUserId(Long userId);
 }

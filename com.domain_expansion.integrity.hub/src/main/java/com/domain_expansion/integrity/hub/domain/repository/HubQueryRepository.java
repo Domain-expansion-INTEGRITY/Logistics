@@ -4,9 +4,8 @@ import com.domain_expansion.integrity.hub.presentation.request.HubSearchConditio
 import com.domain_expansion.integrity.hub.presentation.response.HubResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Repository;
 
-@Repository
+
 public interface HubQueryRepository {
 
     Page<HubResponseDto> searchHubs(HubSearchCondition condition, Pageable pageable);

@@ -32,7 +32,7 @@ public class HubServiceImpl implements HubService{
 
     private final HubMapper hubMapper;
 
-    private final HubQueryRepository hubQueryRepository;
+     private final HubQueryRepository hubQueryRepository;
 
     /***
      * 허브 관리자만 가능
@@ -80,15 +80,15 @@ public class HubServiceImpl implements HubService{
 
         return HubResponseDto.from(hub,deliveryManLists);
     }
-
-    @Cacheable(cacheNames = "HubsAll",key = "'allHubs'")
+    //TODO: 캐시는 직렬화로 인해 문제가 있다
+   // @Cacheable(cacheNames = "HubsAll",key = "'allHubs'")
     @Transactional(readOnly = true)
     @Override
     public Page<HubResponseDto> getAllHubs(HubSearchCondition searchCondition,Pageable pageable) {
-        return hubQueryRepository.searchHubs(searchCondition,pageable);
+       return hubQueryRepository.searchHubs(searchCondition,pageable);
     }
 
-    @CacheEvict(value = "HubsAll", key = "'allHubs'")
+  //  @CacheEvict(value = "HubsAll", key = "'allHubs'")
     @Override
     public HubResponseDto updateHub(HubUpdateRequestDto requestDto, String hudId) {
 
@@ -111,13 +111,4 @@ public class HubServiceImpl implements HubService{
 
     }
 
-    @Override
-    public HubResponseDto getHubByUserId(Long userId) {
-
-        Hub hub = hubRepository.findByUserId(userId).orElseThrow(
-                () -> new HubException(ExceptionMessage.NOT_FOUND_HUB_ID)
-        );
-
-        return HubResponseDto.from(hub);
-    }
 }

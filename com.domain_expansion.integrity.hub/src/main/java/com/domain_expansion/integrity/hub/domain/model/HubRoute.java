@@ -1,6 +1,7 @@
 package com.domain_expansion.integrity.hub.domain.model;
 
 import com.domain_expansion.integrity.hub.common.entity.BaseDateEntity;
+import com.domain_expansion.integrity.hub.presentation.request.HubRouteUpdateRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -40,7 +41,7 @@ public class HubRoute extends BaseDateEntity {
     private Boolean isDelete = false;
 
     @Builder(access = AccessLevel.PRIVATE)
-    public HubRoute(String hubRouteId, Hub startHub, Hub endHub, Integer duration, Integer distance, Boolean isDelete) {
+    public HubRoute(String hubRouteId, Hub startHub, Hub endHub, Integer duration, Integer distance) {
         this.hubRouteId = hubRouteId;
         this.startHub = startHub;
         this.endHub = endHub;
@@ -57,4 +58,23 @@ public class HubRoute extends BaseDateEntity {
                 .distance(distance)
                 .build();
     }
+
+    public void deleteHubRoute(Long userId){
+        super.setDeletedValue(userId);
+        this.isDelete = true;
+    }
+
+    public void updateHubRoute(HubRouteUpdateRequestDto requestDto){
+
+        if(requestDto.distance() != null)
+        {
+            this.distance = requestDto.distance();
+        }
+
+        if(requestDto.duration() != null)
+        {
+            this.duration = requestDto.duration();
+        }
+    }
+
 }

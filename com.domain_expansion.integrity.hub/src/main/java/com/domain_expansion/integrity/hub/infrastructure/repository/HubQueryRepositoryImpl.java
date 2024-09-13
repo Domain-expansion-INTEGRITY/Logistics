@@ -9,7 +9,6 @@ import com.domain_expansion.integrity.hub.presentation.request.HubSearchConditio
 import com.domain_expansion.integrity.hub.presentation.response.HubDeliverManResponseDto;
 import com.domain_expansion.integrity.hub.presentation.response.HubResponseDto;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -17,12 +16,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
 
+@Repository
 @RequiredArgsConstructor
 public class HubQueryRepositoryImpl implements HubQueryRepository {
 
     private final JPAQueryFactory queryFactory;
-
+    //TODO : fetchjoin을 없애 문제는 해결했지만 n+1문제가 발생할수있다. 문제검토
     @Override
     public Page<HubResponseDto> searchHubs(HubSearchCondition condition, Pageable pageable) {
         QHub hub = QHub.hub;
@@ -44,9 +45,8 @@ public class HubQueryRepositoryImpl implements HubQueryRepository {
         builder.and(hub.isDelete.eq(false));
 
         JPAQuery<Hub> query = queryFactory.selectFrom(hub)
-                .leftJoin(hub,qHubDeliveryMan.hub)
-                .leftJoin(qHubDeliveryMan.hubDeliveryMan)
-                .fetchJoin()
+                .leftJoin(hub.deliveryMans, qHubDeliveryMan)
+                .leftJoin(qHubDeliveryMan.deliveryMan, deliveryMan)
                 .where(builder)
                 .orderBy(hub.createdAt.desc())
                 .offset(pageable.getOffset())
