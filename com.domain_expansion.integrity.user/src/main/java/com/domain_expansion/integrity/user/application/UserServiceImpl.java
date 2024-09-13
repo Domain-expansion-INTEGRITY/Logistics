@@ -68,7 +68,6 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public Page<UserResponseDto> findUserList(Pageable pageable,
-
         UserSearchCondition searchCondition) {
         Page<User> userList = userQueryRepository.findAllUserByCondition(pageable, searchCondition);
 
