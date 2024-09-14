@@ -1,13 +1,22 @@
 package com.domain_expansion.integrity.hub;
 
+import com.domain_expansion.integrity.hub.domain.model.Hub;
+import com.domain_expansion.integrity.hub.domain.model.vo.hub.HubLatitude;
+import com.domain_expansion.integrity.hub.domain.model.vo.hub.HubLongitude;
+import com.domain_expansion.integrity.hub.domain.repository.HubRepository;
+import com.github.ksuid.Ksuid;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class HubInsertHubDataTests {
-	/***
-	 * 허브관련 테스트 데이더 저장
+
 	@Autowired
-	private JpaHubRepository hubRepository;
+	private HubRepository hubRepository;
 
 	@Test
 	void insertTestDataInHub(){
@@ -32,8 +41,14 @@ class HubInsertHubDataTests {
 				new HubTestData("경상남도 센터", "경남 창원시 의창구 중앙대로 300", 35.216667, 128.683333)
 		);
 
+		double index = 1;
+
+		for(HubTestData data : testData){
+			data.addIndex(index++);
+		}
+
 		List<Hub> hubs = testData.stream()
-				.map(data -> new Hub(Ksuid.newKsuid().toString(),100L,data.getName(), data.getAddress(), new HubLatitude(data.getLatitude()), new HubLongitude(data.getLongitude())))
+				.map(data -> new Hub(Ksuid.newKsuid().toString(),100L,data.getName(), data.getAddress(),data.getIndex(),new HubLatitude(data.getLatitude()), new HubLongitude(data.getLongitude())))
 				.collect(Collectors.toList());
 
 		hubRepository.saveAll(hubs);
@@ -45,6 +60,7 @@ class HubInsertHubDataTests {
 		String address;
 		double latitude;
 		double longitude;
+		double index;
 
 		public HubTestData(String name, String address, double latitude, double longitude) {
 			this.name = name;
@@ -72,6 +88,14 @@ class HubInsertHubDataTests {
 			return this.longitude;
 		}
 
+		public double getIndex(){
+			return this.index;
+		}
+
+		public void addIndex(double index)
+		{
+			this.index = index;
+		}
 	}
-	*/
+
 }

@@ -6,6 +6,7 @@ import com.domain_expansion.integrity.hub.common.message.ExceptionMessage;
 import com.domain_expansion.integrity.hub.common.security.UserDetailsImpl;
 import com.domain_expansion.integrity.hub.domain.model.Hub;
 import com.domain_expansion.integrity.hub.domain.model.HubRoute;
+import com.domain_expansion.integrity.hub.domain.repository.HubQueryRepository;
 import com.domain_expansion.integrity.hub.domain.repository.HubRepository;
 import com.domain_expansion.integrity.hub.presentation.request.HubRouteCreateRequestDto;
 import com.domain_expansion.integrity.hub.presentation.request.HubRouteSearchCondition;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class HubRouteServiceImpl implements HubRouteService {
 
     private final HubRepository hubRepository;
+    private final HubQueryRepository queryRepository;
     private final HubMapper hubMapper;
 
     @Override
@@ -80,15 +82,18 @@ public class HubRouteServiceImpl implements HubRouteService {
                 () -> new HubException(ExceptionMessage.NOT_FOUND_HUB_ID)
         );
 
+        HubRoute hubRoute = existedHub.getStartRoutes().stream()
+                .filter(route -> route.getHubRouteId().equals(hubRouteId))
+                .findFirst()
+                .orElseThrow(() -> new HubException(ExceptionMessage.NOT_FOUND_HUB_ROUTE_ID));
 
-
-        return null;
+        return HubRouteResponseDto.of(hubRoute);
     }
 
     @Transactional(readOnly = true)
     @Override
     public Page<HubRouteResponseDto> getHubRoutes(HubRouteSearchCondition searchDto, Pageable pageable) {
-        return null;
+        return queryRepository.searchHubRoutes(searchDto,pageable);
     }
 
     @Override

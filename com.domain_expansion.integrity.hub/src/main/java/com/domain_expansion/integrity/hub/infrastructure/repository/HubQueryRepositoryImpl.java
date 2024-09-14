@@ -1,13 +1,17 @@
 package com.domain_expansion.integrity.hub.infrastructure.repository;
 
 import com.domain_expansion.integrity.hub.domain.model.Hub;
+import com.domain_expansion.integrity.hub.domain.model.HubRoute;
 import com.domain_expansion.integrity.hub.domain.model.QDeliveryMan;
 import com.domain_expansion.integrity.hub.domain.model.QHub;
 import com.domain_expansion.integrity.hub.domain.model.QHubDeliveryMan;
+import com.domain_expansion.integrity.hub.domain.model.QHubRoute;
 import com.domain_expansion.integrity.hub.domain.repository.HubQueryRepository;
+import com.domain_expansion.integrity.hub.presentation.request.HubRouteSearchCondition;
 import com.domain_expansion.integrity.hub.presentation.request.HubSearchCondition;
 import com.domain_expansion.integrity.hub.presentation.response.HubDeliverManResponseDto;
 import com.domain_expansion.integrity.hub.presentation.response.HubResponseDto;
+import com.domain_expansion.integrity.hub.presentation.response.HubRouteResponseDto;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -76,5 +80,38 @@ public class HubQueryRepositoryImpl implements HubQueryRepository {
         return new PageImpl<>(hubList, pageable, total);
     }
 
+    @Override
+    public Page<HubRouteResponseDto> searchHubRoutes(HubRouteSearchCondition condition, Pageable pageable) {
+
+        QHubRoute hubRoute = QHubRoute.hubRoute;
+        QHub startHub = QHub.hub;
+
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if(condition.distance() != null)
+        {
+            builder.and(hubRoute.distance.eq(condition.distance()));
+        }
+
+        if(condition.StartHubId() != null)
+        {
+            builder.and(hubRoute.startHub.hubId.eq(condition.StartHubId()));
+        }
+
+        builder.and(hubRoute.isDelete.eq(false));
+
+        JPAQuery<HubRoute> query = queryFactory.select(hubRoute)
+                .from(hubRoute)
+                .where(builder)
+                .orderBy(hubRoute.createdAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize());
+
+        Long total = query.fetchCount();
+
+        List<HubRouteResponseDto> lists = query.stream().map(HubRouteResponseDto::of).toList();
+
+        return new PageImpl<>(lists, pageable, total);
+    }
 
 }

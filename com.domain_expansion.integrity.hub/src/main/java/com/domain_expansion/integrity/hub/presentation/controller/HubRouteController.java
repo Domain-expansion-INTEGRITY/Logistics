@@ -11,18 +11,23 @@ import static com.domain_expansion.integrity.hub.common.message.SuccessMessage.S
 import static com.domain_expansion.integrity.hub.common.message.SuccessMessage.SUCCESS_UPDATE_HUB_ROUTE;
 
 import com.domain_expansion.integrity.hub.application.service.hubRoute.HubRouteService;
+import com.domain_expansion.integrity.hub.common.aop.DefaultPageSize;
 import com.domain_expansion.integrity.hub.common.response.CommonResponse;
 import com.domain_expansion.integrity.hub.common.response.SuccessResponse;
 import com.domain_expansion.integrity.hub.common.security.UserDetailsImpl;
 import com.domain_expansion.integrity.hub.presentation.request.HubCreateRequestDto;
 import com.domain_expansion.integrity.hub.presentation.request.HubRouteCreateRequestDto;
+import com.domain_expansion.integrity.hub.presentation.request.HubRouteSearchCondition;
 import com.domain_expansion.integrity.hub.presentation.request.HubRouteUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,18 +51,18 @@ public class HubRouteController {
     }
 
     @GetMapping("/{routeId}")
-    public ResponseEntity<?  extends CommonResponse> getHubRoute(@RequestBody HubCreateRequestDto requestDto,
-            @PathVariable String routeId){
+    public ResponseEntity<?  extends CommonResponse> getHubRoute(@PathVariable String routeId){
 
         return ResponseEntity.status(SUCCESS_GET_HUB_ROUTE.getHttpStatus())
-                .body(SuccessResponse.success(SUCCESS_GET_HUB_ROUTE.getMessage()));
+                .body(SuccessResponse.success(SUCCESS_GET_HUB_ROUTE.getMessage(),hubRouteService.getHubRoute(routeId)));
     }
 
     @GetMapping
-    public ResponseEntity<?  extends CommonResponse> getAllHubRoutes(@RequestBody HubCreateRequestDto requestDto){
+    public ResponseEntity<?  extends CommonResponse> getAllHubRoutes(@ModelAttribute
+            HubRouteSearchCondition searchCondition, @PageableDefault(size = 10) Pageable pageable){
 
         return ResponseEntity.status(SUCCESS_GET_ALL_HUBS_ROUTE.getHttpStatus())
-                .body(SuccessResponse.success(SUCCESS_GET_ALL_HUBS_ROUTE.getMessage()));
+                .body(SuccessResponse.success(SUCCESS_GET_ALL_HUBS_ROUTE.getMessage(),hubRouteService.getHubRoutes(searchCondition, pageable)));
     }
 
     @PreAuthorize("hasAnyRole(T(com.domain_expansion.integrity.hub.application.shared.RoleConstants).ROLE_MASTER)")
@@ -79,4 +84,7 @@ public class HubRouteController {
         return ResponseEntity.status(SUCCESS_DELETE_HUBS_ROUTE.getHttpStatus())
                 .body(SuccessResponse.success(SUCCESS_DELETE_HUBS_ROUTE.getMessage()));
     }
+
+    //TODO : 출발 허브와 목적 허브가 주어지면 걸리는 시간 및 예상거리까지 계산해서 보내줘야된다.
+
 }
