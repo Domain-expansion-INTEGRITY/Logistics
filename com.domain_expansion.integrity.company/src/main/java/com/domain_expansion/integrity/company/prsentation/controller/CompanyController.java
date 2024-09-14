@@ -141,7 +141,7 @@ public class CompanyController {
                 .body(of(SUCCESS_GET_COMPANY.getMessage(), companyService.getCompanyByUserId(userId)));
     }
 
-    @GetMapping("/api/v1/companies/hub/{hubId}")
+    @GetMapping("/hub/{hubId}")
     ResponseEntity<? extends CommonResponse> getCompaniesByHubId(@PathVariable("hubId") String hubId) {
 
         return ResponseEntity.status(SUCCESS_GET_COMPANY.getHttpStatus())

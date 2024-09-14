@@ -17,7 +17,7 @@ public class CompanyResponseData extends CommonResponseData {
             String userId,
             String hubId,
             String name,
-            String type,
+            String companyType,
             String address
     ) {
 

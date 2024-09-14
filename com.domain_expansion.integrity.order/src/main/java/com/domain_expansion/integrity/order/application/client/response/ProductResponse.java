@@ -5,10 +5,20 @@ import lombok.Getter;
 @Getter
 public class ProductResponse extends CommonResponseData {
 
-    private final ProductResponseDto productResponseDto;
+    private final ProductResponseDto data;
 
-    public ProductResponse(boolean success, String message, ProductResponseDto productResponseDto) {
+    public ProductResponse(boolean success, String message, ProductResponseDto data) {
         super(success, message);
-        this.productResponseDto = productResponseDto;
+        this.data = data;
+    }
+
+    public record ProductResponseDto(
+            String companyId,
+            String companyName,
+            String productId,
+            String productName,
+            Integer stock
+    ) {
+
     }
 }

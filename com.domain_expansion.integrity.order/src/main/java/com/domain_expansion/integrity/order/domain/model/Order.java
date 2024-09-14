@@ -36,7 +36,7 @@ public class Order extends BaseDateEntity {
     private String buyerCompanyId;
 
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private Set<OrderProduct> orderProducts = new HashSet<>();
 
     @Builder(access = PRIVATE)

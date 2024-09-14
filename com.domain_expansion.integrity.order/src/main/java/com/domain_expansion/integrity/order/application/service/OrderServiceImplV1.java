@@ -52,11 +52,11 @@ public class OrderServiceImplV1 implements OrderService {
         ResponseEntity<CompanyResponseData> companyByBuyerCompanyId = companyClient.getCompany(
                 requestDto.buyerCompanyId());
 
-        if (!companyBySellerCompanyId.getBody().getData().type().equals(CompanyType.RECEIVING_COMPANY.name())) {
+        if (!companyBySellerCompanyId.getBody().getData().companyType().equals(CompanyType.PRODUCING_COMPANY.name())) {
             throw new OrderException(ExceptionMessage.IS_NOT_SELLER);
         }
 
-        if (!companyByBuyerCompanyId.getBody().getData().type().equals(CompanyType.RECEIVING_COMPANY.name())) {
+        if (!companyByBuyerCompanyId.getBody().getData().companyType().equals(CompanyType.RECEIVING_COMPANY.name())) {
             throw new OrderException(ExceptionMessage.IS_NOT_BUYER);
         }
 
@@ -64,8 +64,10 @@ public class OrderServiceImplV1 implements OrderService {
 
         // TODO 배송 동시에 생성하기
 
-        return OrderResponseDto.from(
-                orderDomainService.addOrderProductAndSave(order, requestDto.productList()));
+        Order savedOrder = orderRepository.save(
+                orderDomainService.addOrderProduct(order, requestDto.productList()));
+
+        return OrderResponseDto.from(savedOrder);
     }
 
     @Override
