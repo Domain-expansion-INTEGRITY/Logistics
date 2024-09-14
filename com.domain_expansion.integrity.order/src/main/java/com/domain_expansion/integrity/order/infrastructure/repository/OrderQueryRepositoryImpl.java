@@ -94,9 +94,8 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
         List<Order> content = queryFactory.select(order)
                 .from(order)
                 .join(orderProduct).on(orderProduct.order.orderId.eq(order.orderId))
-                .where(sellerCompanyIdEq(condition.sellerCompanyId())
-                        .and(buyerCompanyIdEq(condition.buyerCompanyId()))
-                        .and(productIdEq(condition.productId())))
+                .where(sellerCompanyIdEq(condition.sellerCompanyId()), buyerCompanyIdEq(condition.buyerCompanyId())
+                        , productIdEq(condition.productId()))
                 .orderBy(getOrderSpecifiers(pageable.getSort()).toArray(OrderSpecifier[]::new))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -105,9 +104,8 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
         JPAQuery<Long> total = queryFactory.select(order.count())
                 .from(order)
                 .join(orderProduct).on(orderProduct.order.orderId.eq(order.orderId))
-                .where(sellerCompanyIdEq(condition.sellerCompanyId())
-                        .and(buyerCompanyIdEq(condition.buyerCompanyId()))
-                        .and(productIdEq(condition.productId())));
+                .where(sellerCompanyIdEq(condition.sellerCompanyId()), buyerCompanyIdEq(condition.buyerCompanyId())
+                        ,productIdEq(condition.productId()));
 
         return PageableExecutionUtils.getPage(content, pageable, total::fetchOne);
     }
