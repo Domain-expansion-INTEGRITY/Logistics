@@ -4,16 +4,17 @@ import com.domain_expansion.integrity.order.domain.model.Order;
 import com.domain_expansion.integrity.order.presentation.request.OrderSearchCondition;
 import com.netflix.appinfo.ApplicationInfoManager.InstanceStatusMapper;
 import java.util.List;
-import java.util.Optional;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface OrderRepository {
+public interface OrderQueryRepository {
 
-    Optional<Order> findById(String id);
+    Page<Order> findAllByCompanyIdAndCondition(String companyId, Pageable pageable, OrderSearchCondition condition);
 
-    List<Order> findAll();
 
-    Order save(Order product);
+    Page<Order> findAllByCompanyIdsAndCondition(List<String> companyIds, Pageable pageable, OrderSearchCondition condition);
+
+    Page<Order> findAllByCondition(Pageable pageable, OrderSearchCondition condition);
 }

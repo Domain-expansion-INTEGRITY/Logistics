@@ -1,6 +1,8 @@
 package com.domain_expansion.integrity.company.domain.repository;
 
 import com.domain_expansion.integrity.company.domain.model.Company;
+import com.domain_expansion.integrity.company.prsentation.response.CompanyResponseDto;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
@@ -14,4 +16,8 @@ public interface CompanyRepository {
     Company save(Company company);
 
     Optional<Company> findByCompanyIdAndHubIdAndIsDeleteFalse(String companyId,String hubId);
+
+    Optional<Company> findByUserId(Long userId);
+
+    List<Company> findAllByHubId(String hubId);
 }

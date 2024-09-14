@@ -36,7 +36,7 @@ public class Order extends BaseDateEntity {
     private String buyerCompanyId;
 
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private Set<OrderProduct> orderProducts = new HashSet<>();
 
     @Builder(access = PRIVATE)
@@ -62,5 +62,25 @@ public class Order extends BaseDateEntity {
     public void addOrderProduct(OrderProduct orderProduct) {
         this.orderProducts.add(orderProduct);
         orderProduct.setOrder(this);
+    }
+
+    public void clearOrderProducts() {
+
+        orderProducts.clear();
+    }
+
+    public void delete() {
+        this.isDelete = true;
+        super.deleteEntity();
+    }
+
+    public boolean validateByCompanyId(String companyId) {
+
+        return sellerCompanyId.equals(companyId) || buyerCompanyId.equals(companyId);
+    }
+
+    public boolean validateByCompanyIds(Set<String> companyIdsSet) {
+
+        return companyIdsSet.contains(sellerCompanyId) && companyIdsSet.contains(buyerCompanyId);
     }
 }

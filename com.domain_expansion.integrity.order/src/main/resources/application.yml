@@ -30,3 +30,7 @@ eureka:
 
 server:
   port: 19096
+
+jwt:
+  secret:
+    key: ${JWT_SECRET_KEY}

@@ -36,10 +36,9 @@ public class OrderProduct {
     private Integer count;
 
     @Builder(access = PRIVATE)
-    public OrderProduct(String orderProductId, ProductInfo productInfo, Order order, Integer count) {
+    public OrderProduct(String orderProductId, ProductInfo productInfo, Integer count) {
         this.orderProductId = orderProductId;
         this.productInfo = productInfo;
-        this.order = order;
         this.count = count;
     }
 

@@ -1,6 +1,8 @@
 package com.domain_expansion.integrity.company.prsentation.controller;
 
 import static com.domain_expansion.integrity.company.common.message.SuccessMessage.*;
+import static com.domain_expansion.integrity.company.common.response.SuccessResponse.*;
+
 import com.domain_expansion.integrity.company.application.service.CompanyService;
 import com.domain_expansion.integrity.company.common.response.CommonResponse;
 import com.domain_expansion.integrity.company.common.response.SuccessResponse;
@@ -28,12 +30,15 @@ public class CompanyController {
      * @param createRequestDto
      * @return
      */
-    @PreAuthorize("hasAnyRole(T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_MASTER, "
-            + "T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_HUB_COMPANY)")
+    @PreAuthorize(
+            "hasAnyRole(T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_MASTER, "
+                    + "T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_HUB_COMPANY)")
     @PostMapping
-    public ResponseEntity<? extends CommonResponse> createCompany(@RequestBody CompanyCreateRequestDto createRequestDto) {
+    public ResponseEntity<? extends CommonResponse> createCompany(
+            @RequestBody CompanyCreateRequestDto createRequestDto) {
         return ResponseEntity.status(SUCCESS_CREATE_COMPANY.getHttpStatus())
-                .body(SuccessResponse.of(SUCCESS_CREATE_COMPANY.getMessage(), companyService.createCompany(createRequestDto)));
+                .body(of(SUCCESS_CREATE_COMPANY.getMessage(),
+                        companyService.createCompany(createRequestDto)));
     }
 
     /***
@@ -41,15 +46,18 @@ public class CompanyController {
      * @param companyId
      * @return
      */
-    @PreAuthorize("hasAnyRole(T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_MASTER, "
-            + "T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_HUB_COMPANY,"
-            + "T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_HUB_MANAGER)")
+    @PreAuthorize(
+            "hasAnyRole(T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_MASTER, "
+                    + "T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_HUB_COMPANY,"
+                    + "T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_HUB_MANAGER)")
     @GetMapping("/{company_id}")
-    public ResponseEntity<?  extends CommonResponse> findCompanyById(@PathVariable("company_id") String companyId,
+    public ResponseEntity<? extends CommonResponse> findCompanyById(
+            @PathVariable("company_id") String companyId,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         return ResponseEntity.status(SUCCESS_GET_COMPANY.getHttpStatus())
-                .body(SuccessResponse.of(SUCCESS_GET_COMPANY.getMessage(), companyService.getCompany(companyId)));
+                .body(of(SUCCESS_GET_COMPANY.getMessage(),
+                        companyService.getCompany(companyId)));
     }
 
     /***
@@ -57,15 +65,17 @@ public class CompanyController {
      * @param
      * @return
      */
-    @PreAuthorize("hasAnyRole(T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_MASTER, "
-            + "T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_HUB_COMPANY,"
-            + "T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_HUB_MANAGER)")
+    @PreAuthorize(
+            "hasAnyRole(T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_MASTER, "
+                    + "T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_HUB_COMPANY,"
+                    + "T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_HUB_MANAGER)")
     @GetMapping
-    public ResponseEntity<?  extends CommonResponse> findAllCompany(
+    public ResponseEntity<? extends CommonResponse> findAllCompany(
             @ModelAttribute CompanySearchCondition searchCondition,
             @PageableDefault(page = 0, size = 10) Pageable pageable) {
         return ResponseEntity.status(SUCCESS_GET_COMPANY.getHttpStatus()).body(
-                SuccessResponse.of(SUCCESS_GET_COMPANY.getMessage(), companyService.getCompanies(searchCondition,pageable)));
+                of(SUCCESS_GET_COMPANY.getMessage(),
+                        companyService.getCompanies(searchCondition, pageable)));
     }
 
     /***
@@ -74,14 +84,18 @@ public class CompanyController {
      * @param
      * @return
      */
-    @PreAuthorize("hasAnyRole(T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_MASTER, "
-            + "T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_HUB_COMPANY,"
-            + "T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_HUB_MANAGER)")
+    @PreAuthorize(
+            "hasAnyRole(T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_MASTER, "
+                    + "T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_HUB_COMPANY,"
+                    + "T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_HUB_MANAGER)")
     @PatchMapping("{company_id}")
-    public ResponseEntity<?  extends CommonResponse> updateCompany(@PathVariable("company_id") String companyId
-            , @RequestBody CompanyUpdateRequestDto requestDto,@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<? extends CommonResponse> updateCompany(
+            @PathVariable("company_id") String companyId
+            , @RequestBody CompanyUpdateRequestDto requestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return ResponseEntity.status(SUCCESS_UPDATE_COMPANY.getHttpStatus())
-                .body(SuccessResponse.of(SUCCESS_UPDATE_COMPANY.getMessage(), companyService.updateCompany(requestDto,companyId,userDetails)));
+                .body(of(SUCCESS_UPDATE_COMPANY.getMessage(),
+                        companyService.updateCompany(requestDto, companyId, userDetails)));
     }
 
     /***
@@ -89,27 +103,48 @@ public class CompanyController {
      * @param companyId
      * @return
      */
-    @PreAuthorize("hasAnyRole(T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_MASTER, "
-            + "T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_HUB_MANAGER)")
+    @PreAuthorize(
+            "hasAnyRole(T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_MASTER, "
+                    + "T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_HUB_MANAGER)")
     @DeleteMapping("{company_id}")
-    public ResponseEntity<?  extends CommonResponse> deleteCompany(@PathVariable("company_id") String companyId
-    ,@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<? extends CommonResponse> deleteCompany(
+            @PathVariable("company_id") String companyId
+            , @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         companyService.deleteCompany(companyId, userDetails);
 
         return ResponseEntity.status(SUCCESS_DELETE_COMPANY.getHttpStatus())
-                .body(SuccessResponse.of(SUCCESS_DELETE_COMPANY.getMessage()));
+                .body(of(SUCCESS_DELETE_COMPANY.getMessage()));
 
     }
 
-    @PreAuthorize("hasAnyRole(T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_MASTER, "
-            + "T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_HUB_COMPANY)")
+    @PreAuthorize(
+            "hasAnyRole(T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_MASTER, "
+                    + "T(com.domain_expansion.integrity.company.application.shared.RoleConstants).ROLE_HUB_COMPANY)")
     @GetMapping("/{company_id}/validate/user")
-    public ResponseEntity<?  extends CommonResponse> validateUserInCompany(@PathVariable("company_id") String companyId
-            ,@RequestParam Long userId) {
+    public ResponseEntity<? extends CommonResponse> validateUserInCompany(
+            @PathVariable("company_id") String companyId
+            , @RequestParam Long userId) {
 
         return ResponseEntity.status(SUCCESS_GET_COMPANY.getHttpStatus())
-                .body(SuccessResponse.of(SUCCESS_GET_COMPANY.getMessage(),companyService.validateUser(companyId,userId)));
+                .body(of(SUCCESS_GET_COMPANY.getMessage(),
+                        companyService.validateUser(companyId, userId)));
 
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<? extends CommonResponse> getCompanyByUserId(
+            @PathVariable("userId") Long userId
+    ) {
+
+        return ResponseEntity.status(SUCCESS_GET_COMPANY.getHttpStatus())
+                .body(of(SUCCESS_GET_COMPANY.getMessage(), companyService.getCompanyByUserId(userId)));
+    }
+
+    @GetMapping("/hub/{hubId}")
+    ResponseEntity<? extends CommonResponse> getCompaniesByHubId(@PathVariable("hubId") String hubId) {
+
+        return ResponseEntity.status(SUCCESS_GET_COMPANY.getHttpStatus())
+                .body(of(SUCCESS_GET_COMPANY.getMessage(), companyService.getCompanyByHubId(hubId)));
     }
 }

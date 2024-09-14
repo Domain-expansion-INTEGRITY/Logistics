@@ -10,4 +10,5 @@ public interface HubReadService {
 
     Page<HubResponseDto> getAllHubs(Pageable pageable);
 
+    HubResponseDto getHubByUserId(Long userId);
 }

@@ -6,5 +6,9 @@ import java.util.List;
 
 public interface OrderDomainService {
 
-    Order addOrderProductAndSave(Order order, List<OrderProductRequestDto> orderProductRequestDtos);
+    Order addOrderProduct(Order order, List<OrderProductRequestDto> orderProductRequestDtos);
+
+    String createOrderId();
+
+    Order updateOrder(List<OrderProductRequestDto> requestDtos, Order order);
 }

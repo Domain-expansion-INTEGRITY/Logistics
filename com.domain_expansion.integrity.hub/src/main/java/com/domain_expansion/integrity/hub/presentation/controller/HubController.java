@@ -5,13 +5,16 @@ import static com.domain_expansion.integrity.hub.common.message.SuccessMessage.S
 import static com.domain_expansion.integrity.hub.common.message.SuccessMessage.SUCCESS_GET_ALL_HUBS;
 import static com.domain_expansion.integrity.hub.common.message.SuccessMessage.SUCCESS_GET_HUB;
 import static com.domain_expansion.integrity.hub.common.message.SuccessMessage.SUCCESS_UPDATE_HUB;
+import static com.domain_expansion.integrity.hub.common.response.SuccessResponse.*;
 
 import com.domain_expansion.integrity.hub.application.service.HubService;
+import com.domain_expansion.integrity.hub.common.response.CommonResponse;
 import com.domain_expansion.integrity.hub.common.response.SuccessResponse;
 import com.domain_expansion.integrity.hub.presentation.request.HubCreateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -31,27 +34,34 @@ public class HubController {
     @PostMapping
     public SuccessResponse<?> createHub(@RequestBody HubCreateRequestDto requestDto){
 
-        return SuccessResponse.success(SUCCESS_CREATE_HUB.getMessage());
+        return success(SUCCESS_CREATE_HUB.getMessage());
     }
 
     @GetMapping("/{hub_id}")
     public SuccessResponse<?> getHub(@PathVariable String hub_id){
-        return SuccessResponse.success(SUCCESS_GET_HUB.getMessage());
+        return success(SUCCESS_GET_HUB.getMessage());
     }
 
     @GetMapping
     public SuccessResponse<?> getAllHubs(@PageableDefault(size = 10) Pageable pageable){
-        return SuccessResponse.success(SUCCESS_GET_ALL_HUBS.getMessage());
+        return success(SUCCESS_GET_ALL_HUBS.getMessage());
     }
 
     @PatchMapping("/{hub_id}")
     public SuccessResponse<?> updateHub(@PathVariable String hub_id){
-        return SuccessResponse.success(SUCCESS_UPDATE_HUB.getMessage());
+        return success(SUCCESS_UPDATE_HUB.getMessage());
     }
 
     @DeleteMapping("/{hub_id}")
     public SuccessResponse<?> deleteHub(@PathVariable String hub_id){
-        return SuccessResponse.success(SUCCESS_DELETE_HUBS.getMessage());
+        return success(SUCCESS_DELETE_HUBS.getMessage());
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<? extends CommonResponse> getHubByUserId(@PathVariable Long userId) {
+
+        return ResponseEntity.status(SUCCESS_GET_HUB.getHttpStatus())
+                .body(success(SUCCESS_GET_HUB.getMessage(), hubService.getHubByUserId(userId)));
     }
 
 }
