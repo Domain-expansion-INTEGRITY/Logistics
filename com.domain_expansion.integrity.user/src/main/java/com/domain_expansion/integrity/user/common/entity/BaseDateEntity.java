@@ -1,11 +1,13 @@
 package com.domain_expansion.integrity.user.common.entity;
 
+import com.domain_expansion.integrity.user.common.entity.auditor.JpaAuditingConfig;
+import com.domain_expansion.integrity.user.common.exception.UserException;
+import com.domain_expansion.integrity.user.common.message.ExceptionMessage;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 import lombok.Getter;
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -21,7 +23,6 @@ public abstract class BaseDateEntity {
     protected LocalDateTime createdAt;
 
     @Column(name = "created_by", updatable = false)
-    @CreatedBy
     protected Long createdUser;
 
     @Column(name = "updated_at")
@@ -40,7 +41,9 @@ public abstract class BaseDateEntity {
 
     public void deleteEntity() {
         this.deletedAt = LocalDateTime.now();
-        //TODO: 이것도 audit으로 넣어줄 수 있음
-        this.deletedUser = null;
+        JpaAuditingConfig jpaAuditingConfig = new JpaAuditingConfig();
+        this.deletedUser = jpaAuditingConfig.getCurrentAuditor()
+            .orElseThrow(() -> new UserException(
+                ExceptionMessage.AUTHORIZATION));
     }
 }
