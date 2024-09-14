@@ -38,10 +38,10 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
                 .from(order)
                 .join(orderProduct).on(orderProduct.order.orderId.eq(order.orderId))
                 .where((order.buyerCompanyId.eq(companyId)
-                        .or(order.sellerCompanyId.eq(companyId)))
-                        .and(sellerCompanyIdEq(condition.sellerCompanyId()))
-                        .and(buyerCompanyIdEq(condition.buyerCompanyId()))
-                        .and(productIdEq(condition.productId())))
+                        .or(order.sellerCompanyId.eq(companyId))),
+                        sellerCompanyIdEq(condition.sellerCompanyId()),
+                        buyerCompanyIdEq(condition.buyerCompanyId()),
+                        productIdEq(condition.productId()))
                 .orderBy(getOrderSpecifiers(pageable.getSort()).toArray(OrderSpecifier[]::new))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -51,10 +51,10 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
                 .from(order)
                 .join(orderProduct).on(orderProduct.order.orderId.eq(order.orderId))
                 .where((order.buyerCompanyId.eq(companyId)
-                        .or(order.sellerCompanyId.eq(companyId)))
-                        .and(sellerCompanyIdEq(condition.sellerCompanyId()))
-                        .and(buyerCompanyIdEq(condition.buyerCompanyId()))
-                        .and(productIdEq(condition.productId())));
+                        .or(order.sellerCompanyId.eq(companyId))),
+                        sellerCompanyIdEq(condition.sellerCompanyId()),
+                        buyerCompanyIdEq(condition.buyerCompanyId()),
+                        productIdEq(condition.productId()));
 
         return PageableExecutionUtils.getPage(content, pageable, total::fetchOne);
     }
@@ -67,10 +67,10 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
                 .from(order)
                 .join(orderProduct).on(orderProduct.order.orderId.eq(order.orderId))
                 .where((order.buyerCompanyId.in(companyIds)
-                        .or(order.sellerCompanyId.in(companyIds)))
-                        .and(sellerCompanyIdEq(condition.sellerCompanyId()))
-                        .and(buyerCompanyIdEq(condition.buyerCompanyId()))
-                        .and(productIdEq(condition.productId())))
+                        .or(order.sellerCompanyId.in(companyIds))),
+                        sellerCompanyIdEq(condition.sellerCompanyId()),
+                        buyerCompanyIdEq(condition.buyerCompanyId()),
+                        productIdEq(condition.productId()))
                 .orderBy(getOrderSpecifiers(pageable.getSort()).toArray(OrderSpecifier[]::new))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -80,10 +80,10 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
                 .from(order)
                 .join(orderProduct).on(orderProduct.order.orderId.eq(order.orderId))
                 .where((order.buyerCompanyId.in(companyIds)
-                        .or(order.sellerCompanyId.in(companyIds)))
-                        .and(sellerCompanyIdEq(condition.sellerCompanyId()))
-                        .and(buyerCompanyIdEq(condition.buyerCompanyId()))
-                        .and(productIdEq(condition.productId())));
+                        .or(order.sellerCompanyId.in(companyIds))),
+                        sellerCompanyIdEq(condition.sellerCompanyId()),
+                        buyerCompanyIdEq(condition.buyerCompanyId()),
+                        productIdEq(condition.productId()));
 
         return PageableExecutionUtils.getPage(content, pageable, total::fetchOne);
     }
