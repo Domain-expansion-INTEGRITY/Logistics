@@ -121,6 +121,11 @@ public class HubRouteServiceImpl implements HubRouteService {
     @Override
     public HubRouteTotalResponseDto getRouteFromStartToEnd(String startHubId, String endHubId) {
 
+        if(startHubId.equals(endHubId))
+        {
+            throw new HubException(ExceptionMessage.ROUTE_MUST_NOT_SAME);
+        }
+
         Hub startHub = hubRepository.findById(startHubId).orElseThrow(
                 () -> new HubException(ExceptionMessage.NOT_FOUND_HUB_ID)
         );

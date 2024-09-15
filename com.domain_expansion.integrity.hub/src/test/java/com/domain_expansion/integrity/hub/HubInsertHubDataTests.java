@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+//@SpringBootTest
 class HubInsertHubDataTests {
 
 	@Autowired
@@ -51,7 +51,7 @@ class HubInsertHubDataTests {
 				.map(data -> new Hub(Ksuid.newKsuid().toString(),100L,data.getName(), data.getAddress(),data.getIndex(),new HubLatitude(data.getLatitude()), new HubLongitude(data.getLongitude())))
 				.collect(Collectors.toList());
 
-		hubRepository.saveAll(hubs);
+		//hubRepository.saveAll(hubs);
 
 	}
 
