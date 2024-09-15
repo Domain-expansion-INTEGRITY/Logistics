@@ -33,7 +33,7 @@ public class AiHistory extends BaseDateEntity {
     @JoinColumn(name = "ai_prompt")
     private AiPrompt aiPrompt;
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     private Long userId;
 
     @Builder(access = AccessLevel.PROTECTED)
