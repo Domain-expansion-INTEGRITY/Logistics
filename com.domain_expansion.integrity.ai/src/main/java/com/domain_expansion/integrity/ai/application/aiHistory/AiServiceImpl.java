@@ -82,7 +82,7 @@ public class AiServiceImpl implements AiService {
 
         // aiPrompt로 부터 question을 생성해낸다.
         AiHistory ai = aiMapper.createDtoToAiHistory(
-            shortQuestionForDB, Ksuid.newKsuid().toString(), aiPrompt
+            shortQuestionForDB, Ksuid.newKsuid().toString(), aiPrompt, requestDto.userId()
         );
 
         AiHistory savedAi = aiRepository.save(ai);
@@ -114,7 +114,7 @@ public class AiServiceImpl implements AiService {
 
         // aiPrompt로 부터 question을 생성해낸다.
         AiHistory ai = aiMapper.createDtoToAiHistory(
-            question, Ksuid.newKsuid().toString(), aiPrompt
+            question, Ksuid.newKsuid().toString(), aiPrompt, requestDto.userId()
         );
 
         // 호출 기록을 남기기 위해 호출 전에 저장을 한다.
@@ -149,7 +149,8 @@ public class AiServiceImpl implements AiService {
 
         // 보내기 전에 저장
         AiHistory ai = aiMapper
-            .createDtoToAiHistory(question, Ksuid.newKsuid().toString(), aiPrompt);
+            .createDtoToAiHistory(question, Ksuid.newKsuid().toString(), aiPrompt,
+                requestDto.userId());
         AiHistory savedAi = aiRepository.save(ai);
 
         // GEMINI AI 호출해서 답을 갖고 온다.

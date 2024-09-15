@@ -33,19 +33,24 @@ public class AiHistory extends BaseDateEntity {
     @JoinColumn(name = "ai_prompt")
     private AiPrompt aiPrompt;
 
+    @Column(name = "user_id")
+    private Long userId;
+
     @Builder(access = AccessLevel.PROTECTED)
-    private AiHistory(String id, String question, AiPrompt aiPrompt) {
+    private AiHistory(String id, String question, AiPrompt aiPrompt, Long userId) {
         this.id = id;
         this.question = question;
         this.aiPrompt = aiPrompt;
+        this.userId = userId;
     }
 
-    public static AiHistory from(String id, String question, AiPrompt aiPrompt) {
+    public static AiHistory from(String id, String question, AiPrompt aiPrompt, Long userId) {
 
         return AiHistory.builder()
             .id(id)
             .question(question)
             .aiPrompt(aiPrompt)
+            .userId(userId)
             .build();
     }
 

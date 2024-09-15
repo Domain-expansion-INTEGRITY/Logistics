@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 public class AiMapper {
 
     public AiHistory createDtoToAiHistory(String generatedQuestion, String ksuid,
-        AiPrompt aiPrompt) {
-        return AiHistory.from(ksuid, generatedQuestion, aiPrompt);
+        AiPrompt aiPrompt, Long userId) {
+        return AiHistory.from(ksuid, generatedQuestion, aiPrompt, userId);
     }
 
 }
