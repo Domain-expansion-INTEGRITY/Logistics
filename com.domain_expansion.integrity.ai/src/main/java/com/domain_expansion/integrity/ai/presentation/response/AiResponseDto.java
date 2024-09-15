@@ -1,23 +1,24 @@
 package com.domain_expansion.integrity.ai.presentation.response;
 
 import com.domain_expansion.integrity.ai.domain.model.AiHistory;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 
-@Builder(access = AccessLevel.PROTECTED)
+@Builder(access = AccessLevel.PRIVATE)
 public record AiResponseDto(
     String aiId,
     String question,
     String answer,
-    Long userId
+    LocalDateTime createdAt
 ) {
 
-    public static AiResponseDto from(AiHistory ai, Long userId) {
+    public static AiResponseDto from(AiHistory aiHistory) {
         return AiResponseDto.builder()
-            .aiId(ai.getId())
-            .userId(userId)
-            .question(ai.getQuestion())
-            .answer(ai.getAnswer())
+            .aiId(aiHistory.getId())
+            .question(aiHistory.getQuestion())
+            .answer(aiHistory.getAnswer())
+            .createdAt(aiHistory.getCreatedAt())
             .build();
     }
 
