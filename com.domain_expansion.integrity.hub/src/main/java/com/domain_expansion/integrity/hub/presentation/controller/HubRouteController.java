@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/api/v1/hubs/routes")
@@ -85,6 +86,11 @@ public class HubRouteController {
                 .body(SuccessResponse.success(SUCCESS_DELETE_HUBS_ROUTE.getMessage()));
     }
 
-    //TODO : 출발 허브와 목적 허브가 주어지면 걸리는 시간 및 예상거리까지 계산해서 보내줘야된다.
+    @GetMapping(params = {"startHubId","endHubId"})
+    public ResponseEntity<?  extends CommonResponse> getRouteFromStartToEnd(@RequestParam("startHubId") String startHubId,
+            @RequestParam("endHubId") String endHubId){
 
+        return ResponseEntity.status(SUCCESS_GET_HUB_ROUTE.getHttpStatus())
+                .body(SuccessResponse.success(SUCCESS_GET_HUB_ROUTE.getMessage(),hubRouteService.getRouteFromStartToEnd(startHubId,endHubId)));
+    }
 }

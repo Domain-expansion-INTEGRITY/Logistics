@@ -12,7 +12,9 @@ import com.domain_expansion.integrity.hub.presentation.request.HubRouteCreateReq
 import com.domain_expansion.integrity.hub.presentation.request.HubRouteSearchCondition;
 import com.domain_expansion.integrity.hub.presentation.request.HubRouteUpdateRequestDto;
 import com.domain_expansion.integrity.hub.presentation.response.HubRouteResponseDto;
+import com.domain_expansion.integrity.hub.presentation.response.HubRouteTotalResponseDto;
 import com.github.ksuid.Ksuid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -98,7 +100,7 @@ public class HubRouteServiceImpl implements HubRouteService {
 
     @Override
     public HubRouteResponseDto updateHubRoute(HubRouteUpdateRequestDto requestDto, String hubRouteId) {
-        //hubRouteId를 이용하여 startRoute를 가진 Hub를 가져오기
+
         Hub existedHub = hubRepository.findByStartRoutes_HubRouteId(hubRouteId).orElseThrow(
                 () -> new HubException(ExceptionMessage.NOT_FOUND_HUB_ID)
         );
@@ -116,4 +118,43 @@ public class HubRouteServiceImpl implements HubRouteService {
 
     }
 
+    @Override
+    public HubRouteTotalResponseDto getRouteFromStartToEnd(String startHubId, String endHubId) {
+
+        Hub startHub = hubRepository.findById(startHubId).orElseThrow(
+                () -> new HubException(ExceptionMessage.NOT_FOUND_HUB_ID)
+        );
+
+        Hub endHub = hubRepository.findById(endHubId).orElseThrow(
+                () -> new HubException(ExceptionMessage.NOT_FOUND_HUB_ID)
+        );
+
+        boolean isForward = startHub.getIndex() < endHub.getIndex();
+
+        List<Object[]> lists = null;
+
+        if(isForward)
+        {
+            lists = hubRepository.findRouteInfoForward(startHubId,endHubId);
+        }else{
+            lists = hubRepository.findRouteInfoBackWard(startHubId,endHubId);
+        }
+
+        if(lists.isEmpty())
+        {
+            throw new HubException(ExceptionMessage.NOT_FOUND_HUB_ROUTE_ID);
+        }
+
+        HubRouteTotalResponseDto responseDto = null;
+
+        for(Object[] objects : lists)
+        {
+            Integer total_duration = (Integer) objects[0];
+            Integer total_distance = (Integer) objects[1];
+
+            responseDto = new HubRouteTotalResponseDto(startHubId,endHubId,total_duration,total_distance);
+        }
+
+        return responseDto;
+    }
 }

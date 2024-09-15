@@ -80,15 +80,15 @@ public class HubServiceImpl implements HubService{
 
         return HubResponseDto.from(hub,deliveryManLists);
     }
-    //TODO: 캐시는 직렬화로 인해 문제가 있다
-   // @Cacheable(cacheNames = "HubsAll",key = "'allHubs'")
+    //TODO : Page 객체는 역직렬화할때에 에러가 나온다. 다른 방법을 모색해야된다.
+    @Cacheable(cacheNames = "HubsAll",key = "'allHubs'" )
     @Transactional(readOnly = true)
     @Override
     public Page<HubResponseDto> getAllHubs(HubSearchCondition searchCondition,Pageable pageable) {
        return hubQueryRepository.searchHubs(searchCondition,pageable);
     }
 
-  //  @CacheEvict(value = "HubsAll", key = "'allHubs'")
+    @CacheEvict(value = "HubsAll", key = "'allHubs'")
     @Override
     public HubResponseDto updateHub(HubUpdateRequestDto requestDto, String hudId) {
 
