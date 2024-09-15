@@ -45,6 +45,11 @@ public class WebSecurityConfig {
                     .requestMatchers(
                         PathRequest.toStaticResources().atCommonLocations())
                     .permitAll() // resources 접근 허용 설정
+                    .requestMatchers(
+                        "/api/v1/ais/hub-delivery/slack", "/api/v1/ais/company-delivery/slack",
+                        "/api/v1/ais/company-delivery/sequence"
+                    ) // 내부 서비스에서 ai 호출
+                    .permitAll()
                     .anyRequest()
                     .authenticated()
         );
