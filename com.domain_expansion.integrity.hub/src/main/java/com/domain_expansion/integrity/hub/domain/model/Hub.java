@@ -49,7 +49,6 @@ public class Hub extends BaseDateEntity {
     @Embedded
     private HubLongitude hubLongitude;
 
-
     @OneToMany(mappedBy = "hub",cascade = CascadeType.ALL ,orphanRemoval = true)
     @BatchSize(size = 10)//업체 배송담당자는 10명이기 때문에 설정
     private List<HubDeliveryMan> deliveryMans = new ArrayList<>();

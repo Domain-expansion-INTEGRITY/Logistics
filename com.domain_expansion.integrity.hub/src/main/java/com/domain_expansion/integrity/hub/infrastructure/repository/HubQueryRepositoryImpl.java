@@ -27,7 +27,7 @@ import org.springframework.stereotype.Repository;
 public class HubQueryRepositoryImpl implements HubQueryRepository {
 
     private final JPAQueryFactory queryFactory;
-    //TODO : fetchjoin을 없애 문제는 해결했지만 n+1문제가 발생할수있다. 문제검토
+
     @Override
     public Page<HubResponseDto> searchHubs(HubSearchCondition condition, Pageable pageable) {
         QHub hub = QHub.hub;
