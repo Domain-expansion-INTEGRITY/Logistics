@@ -31,10 +31,16 @@ public class AiDomainServiceImpl implements AiDomainService {
 
         GeminiRequest request = new GeminiRequest(question);
 
-        GeminiResponse output = geminiClient.findAllByQuery(geminiKey, request);
-        return output.getCandidates().get(0).getContent().getParts().get(0)
-            .getText();
-//        return "후후";
+        try {
+            GeminiResponse output = geminiClient.findAllByQuery(geminiKey, request);
+            return output.getCandidates().get(0).getContent().getParts().get(0)
+                .getText();
+        } catch (Exception e) {
+            // 외부 api 호출 별도 적용
+            log.error("Gemini ai 호출 에러" + e);
+            throw new AiException(ExceptionMessage.GEMINI_EXCEPTION);
+        }
+
     }
 
 

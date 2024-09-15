@@ -1,13 +1,17 @@
 package com.domain_expansion.integrity.ai.domain.model.weather;
 
+import com.domain_expansion.integrity.ai.common.exception.AiException;
+import com.domain_expansion.integrity.ai.common.message.ExceptionMessage;
 import com.domain_expansion.integrity.ai.domain.model.weather.response.WeatherResponse;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class WeatherService {
@@ -36,8 +40,8 @@ public class WeatherService {
                 .map(WeatherPick::from).toList()
                 .toString();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return e.getMessage();
+            log.error("기상청 api 호출 에러" + e);
+            throw new AiException(ExceptionMessage.WEATHER_EXCEPTION);
         }
     }
 
