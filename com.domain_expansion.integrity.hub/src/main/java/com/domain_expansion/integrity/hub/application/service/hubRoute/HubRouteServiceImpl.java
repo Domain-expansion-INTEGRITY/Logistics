@@ -11,6 +11,7 @@ import com.domain_expansion.integrity.hub.domain.repository.HubRepository;
 import com.domain_expansion.integrity.hub.presentation.request.HubRouteCreateRequestDto;
 import com.domain_expansion.integrity.hub.presentation.request.HubRouteSearchCondition;
 import com.domain_expansion.integrity.hub.presentation.request.HubRouteUpdateRequestDto;
+import com.domain_expansion.integrity.hub.presentation.response.HubRoutePaginatedResponseDto;
 import com.domain_expansion.integrity.hub.presentation.response.HubRouteResponseDto;
 import com.domain_expansion.integrity.hub.presentation.response.HubRouteTotalResponseDto;
 import com.github.ksuid.Ksuid;
@@ -94,8 +95,12 @@ public class HubRouteServiceImpl implements HubRouteService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<HubRouteResponseDto> getHubRoutes(HubRouteSearchCondition searchDto, Pageable pageable) {
-        return queryRepository.searchHubRoutes(searchDto,pageable);
+    public HubRoutePaginatedResponseDto getHubRoutes(HubRouteSearchCondition searchDto, Pageable pageable) {
+
+        Page<HubRouteResponseDto> pages = queryRepository.searchHubRoutes(searchDto,pageable);
+
+        return HubRoutePaginatedResponseDto.of(pages);
+
     }
 
     @Override

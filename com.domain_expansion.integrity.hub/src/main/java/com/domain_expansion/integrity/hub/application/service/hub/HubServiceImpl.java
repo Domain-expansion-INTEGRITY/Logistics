@@ -11,6 +11,7 @@ import com.domain_expansion.integrity.hub.presentation.request.HubSearchConditio
 import com.domain_expansion.integrity.hub.presentation.request.HubUpdateRequestDto;
 import com.domain_expansion.integrity.hub.presentation.response.HubCreateResponseDto;
 import com.domain_expansion.integrity.hub.presentation.response.HubDeliverManResponseDto;
+import com.domain_expansion.integrity.hub.presentation.response.HubPaginatedResponseDto;
 import com.domain_expansion.integrity.hub.presentation.response.HubResponseDto;
 import com.domain_expansion.integrity.hub.presentation.response.HubValidateResponseDto;
 import com.github.ksuid.Ksuid;
@@ -80,15 +81,17 @@ public class HubServiceImpl implements HubService{
 
         return HubResponseDto.from(hub,deliveryManLists);
     }
-    //TODO : Page 객체는 역직렬화할때에 에러가 나온다. 다른 방법을 모색해야된다.
-    @Cacheable(cacheNames = "HubsAll",key = "'allHubs'" )
+
+    @Cacheable(cacheNames = "HubsAll",key = "'allHubs'+#page" )
     @Transactional(readOnly = true)
     @Override
-    public Page<HubResponseDto> getAllHubs(HubSearchCondition searchCondition,Pageable pageable) {
-       return hubQueryRepository.searchHubs(searchCondition,pageable);
+    public HubPaginatedResponseDto getAllHubs(HubSearchCondition searchCondition,Pageable pageable) {
+        Page<HubResponseDto> pages = hubQueryRepository.searchHubs(searchCondition,pageable);
+
+        return HubPaginatedResponseDto.of(pages);
     }
 
-    @CacheEvict(value = "HubsAll", key = "'allHubs'")
+    @CacheEvict(value = "HubsAll", allEntries = true)
     @Override
     public HubResponseDto updateHub(HubUpdateRequestDto requestDto, String hudId) {
 

@@ -8,8 +8,8 @@ import org.springframework.data.redis.cache.CacheKeyPrefix;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext.SerializationPair;
-import org.springframework.data.redis.serializer.RedisSerializer;
 
 @Configuration
 @EnableCaching
@@ -29,7 +29,7 @@ public class CacheConfig {
                 .computePrefixWith(CacheKeyPrefix.simple())
                 // 캐시에 저장할 값을 어떻게 직렬화 / 역직렬화 할것인지
                 .serializeValuesWith(
-                        SerializationPair.fromSerializer(RedisSerializer.java())
+                        SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())
                 );
 
         return RedisCacheManager
@@ -37,4 +37,6 @@ public class CacheConfig {
                 .cacheDefaults(configuration)
                 .build();
     }
+
+
 }
