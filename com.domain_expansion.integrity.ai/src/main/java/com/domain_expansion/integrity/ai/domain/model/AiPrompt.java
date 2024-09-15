@@ -7,6 +7,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.io.Serializable;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "p_ai_prompt")
 @Getter
 @Entity
-public class AiPrompt extends BaseDateEntity {
+public class AiPrompt extends BaseDateEntity implements Serializable {
 
     @Id
     @Column(name = "ai_prompt_id")
@@ -35,6 +36,7 @@ public class AiPrompt extends BaseDateEntity {
         this.name = type;
         this.prompt = prompt;
     }
+
 
     public static AiPrompt from(String id, PromptType type, String prompt) {
         return AiPrompt.builder()

@@ -23,10 +23,10 @@ public class AiHistory extends BaseDateEntity {
     @Column(name = "ai_id")
     private String id;
 
-    @Column(nullable = false)
+    @Column(length = 1500, nullable = false)
     private String question;
 
-    @Column
+    @Column(length = 500)
     private String answer;
 
     @ManyToOne(fetch = FetchType.LAZY)
