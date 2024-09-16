@@ -6,8 +6,10 @@ import com.domain_expansion.integrity.order.application.client.constant.CompanyT
 import com.domain_expansion.integrity.order.application.client.response.CompaniesResponseData;
 import com.domain_expansion.integrity.order.application.client.response.CompaniesResponseData.CompaniesResponseDto;
 import com.domain_expansion.integrity.order.application.client.response.CompanyResponseData;
+import com.domain_expansion.integrity.order.application.client.response.CompanyResponseData.CompanyResponseDto;
 import com.domain_expansion.integrity.order.application.client.response.HubResponseData;
 import com.domain_expansion.integrity.order.application.mapper.OrderMapper;
+import com.domain_expansion.integrity.order.application.service.dto.DeliveryCreateRequestDto;
 import com.domain_expansion.integrity.order.common.exception.OrderException;
 import com.domain_expansion.integrity.order.common.message.ExceptionMessage;
 import com.domain_expansion.integrity.order.common.security.UserDetailsImpl;
@@ -26,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +43,7 @@ public class OrderServiceImplV1 implements OrderService {
     private final CompanyClient companyClient;
     private final HubClient hubClient;
     private final OrderQueryRepository orderQueryRepository;
+    private final KafkaTemplate<String, DeliveryCreateRequestDto> kafkaTemplate;
 
     @Override
     public OrderResponseDto createOrder(OrderCreateRequestDto requestDto) {
@@ -52,20 +56,27 @@ public class OrderServiceImplV1 implements OrderService {
         ResponseEntity<CompanyResponseData> companyByBuyerCompanyId = companyClient.getCompany(
                 requestDto.buyerCompanyId());
 
-        if (!companyBySellerCompanyId.getBody().getData().companyType().equals(CompanyType.PRODUCING_COMPANY.name())) {
+        CompanyResponseDto sellerCompanyResponse = companyBySellerCompanyId.getBody().getData();
+        CompanyResponseDto buyerCompanyResponse = companyByBuyerCompanyId.getBody().getData();
+
+        if (!sellerCompanyResponse.companyType().equals(CompanyType.PRODUCING_COMPANY.name())) {
             throw new OrderException(ExceptionMessage.IS_NOT_SELLER);
         }
 
-        if (!companyByBuyerCompanyId.getBody().getData().companyType().equals(CompanyType.RECEIVING_COMPANY.name())) {
+        if (!buyerCompanyResponse.companyType().equals(CompanyType.RECEIVING_COMPANY.name())) {
             throw new OrderException(ExceptionMessage.IS_NOT_BUYER);
         }
 
         Order order = orderMapper.toOrder(requestDto, productId);
 
-        // TODO 배송 동시에 생성하기
-
         Order savedOrder = orderRepository.save(
                 orderDomainService.addOrderProduct(order, requestDto.productList()));
+
+        DeliveryCreateRequestDto deliveryCreateRequestDto = DeliveryCreateRequestDto.of(order,
+                sellerCompanyResponse, buyerCompanyResponse, requestDto);
+        kafkaTemplate.send("createdOrder", deliveryCreateRequestDto);
+
+        // TODO createOrder(이벤트) -> (리스닝)Product 재고 수량 감소(이벤트) -> (리스닝)saveOrder(이벤트) -> (리스닝)createDelivery
 
         return OrderResponseDto.from(savedOrder);
     }
