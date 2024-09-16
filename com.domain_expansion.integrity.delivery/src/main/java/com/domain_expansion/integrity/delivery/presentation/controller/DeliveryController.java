@@ -1,6 +1,7 @@
 package com.domain_expansion.integrity.delivery.presentation.controller;
 
 import static com.domain_expansion.integrity.delivery.common.message.SuccessMessage.SUCCESS_CREATE_DELIVERY;
+import static com.domain_expansion.integrity.delivery.common.message.SuccessMessage.SUCCESS_DELETE_DELIVERY;
 import static com.domain_expansion.integrity.delivery.common.message.SuccessMessage.SUCCESS_GET_DELIVERY;
 import static com.domain_expansion.integrity.delivery.common.message.SuccessMessage.SUCCESS_GET_DELIVERIES;
 import static com.domain_expansion.integrity.delivery.common.message.SuccessMessage.SUCCESS_UPDATE_DELIVERY;
@@ -127,8 +128,8 @@ public class DeliveryController {
 
         deliveryService.deleteDelivery(deliveryId);
 
-        return ResponseEntity.status(SUCCESS_CREATE_DELIVERY.getHttpStatus())
-                .body(success(SUCCESS_CREATE_DELIVERY.getMessage()));
+        return ResponseEntity.status(SUCCESS_DELETE_DELIVERY.getHttpStatus())
+                .body(success(SUCCESS_DELETE_DELIVERY.getMessage()));
     }
 
     //    - **수정**: 마스터 관리자, 해당 허브 관리자, 그리고 해당 배송 담당자만 가능
