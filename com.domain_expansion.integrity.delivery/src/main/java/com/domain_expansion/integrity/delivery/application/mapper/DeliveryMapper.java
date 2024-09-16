@@ -15,7 +15,6 @@ public class DeliveryMapper {
         return Delivery.of(
                 deliveryId,
                 DeliveryStatus.WAITING,
-                null,
                 requestDto.orderId(),
                 requestDto.startHubId(),
                 requestDto.endHubId(),
