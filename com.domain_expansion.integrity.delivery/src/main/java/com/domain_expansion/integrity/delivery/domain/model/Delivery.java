@@ -18,11 +18,13 @@ import java.util.Set;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLRestriction;
 
 @Getter
 @Entity
 @Table(name = "p_delivery")
 @NoArgsConstructor(access = PROTECTED)
+@SQLRestriction("is_delete = false")
 public class Delivery extends BaseDateEntity {
 
     @Id
@@ -35,6 +37,9 @@ public class Delivery extends BaseDateEntity {
 
     @Column
     private String deliveryManId;
+
+    @Column
+    private String hubDeliveryManId;
 
     @Column
     private String orderId;
@@ -64,12 +69,11 @@ public class Delivery extends BaseDateEntity {
     private Set<HubDeliveryHistory> hubDeliveryHistories = new HashSet<>();
 
     @Builder(access = PRIVATE)
-    public Delivery(String deliveryId, DeliveryStatus status, String deliveryManId, String orderId,
+    public Delivery(String deliveryId, DeliveryStatus status, String orderId,
             String startHubId, String endHubId, String address, String receiver, String receiverSlackId,
             Boolean isDelete) {
         this.deliveryId = deliveryId;
         this.status = status;
-        this.deliveryManId = deliveryManId;
         this.orderId = orderId;
         this.startHubId = startHubId;
         this.endHubId = endHubId;
@@ -79,14 +83,13 @@ public class Delivery extends BaseDateEntity {
         this.isDelete = isDelete;
     }
 
-    public static Delivery of(String deliveryId, DeliveryStatus status, String deliveryManId,
-            String orderId, String startHubId, String endHubId, String address, String receiver,
+    public static Delivery of(String deliveryId, DeliveryStatus status, String orderId,
+            String startHubId, String endHubId, String address, String receiver,
             String receiverSlackId, Boolean isDelete) {
 
         return Delivery.builder()
                 .deliveryId(deliveryId)
                 .status(status)
-                .deliveryManId(deliveryManId)
                 .orderId(orderId)
                 .startHubId(startHubId)
                 .endHubId(endHubId)
@@ -105,7 +108,18 @@ public class Delivery extends BaseDateEntity {
     }
 
     public void deleteDelivery() {
+
         this.isDelete = true;
         super.deleteEntity();
+    }
+
+    public void updateDeliveryMan(String deliveryManId) {
+
+        this.deliveryManId = deliveryManId;
+    }
+
+    public void updateHubDeliveryMan(String hubDeliveryManId) {
+
+        this.hubDeliveryManId = hubDeliveryManId;
     }
 }
