@@ -15,6 +15,7 @@ import com.domain_expansion.integrity.delivery.presentation.response.DeliveryRes
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,8 +29,8 @@ public class DeliveryServiceImplV1 implements DeliveryService {
     private final DeliveryMapper deliveryMapper;
     private final DeliveryQueryRepository deliveryQueryRepository;
 
-    // TODO 리스너 설정
     @Override
+    @KafkaListener(topics = "createdOrder", groupId = "a")
     public DeliveryResponseDto createDelivery(DeliveryCreateRequestDto requestDto) {
 
         String deliveryId = deliveryDomainService.createDeliveryId();
