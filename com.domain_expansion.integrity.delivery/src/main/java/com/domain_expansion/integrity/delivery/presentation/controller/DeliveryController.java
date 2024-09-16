@@ -4,6 +4,8 @@ import static com.domain_expansion.integrity.delivery.common.message.SuccessMess
 import static com.domain_expansion.integrity.delivery.common.message.SuccessMessage.SUCCESS_GET_DELIVERY;
 import static com.domain_expansion.integrity.delivery.common.message.SuccessMessage.SUCCESS_GET_DELIVERIES;
 import static com.domain_expansion.integrity.delivery.common.message.SuccessMessage.SUCCESS_UPDATE_DELIVERY;
+import static com.domain_expansion.integrity.delivery.common.message.SuccessMessage.SUCCESS_UPDATE_DELIVERY_DELIVERY_MAN;
+import static com.domain_expansion.integrity.delivery.common.message.SuccessMessage.SUCCESS_UPDATE_DELIVERY_HUB_DELIVERY_MAN;
 import static com.domain_expansion.integrity.delivery.common.response.SuccessResponse.success;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
@@ -99,8 +101,8 @@ public class DeliveryController {
             String deliveryId
     ) {
 
-        return ResponseEntity.status(SUCCESS_UPDATE_DELIVERY.getHttpStatus())
-                .body(success(SUCCESS_UPDATE_DELIVERY.getMessage(), deliveryService.updateDeliveryDeliveryMan(requestDto, deliveryId)));
+        return ResponseEntity.status(SUCCESS_UPDATE_DELIVERY_DELIVERY_MAN.getHttpStatus())
+                .body(success(SUCCESS_UPDATE_DELIVERY_DELIVERY_MAN.getMessage(), deliveryService.updateDeliveryDeliveryMan(requestDto, deliveryId)));
     }
 
     @PatchMapping("/{deliveryId}/hub-delivery-man")
@@ -112,8 +114,8 @@ public class DeliveryController {
             String deliveryId
     ) {
 
-        return ResponseEntity.status(SUCCESS_UPDATE_DELIVERY.getHttpStatus())
-                .body(success(SUCCESS_UPDATE_DELIVERY.getMessage(), deliveryService.updateDeliveryHubDeliveryMan(requestDto, deliveryId)));
+        return ResponseEntity.status(SUCCESS_UPDATE_DELIVERY_HUB_DELIVERY_MAN.getHttpStatus())
+                .body(success(SUCCESS_UPDATE_DELIVERY_HUB_DELIVERY_MAN.getMessage(), deliveryService.updateDeliveryHubDeliveryMan(requestDto, deliveryId)));
     }
 
     @DeleteMapping("/{deliveryId}")
