@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DeliveryMapper {
 
-    public Delivery deliveryCreateRequestDtoAndDeliveryIdToDelivery(
+    public Delivery toDelivery(
             DeliveryCreateRequestDto requestDto, String deliveryId
     ) {
 

@@ -96,4 +96,16 @@ public class Delivery extends BaseDateEntity {
                 .isDelete(isDelete)
                 .build();
     }
+
+    public void updateDelivery(String address, String receiver, String receiverSlackId) {
+
+        this.address = address;
+        this.receiver = receiver;
+        this.receiverSlackId = receiverSlackId;
+    }
+
+    public void deleteDelivery() {
+        this.isDelete = true;
+        super.deleteEntity();
+    }
 }

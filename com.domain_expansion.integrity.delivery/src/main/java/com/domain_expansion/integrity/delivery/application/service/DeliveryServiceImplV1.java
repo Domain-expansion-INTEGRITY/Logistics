@@ -1,12 +1,17 @@
 package com.domain_expansion.integrity.delivery.application.service;
 
 import com.domain_expansion.integrity.delivery.application.mapper.DeliveryMapper;
+import com.domain_expansion.integrity.delivery.common.exception.DeliveryException;
+import com.domain_expansion.integrity.delivery.common.message.ExceptionMessage;
+import com.domain_expansion.integrity.delivery.common.security.UserDetailsImpl;
+import com.domain_expansion.integrity.delivery.domain.model.Delivery;
+import com.domain_expansion.integrity.delivery.domain.repository.DeliveryQueryRepository;
 import com.domain_expansion.integrity.delivery.domain.repository.DeliveryRepository;
 import com.domain_expansion.integrity.delivery.domain.service.DeliveryDomainService;
+import com.domain_expansion.integrity.delivery.presentation.request.DeliverySearchCondition;
 import com.domain_expansion.integrity.delivery.presentation.request.DeliveryCreateRequestDto;
 import com.domain_expansion.integrity.delivery.presentation.request.DeliveryUpdateRequestDto;
 import com.domain_expansion.integrity.delivery.presentation.response.DeliveryResponseDto;
-import com.github.ksuid.Ksuid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,34 +26,62 @@ public class DeliveryServiceImplV1 implements DeliveryService {
     private final DeliveryRepository deliveryRepository;
     private final DeliveryDomainService deliveryDomainService;
     private final DeliveryMapper deliveryMapper;
+    private final DeliveryQueryRepository deliveryQueryRepository;
 
+    // TODO 리스너 설정
     @Override
     public DeliveryResponseDto createDelivery(DeliveryCreateRequestDto requestDto) {
 
+        String deliveryId = deliveryDomainService.createDeliveryId();
+        
         return DeliveryResponseDto.from(deliveryRepository.save(
-                deliveryMapper.deliveryCreateRequestDtoAndDeliveryIdToDelivery(requestDto,
-                        Ksuid.newKsuid().toString())));
+                deliveryMapper.toDelivery(requestDto, deliveryId)));
     }
 
     @Override
-    public void deleteDelivery(String OrderId) {
+    @Transactional(readOnly = true)
+    public DeliveryResponseDto getDelivery(String deliveryId) {
 
+        Delivery delivery = deliveryRepository.findById(deliveryId).orElseThrow(
+                () -> new DeliveryException(ExceptionMessage.NOT_FOUND_DELIVERY)
+        );
+
+        return DeliveryResponseDto.from(delivery);
     }
 
     @Override
-    public DeliveryResponseDto getDelivery(String requestDto) {
-        return null;
+    @Transactional(readOnly = true)
+    public Page<DeliveryResponseDto> getDeliveries(
+            Pageable pageable,
+            DeliverySearchCondition searchCondition,
+            UserDetailsImpl userDetails
+    ) {
+
+        return deliveryQueryRepository.findAllByCondition(pageable, searchCondition)
+                .map(DeliveryResponseDto::from);
     }
 
     @Override
-    public Page<DeliveryResponseDto> getDeliveries(Pageable pageable) {
-        return null;
+    public DeliveryResponseDto updateDelivery(
+            DeliveryUpdateRequestDto requestDto,
+            String deliveryId
+    ) {
+
+        Delivery delivery = deliveryRepository.findById(deliveryId).orElseThrow(
+                () -> new DeliveryException(ExceptionMessage.NOT_FOUND_DELIVERY)
+        );
+
+        delivery.updateDelivery(requestDto.address(), requestDto.receiver(), requestDto.receiverSlackId());
+
+        return DeliveryResponseDto.from(delivery);
     }
 
     @Override
-    public DeliveryResponseDto updateDelivery(DeliveryUpdateRequestDto requestDto,
-            String deliveryId) {
-
-        return null;
+    public void deleteDelivery(String deliveryId) {
+        Delivery delivery = deliveryRepository.findById(deliveryId).orElseThrow(
+                () -> new DeliveryException(ExceptionMessage.NOT_FOUND_DELIVERY)
+        );
+        delivery.deleteDelivery();
     }
+
 }
