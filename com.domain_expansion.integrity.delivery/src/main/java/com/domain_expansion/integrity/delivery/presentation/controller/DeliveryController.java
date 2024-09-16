@@ -12,6 +12,8 @@ import com.domain_expansion.integrity.delivery.common.aop.DefaultPageSize;
 import com.domain_expansion.integrity.delivery.common.response.CommonResponse;
 import com.domain_expansion.integrity.delivery.common.security.UserDetailsImpl;
 import com.domain_expansion.integrity.delivery.presentation.request.DeliveryCreateRequestDto;
+import com.domain_expansion.integrity.delivery.presentation.request.DeliveryDeliveryManUpdateRequestDto;
+import com.domain_expansion.integrity.delivery.presentation.request.DeliveryHubDeliveryManUpdateRequestDto;
 import com.domain_expansion.integrity.delivery.presentation.request.DeliverySearchCondition;
 import com.domain_expansion.integrity.delivery.presentation.request.DeliveryUpdateRequestDto;
 import jakarta.validation.Valid;
@@ -86,6 +88,32 @@ public class DeliveryController {
 
         return ResponseEntity.status(SUCCESS_UPDATE_DELIVERY.getHttpStatus())
                 .body(success(SUCCESS_UPDATE_DELIVERY.getMessage(), deliveryService.updateDelivery(requestDto, deliveryId)));
+    }
+
+    @PatchMapping("/{deliveryId}/delivery-man")
+    @PreAuthorize("hasAnyRole('ROLE_MASTER', 'ROLE_HUB_MANAGER', 'ROLE_HUB_DELIVERY_MAN', 'ROLE_HUB_COMPANY_DELIVERY_MAN')")
+    public ResponseEntity<? extends CommonResponse> updateDeliveryMan(
+            @Valid @RequestBody
+            DeliveryDeliveryManUpdateRequestDto requestDto,
+            @PathVariable
+            String deliveryId
+    ) {
+
+        return ResponseEntity.status(SUCCESS_UPDATE_DELIVERY.getHttpStatus())
+                .body(success(SUCCESS_UPDATE_DELIVERY.getMessage(), deliveryService.updateDeliveryDeliveryMan(requestDto, deliveryId)));
+    }
+
+    @PatchMapping("/{deliveryId}/hub-delivery-man")
+    @PreAuthorize("hasAnyRole('ROLE_MASTER', 'ROLE_HUB_MANAGER', 'ROLE_HUB_DELIVERY_MAN', 'ROLE_HUB_COMPANY_DELIVERY_MAN')")
+    public ResponseEntity<? extends CommonResponse> updateHubDeliveryMan(
+            @Valid @RequestBody
+            DeliveryHubDeliveryManUpdateRequestDto requestDto,
+            @PathVariable
+            String deliveryId
+    ) {
+
+        return ResponseEntity.status(SUCCESS_UPDATE_DELIVERY.getHttpStatus())
+                .body(success(SUCCESS_UPDATE_DELIVERY.getMessage(), deliveryService.updateDeliveryHubDeliveryMan(requestDto, deliveryId)));
     }
 
     @DeleteMapping("/{deliveryId}")

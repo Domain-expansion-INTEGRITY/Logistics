@@ -10,11 +10,10 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum ExceptionMessage {
 
-    PRODUCT_SERVER_ERROR(BAD_REQUEST, "상품 서버에서 오류가 발생했습니다. 존재하지 않는 상품이 있을 수 있으니 확인해주세요."),
+    NOT_FOUND_DELIVERY(NOT_FOUND, "배달을 찾지 못했습니다."),
 
-    PRODUCT_NAME_MIN_VALUE(BAD_REQUEST, "상품명은 최소 1글자 이상 입력해야 합니다."),
-    PRODUCT_NAME_MAX_VALUE(BAD_REQUEST, "상품명은 최대 255글자 까지 입력할 수 있습니다."),
-    NOT_FOUND_DELIVERY(NOT_FOUND, "배달을 찾지 못했습니다.");
+    CANT_JOIN_BECAUSE_HUB_DELIVERY_MAN(BAD_REQUEST, "업체 배송 담당자는 허브 배송 담당자란에 등록할 수 없습니다."),
+    CANT_JOIN_BECAUSE_DELIVERY_MAN(BAD_REQUEST, "허브 배송 담당자는 업체 배송 담당자란에 등록할 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
