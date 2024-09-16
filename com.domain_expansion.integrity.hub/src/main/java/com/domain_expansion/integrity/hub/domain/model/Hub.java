@@ -3,7 +3,7 @@ package com.domain_expansion.integrity.hub.domain.model;
 import com.domain_expansion.integrity.hub.common.entity.BaseDateEntity;
 import com.domain_expansion.integrity.hub.domain.model.vo.hub.HubLatitude;
 import com.domain_expansion.integrity.hub.domain.model.vo.hub.HubLongitude;
-import com.domain_expansion.integrity.hub.presentation.request.HubUpdateRequestDto;
+import com.domain_expansion.integrity.hub.presentation.request.hub.HubUpdateRequestDto;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -120,5 +120,9 @@ public class Hub extends BaseDateEntity {
             this.hubLongitude = new HubLongitude(requestDto.longitude());
         }
 
+    }
+
+    public void addDeliveryMan(HubDeliveryMan deliveryMan) {
+        deliveryMans.add(deliveryMan);
     }
 }

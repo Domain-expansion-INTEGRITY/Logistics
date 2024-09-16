@@ -1,4 +1,4 @@
-package com.domain_expansion.integrity.hub.presentation.response;
+package com.domain_expansion.integrity.hub.presentation.response.hubRoute;
 
 public record HubRouteTotalResponseDto (
         String startHubId,

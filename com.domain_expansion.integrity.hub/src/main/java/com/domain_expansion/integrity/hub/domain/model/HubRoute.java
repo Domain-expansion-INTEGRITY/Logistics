@@ -1,7 +1,7 @@
 package com.domain_expansion.integrity.hub.domain.model;
 
 import com.domain_expansion.integrity.hub.common.entity.BaseDateEntity;
-import com.domain_expansion.integrity.hub.presentation.request.HubRouteUpdateRequestDto;
+import com.domain_expansion.integrity.hub.presentation.request.hubRoute.HubRouteUpdateRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

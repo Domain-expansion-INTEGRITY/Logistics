@@ -1,14 +1,8 @@
 package com.domain_expansion.integrity.hub.domain.repository;
 
 import com.domain_expansion.integrity.hub.domain.model.Hub;
-import com.domain_expansion.integrity.hub.domain.model.HubRoute;
-import com.domain_expansion.integrity.hub.presentation.response.HubRouteTotalResponseDto;
 import io.lettuce.core.dynamic.annotation.Param;
-import jakarta.persistence.ColumnResult;
-import jakarta.persistence.ConstructorResult;
-import jakarta.persistence.SqlResultSetMapping;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.Query;
 
@@ -16,11 +10,11 @@ public interface HubRepository{
 
     Optional<Hub> findById(String id);
 
+    Optional<Hub> findHubByUserId(Long userId);
+
     Hub save(Hub hub);
 
     Optional<Hub> findByHubIdAndUserId(String hubId, Long userId);
-
-    //List<Hub> saveAll(Collection<Hub> hubs);
 
     Optional<Hub> findByStartRoutes_HubRouteId(String hubRouteId);
 

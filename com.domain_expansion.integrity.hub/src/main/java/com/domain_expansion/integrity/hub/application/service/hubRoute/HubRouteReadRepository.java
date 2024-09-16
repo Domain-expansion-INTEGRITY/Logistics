@@ -1,9 +1,9 @@
 package com.domain_expansion.integrity.hub.application.service.hubRoute;
 
-import com.domain_expansion.integrity.hub.presentation.request.HubRouteSearchCondition;
-import com.domain_expansion.integrity.hub.presentation.response.HubRoutePaginatedResponseDto;
-import com.domain_expansion.integrity.hub.presentation.response.HubRouteResponseDto;
-import com.domain_expansion.integrity.hub.presentation.response.HubRouteTotalResponseDto;
+import com.domain_expansion.integrity.hub.presentation.request.hubRoute.HubRouteSearchCondition;
+import com.domain_expansion.integrity.hub.presentation.response.hubRoute.HubRoutePaginatedResponseDto;
+import com.domain_expansion.integrity.hub.presentation.response.hubRoute.HubRouteResponseDto;
+import com.domain_expansion.integrity.hub.presentation.response.hubRoute.HubRouteTotalResponseDto;
 import org.springframework.data.domain.Pageable;
 
 public interface HubRouteReadRepository {

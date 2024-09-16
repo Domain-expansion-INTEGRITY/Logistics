@@ -1,4 +1,4 @@
-package com.domain_expansion.integrity.hub.presentation.response;
+package com.domain_expansion.integrity.hub.presentation.response.hubRoute;
 
 import com.domain_expansion.integrity.hub.domain.model.HubRoute;
 import lombok.AccessLevel;

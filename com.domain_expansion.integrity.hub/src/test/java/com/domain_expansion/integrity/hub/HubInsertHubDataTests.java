@@ -4,6 +4,7 @@ import com.domain_expansion.integrity.hub.domain.model.Hub;
 import com.domain_expansion.integrity.hub.domain.model.vo.hub.HubLatitude;
 import com.domain_expansion.integrity.hub.domain.model.vo.hub.HubLongitude;
 import com.domain_expansion.integrity.hub.domain.repository.HubRepository;
+import com.domain_expansion.integrity.hub.infrastructure.repository.JpaHubRepository;
 import com.github.ksuid.Ksuid;
 import java.util.Arrays;
 import java.util.List;
@@ -15,8 +16,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 //@SpringBootTest
 class HubInsertHubDataTests {
 
-	@Autowired
-	private HubRepository hubRepository;
+	//@Autowired
+	private JpaHubRepository hubRepository;
 
 	@Test
 	void insertTestDataInHub(){
@@ -51,7 +52,7 @@ class HubInsertHubDataTests {
 				.map(data -> new Hub(Ksuid.newKsuid().toString(),100L,data.getName(), data.getAddress(),data.getIndex(),new HubLatitude(data.getLatitude()), new HubLongitude(data.getLongitude())))
 				.collect(Collectors.toList());
 
-		//hubRepository.saveAll(hubs);
+		hubRepository.saveAll(hubs);
 
 	}
 

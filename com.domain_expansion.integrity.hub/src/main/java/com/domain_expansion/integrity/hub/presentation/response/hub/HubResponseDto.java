@@ -1,4 +1,4 @@
-package com.domain_expansion.integrity.hub.presentation.response;
+package com.domain_expansion.integrity.hub.presentation.response.hub;
 
 
 import com.domain_expansion.integrity.hub.domain.model.Hub;

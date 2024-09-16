@@ -1,0 +1,6 @@
+package com.domain_expansion.integrity.hub.application.service.deliveryman;
+
+public interface HubDeliveryManService extends HubDeliveryManCreateService,HubDeliveryManUpdateService,HubDeliveryManDeleteService,HubDeliveryManReadService
+{
+
+}

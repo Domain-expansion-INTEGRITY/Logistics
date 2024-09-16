@@ -10,9 +10,9 @@ import com.domain_expansion.integrity.hub.application.service.hubRoute.HubRouteS
 import com.domain_expansion.integrity.hub.common.response.CommonResponse;
 import com.domain_expansion.integrity.hub.common.response.SuccessResponse;
 import com.domain_expansion.integrity.hub.common.security.UserDetailsImpl;
-import com.domain_expansion.integrity.hub.presentation.request.HubRouteCreateRequestDto;
-import com.domain_expansion.integrity.hub.presentation.request.HubRouteSearchCondition;
-import com.domain_expansion.integrity.hub.presentation.request.HubRouteUpdateRequestDto;
+import com.domain_expansion.integrity.hub.presentation.request.hubRoute.HubRouteCreateRequestDto;
+import com.domain_expansion.integrity.hub.presentation.request.hubRoute.HubRouteSearchCondition;
+import com.domain_expansion.integrity.hub.presentation.request.hubRoute.HubRouteUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;

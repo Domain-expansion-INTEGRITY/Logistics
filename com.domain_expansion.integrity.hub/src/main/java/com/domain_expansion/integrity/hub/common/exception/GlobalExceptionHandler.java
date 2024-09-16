@@ -20,6 +20,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(BAD_REQUEST).body(ErrorResponse.of(e.getMessage()));
     }
 
+    @ExceptionHandler(ClientException.class)
+    public ResponseEntity<? extends CommonResponse> handleValidException(ClientException e) {
+
+        e.printStackTrace();
+
+        return ResponseEntity.status(BAD_REQUEST).body(ErrorResponse.of(e.getMessage()));
+    }
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<? extends CommonResponse> handleValidException(MethodArgumentNotValidException e) {
