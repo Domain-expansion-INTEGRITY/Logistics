@@ -15,16 +15,28 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
-      format_sql: true
-      show_sql: true
+      hibernate:
+        format_sql: true
+        show_sql: true
   #        database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  kafka:
+    bootstrap-servers: localhost:9092
+
+
 
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:19090/eureka/
+jwt:
+  secret:
+    key: ${JWT_SECRET_KEY}
+
+slack:
+  url: https://hooks.slack.com/services/T07MKQDE5RA/B07M3CY2PQF
 
 server:
   port: 19099
