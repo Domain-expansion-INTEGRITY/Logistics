@@ -5,10 +5,10 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 import lombok.Getter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
@@ -17,7 +17,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public abstract class BaseDateEntity {
 
     @Column(name = "created_at", updatable = false)
-    @CreatedDate
+    @CreationTimestamp
     protected LocalDateTime createdAt;
 
     @Column(name = "created_by", updatable = false)
@@ -25,7 +25,7 @@ public abstract class BaseDateEntity {
     protected Long createdUser;
 
     @Column(name = "updated_at")
-    @LastModifiedDate
+    @UpdateTimestamp
     protected LocalDateTime updatedAt;
 
     @Column(name = "updated_by")

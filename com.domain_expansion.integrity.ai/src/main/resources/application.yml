@@ -15,13 +15,13 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
-        show_sql: true # sql 로깅
-        format_sql: true # SQL 문 정렬하여 출력
-        highlight_sql: true # SQL 문 색 부여
-        use_sql_comments: true # 콘솔에 표시되는 쿼리문 위에 어떤 실행을 하려는지 HINT 표시
+  #        show_sql: true # sql 로깅
+  #        format_sql: true # SQL 문 정렬하여 출력
+  #        highlight_sql: true # SQL 문 색 부여
+  #        use_sql_comments: true # 콘솔에 표시되는 쿼리문 위에 어떤 실행을 하려는지 HINT 표시
   #        database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 eureka:
@@ -29,5 +29,18 @@ eureka:
     service-url:
       defaultZone: http://localhost:19090/eureka/
 
+gemini:
+  baseurl: https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent
+  key: ${DEV_GEMINI_KEY}
+
+weather:
+  baseurl: https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst
+  key: ${DEV_WEATHER_KEY}
+
 server:
   port: 19098
+
+
+jwt:
+  secret:
+    key: ${JWT_SECRET_KEY}
