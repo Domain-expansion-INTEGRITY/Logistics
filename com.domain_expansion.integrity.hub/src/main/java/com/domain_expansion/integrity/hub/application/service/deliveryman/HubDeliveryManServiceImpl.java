@@ -8,6 +8,7 @@ import com.domain_expansion.integrity.hub.common.exception.HubException;
 import com.domain_expansion.integrity.hub.common.message.ExceptionMessage;
 import com.domain_expansion.integrity.hub.common.security.UserDetailsImpl;
 import com.domain_expansion.integrity.hub.domain.model.DeliveryMan;
+import com.domain_expansion.integrity.hub.domain.model.DeliveryState;
 import com.domain_expansion.integrity.hub.domain.model.Hub;
 import com.domain_expansion.integrity.hub.domain.model.HubDeliveryMan;
 import com.domain_expansion.integrity.hub.domain.repository.DeliveryManRepository;
@@ -19,14 +20,18 @@ import com.domain_expansion.integrity.hub.presentation.request.deliveryMan.Deliv
 import com.domain_expansion.integrity.hub.presentation.request.deliveryMan.HubDeliveryManCreateRequestDto;
 import com.domain_expansion.integrity.hub.presentation.request.deliveryMan.HubDeliveryRequsetDto;
 import com.domain_expansion.integrity.hub.presentation.response.deliveryMan.DeliveryManCreateResponseDto;
+import com.domain_expansion.integrity.hub.presentation.response.deliveryMan.DeliveryManNextResponseDto;
 import com.domain_expansion.integrity.hub.presentation.response.deliveryMan.DeliveryManResponseDto;
 import com.domain_expansion.integrity.hub.presentation.response.deliveryMan.DeliveryManUpdateResponseDto;
 import com.domain_expansion.integrity.hub.presentation.response.deliveryMan.HubDeliveryManCreateResposeDto;
 import com.github.ksuid.Ksuid;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +45,7 @@ public class HubDeliveryManServiceImpl implements HubDeliveryManService {
     private final DeliveryManRepository deliveryManRepository;
     private final HubMapper hubMapper;
     private final UserClient userClient;
+    private final RedisTemplate<String,String> redisTemplate;
 
     @Override
     public DeliveryManCreateResponseDto createDeliveryMan(DeliveryManCreateRequestDto requestDto) {
@@ -204,4 +210,44 @@ public class HubDeliveryManServiceImpl implements HubDeliveryManService {
             Pageable pageable,UserDetailsImpl userDetails) {
         return queryRepository.searchDeliveryMans(searchDto,pageable,userDetails);
     }
+
+    /***
+     * Redis를 이용하여 실시간 처리 & ROUND ROBIN
+     * @return
+     */
+    @Transactional
+    @Override
+    public DeliveryManNextResponseDto findNextDeliveryMan() {
+
+        //Redis에서 마지막 인덱스 가져오기
+        String lastKsuid = redisTemplate.opsForValue().get("lastDeliveryManId");
+
+        //배달 가능한 허브 배송담당자들을 조회
+        List<DeliveryMan> deliveryManList = queryRepository.findAllDeliveryMans();
+
+        if (deliveryManList.isEmpty()) {
+            throw new HubException(ExceptionMessage.NOT_FOUND_DELIVERY_MAN);
+        }
+
+        DeliveryMan nextDeliveryMan = null;
+
+        //처음 시작하면 1번째로 설정
+        if (lastKsuid == null) {
+            nextDeliveryMan = deliveryManList.get(0);
+            lastKsuid = nextDeliveryMan.getDeliveryManId();
+        }else{
+            final String lastDeliveryManId = lastKsuid;
+
+            nextDeliveryMan = deliveryManList.stream().filter(dm -> dm.getDeliveryManId().compareTo(lastDeliveryManId) > 0)
+                    .findFirst().orElse(deliveryManList.get(0));
+
+        }
+
+        nextDeliveryMan.updatedState(DeliveryState.RUNNING);
+
+        redisTemplate.opsForValue().set("lastDeliveryManId", nextDeliveryMan.getDeliveryManId());
+
+        return DeliveryManNextResponseDto.from(nextDeliveryMan);
+    }
+
 }

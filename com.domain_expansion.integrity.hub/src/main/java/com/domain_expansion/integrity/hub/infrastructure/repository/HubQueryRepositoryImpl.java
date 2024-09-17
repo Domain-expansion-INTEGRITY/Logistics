@@ -3,6 +3,7 @@ package com.domain_expansion.integrity.hub.infrastructure.repository;
 import com.domain_expansion.integrity.hub.application.shared.RoleConstants;
 import com.domain_expansion.integrity.hub.common.security.UserDetailsImpl;
 import com.domain_expansion.integrity.hub.domain.model.DeliveryMan;
+import com.domain_expansion.integrity.hub.domain.model.DeliveryState;
 import com.domain_expansion.integrity.hub.domain.model.Hub;
 import com.domain_expansion.integrity.hub.domain.model.HubRoute;
 import com.domain_expansion.integrity.hub.domain.model.QDeliveryMan;
@@ -26,7 +27,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.expression.spel.ast.Projection;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -198,6 +198,25 @@ public class HubQueryRepositoryImpl implements HubQueryRepository {
 
             return new PageImpl<>(content, pageable, total);
         }
+    }
+
+    @Override
+    public List<DeliveryMan> findAllDeliveryMans() {
+
+        QDeliveryMan qDeliveryMan = QDeliveryMan.deliveryMan;
+        QHubDeliveryMan qHubDeliveryMan = QHubDeliveryMan.hubDeliveryMan;
+        QHub qHub = QHub.hub;
+
+        List<DeliveryMan> lists = queryFactory.select(qDeliveryMan)
+                .from(qDeliveryMan)
+                .leftJoin(qHubDeliveryMan).on(qDeliveryMan.deliveryManId.eq(qHubDeliveryMan.deliveryMan.deliveryManId))
+                .leftJoin(qHubDeliveryMan.hub, qHub)
+                .where(qHubDeliveryMan.hub.isNull(),
+                        qDeliveryMan.deliveryState.stringValue().eq(DeliveryState.COMPLETED.name()))
+                .orderBy(qDeliveryMan.deliveryManId.desc())
+                .fetch();
+
+        return lists;
     }
 
 }

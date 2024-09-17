@@ -4,6 +4,8 @@ import com.domain_expansion.integrity.hub.common.entity.BaseDateEntity;
 import com.domain_expansion.integrity.hub.presentation.request.deliveryMan.DeliveryManUpdateRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -26,6 +28,10 @@ public class DeliveryMan extends BaseDateEntity {
 
     @Column(name = "user_id")
     private Long userId;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private DeliveryState deliveryState = DeliveryState.COMPLETED;
 
     @Column(name = "is_delete")
     private Boolean isDelete = false;
@@ -54,5 +60,10 @@ public class DeliveryMan extends BaseDateEntity {
     public void deleteDeliveryMan(Long userId){
         super.setDeletedValue(userId);
         this.isDelete = true;
+    }
+
+    public void updatedState(DeliveryState state)
+    {
+        this.deliveryState = state;
     }
 }

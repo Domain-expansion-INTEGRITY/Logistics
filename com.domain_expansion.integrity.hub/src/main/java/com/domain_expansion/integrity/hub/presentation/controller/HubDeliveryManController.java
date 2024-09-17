@@ -4,6 +4,7 @@ import static com.domain_expansion.integrity.hub.common.message.SuccessMessage.S
 import static com.domain_expansion.integrity.hub.common.message.SuccessMessage.SUCCESS_CREATE_HUB_DELIVERYMAN;
 import static com.domain_expansion.integrity.hub.common.message.SuccessMessage.SUCCESS_DELETE_DELIVERYMAN;
 import static com.domain_expansion.integrity.hub.common.message.SuccessMessage.SUCCESS_GET_ALL_HUBS_ROUTE;
+import static com.domain_expansion.integrity.hub.common.message.SuccessMessage.SUCCESS_GET_DELIVERYMAN;
 import static com.domain_expansion.integrity.hub.common.message.SuccessMessage.SUCCESS_GET_HUB_ROUTE;
 import static com.domain_expansion.integrity.hub.common.message.SuccessMessage.SUCCESS_UPDATE_DELIVERYMAN;
 
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/api/v1/hubs")
@@ -111,4 +113,14 @@ public class HubDeliveryManController {
                 .body(SuccessResponse.success(SUCCESS_DELETE_DELIVERYMAN.getMessage()));
     }
 
+    /***
+     * 다음 배송담당자를 조회
+     * @return
+     */
+    @GetMapping("/deliveryMan/next")
+    public ResponseEntity<?  extends CommonResponse> findNextDeliveryMan(){
+
+        return ResponseEntity.status(SUCCESS_GET_DELIVERYMAN.getHttpStatus())
+                .body(SuccessResponse.success(SUCCESS_GET_DELIVERYMAN.getMessage(),hubDeliveryManService.findNextDeliveryMan()));
+    }
 }
