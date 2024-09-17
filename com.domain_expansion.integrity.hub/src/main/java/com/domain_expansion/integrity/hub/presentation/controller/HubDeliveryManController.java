@@ -9,6 +9,7 @@ import static com.domain_expansion.integrity.hub.common.message.SuccessMessage.S
 import static com.domain_expansion.integrity.hub.common.message.SuccessMessage.SUCCESS_UPDATE_DELIVERYMAN;
 
 import com.domain_expansion.integrity.hub.application.service.deliveryman.HubDeliveryManService;
+import com.domain_expansion.integrity.hub.common.aop.DefaultPageSize;
 import com.domain_expansion.integrity.hub.common.response.CommonResponse;
 import com.domain_expansion.integrity.hub.common.response.SuccessResponse;
 import com.domain_expansion.integrity.hub.common.security.UserDetailsImpl;
@@ -18,7 +19,6 @@ import com.domain_expansion.integrity.hub.presentation.request.deliveryMan.Deliv
 import com.domain_expansion.integrity.hub.presentation.request.deliveryMan.HubDeliveryManCreateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/api/v1/hubs")
@@ -78,11 +77,12 @@ public class HubDeliveryManController {
                 .body(SuccessResponse.success(SUCCESS_GET_HUB_ROUTE.getMessage(),hubDeliveryManService.getDeliveryManById(deliveryManId,userDetails)));
     }
 
+    @DefaultPageSize
     @PreAuthorize("hasAnyRole(T(com.domain_expansion.integrity.hub.application.shared.RoleConstants).ROLE_MASTER,"
             + "T(com.domain_expansion.integrity.hub.application.shared.RoleConstants).ROLE_HUB_MANAGER)")
     @GetMapping("/deliveryMan")
-    public ResponseEntity<?  extends CommonResponse> getAllHubRoutes(@ModelAttribute
-    DeliveryManSearchCondition searchCondition, @PageableDefault(size = 10) Pageable pageable,@AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ResponseEntity<?  extends CommonResponse> getAllDeliveryMans(@ModelAttribute
+    DeliveryManSearchCondition searchCondition, Pageable pageable,@AuthenticationPrincipal UserDetailsImpl userDetails){
 
         return ResponseEntity.status(SUCCESS_GET_ALL_HUBS_ROUTE.getHttpStatus())
                 .body(SuccessResponse.success(SUCCESS_GET_ALL_HUBS_ROUTE.getMessage(),hubDeliveryManService.getAllDeliveryMans(searchCondition,pageable,userDetails)));

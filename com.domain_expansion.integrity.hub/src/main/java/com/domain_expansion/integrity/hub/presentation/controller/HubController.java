@@ -2,6 +2,7 @@ package com.domain_expansion.integrity.hub.presentation.controller;
 
 import static com.domain_expansion.integrity.hub.common.message.SuccessMessage.*;
 
+import com.domain_expansion.integrity.hub.common.aop.DefaultPageSize;
 import com.domain_expansion.integrity.hub.common.response.SuccessResponse;
 import com.domain_expansion.integrity.hub.common.response.CommonResponse;
 import com.domain_expansion.integrity.hub.application.service.hub.HubService;
@@ -48,6 +49,7 @@ public class HubController {
 
     }
 
+    @DefaultPageSize
     @GetMapping
     public ResponseEntity<?  extends CommonResponse>  getAllHubs(
             @ModelAttribute HubSearchCondition searchCondition,

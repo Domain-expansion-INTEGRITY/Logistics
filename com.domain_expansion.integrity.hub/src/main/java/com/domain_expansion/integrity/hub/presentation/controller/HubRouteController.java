@@ -7,6 +7,7 @@ import static com.domain_expansion.integrity.hub.common.message.SuccessMessage.S
 import static com.domain_expansion.integrity.hub.common.message.SuccessMessage.SUCCESS_UPDATE_HUB_ROUTE;
 
 import com.domain_expansion.integrity.hub.application.service.hubRoute.HubRouteService;
+import com.domain_expansion.integrity.hub.common.aop.DefaultPageSize;
 import com.domain_expansion.integrity.hub.common.response.CommonResponse;
 import com.domain_expansion.integrity.hub.common.response.SuccessResponse;
 import com.domain_expansion.integrity.hub.common.security.UserDetailsImpl;
@@ -53,8 +54,9 @@ public class HubRouteController {
     }
 
     @GetMapping
+    @DefaultPageSize
     public ResponseEntity<?  extends CommonResponse> getAllHubRoutes(@ModelAttribute
-            HubRouteSearchCondition searchCondition, @PageableDefault(size = 10) Pageable pageable){
+            HubRouteSearchCondition searchCondition, Pageable pageable){
 
         return ResponseEntity.status(SUCCESS_GET_ALL_HUBS_ROUTE.getHttpStatus())
                 .body(SuccessResponse.success(SUCCESS_GET_ALL_HUBS_ROUTE.getMessage(),hubRouteService.getHubRoutes(searchCondition, pageable)));
