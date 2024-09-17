@@ -36,7 +36,7 @@ jwt:
     key: ${JWT_SECRET_KEY}
 
 slack:
-  url: https://hooks.slack.com/services/T07MKQDE5RA/B07M3CY2PQF
+  url: ${SLACK_WEBHOOK_URL}
 
 server:
   port: 19099
