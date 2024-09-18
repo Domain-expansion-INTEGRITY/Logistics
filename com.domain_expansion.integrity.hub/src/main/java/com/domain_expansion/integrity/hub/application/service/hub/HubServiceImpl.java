@@ -1,11 +1,13 @@
 package com.domain_expansion.integrity.hub.application.service.hub;
 
 import com.domain_expansion.integrity.hub.application.mapper.HubMapper;
+import com.domain_expansion.integrity.hub.common.Serializer.EventSerializer;
 import com.domain_expansion.integrity.hub.common.exception.HubException;
 import com.domain_expansion.integrity.hub.common.message.ExceptionMessage;
 import com.domain_expansion.integrity.hub.domain.model.Hub;
 import com.domain_expansion.integrity.hub.domain.repository.HubQueryRepository;
 import com.domain_expansion.integrity.hub.domain.repository.HubRepository;
+import com.domain_expansion.integrity.hub.events.HubDeleteEvent;
 import com.domain_expansion.integrity.hub.presentation.request.hub.HubCreateRequestDto;
 import com.domain_expansion.integrity.hub.presentation.request.hub.HubSearchCondition;
 import com.domain_expansion.integrity.hub.presentation.request.hub.HubUpdateRequestDto;
@@ -21,6 +23,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +36,9 @@ public class HubServiceImpl implements HubService{
 
     private final HubMapper hubMapper;
 
-     private final HubQueryRepository hubQueryRepository;
+    private final HubQueryRepository hubQueryRepository;
+
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     /***
      * 허브 관리자만 가능
@@ -62,6 +67,10 @@ public class HubServiceImpl implements HubService{
         );
 
         hub.deleteHub(userId);
+
+        //허브 삭제 이벤트 발행
+        HubDeleteEvent event = new HubDeleteEvent(hub.getHubId());
+        kafkaTemplate.send("hub-deleted-topic", EventSerializer.serialize(event));
 
     }
 

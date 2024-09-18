@@ -23,7 +23,19 @@ spring:
         format_sql: true # SQL 문 정렬하여 출력
         highlight_sql: true # SQL 문 색 부여
       database-platform: org.hibernate.dialect.PostgreSQLDialect
-
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: ${spring.application.name}-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: '*'
+        type.mapping: "hubDeleteEvent:com.domain_expansion.integrity.hub.events.HubDeleteEvent"
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 eureka:
   client:
     service-url:
@@ -35,3 +47,4 @@ server:
 jwt:
   secret:
     key: ${JWT_SECRET_KEY}
+

@@ -14,4 +14,6 @@ public interface CompanyRepository {
     Company save(Company company);
 
     Optional<Company> findByCompanyIdAndHubIdAndIsDeleteFalse(String companyId,String hubId);
+
+    Optional<Company> findByHubIdAndIsDeleteFalse(String hubId);
 }
