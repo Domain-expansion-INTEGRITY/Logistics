@@ -39,7 +39,7 @@ public class DeliveryHistoryScheduleService {
     private final KafkaTemplate<String, SlackCreateRequestDto> slackKafkaTemplate;
     private final DeliveryService deliveryService;
 
-    @Scheduled(cron = "* * * * * *")
+    @Scheduled(cron = "0 0 6 * * *")
     @Transactional
     public void scheduleDeliveryHistory() {
 
