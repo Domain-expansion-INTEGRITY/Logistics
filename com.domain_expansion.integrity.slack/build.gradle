@@ -31,8 +31,14 @@ dependencies {
     // ksuid
     implementation 'com.github.ksuid:ksuid:1.1.2'
 
+    // feign client
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
     // 모니터링
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // kafka
+    implementation 'org.springframework.kafka:spring-kafka'
 
     // spring data
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -44,16 +50,25 @@ dependencies {
     // web
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
+    // security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
     // eureka
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 
     // postgresql
     runtimeOnly 'org.postgresql:postgresql'
 
+    // jwt
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.12.5'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.12.5'
+
     // lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
+    testImplementation 'org.springframework.kafka:spring-kafka-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
