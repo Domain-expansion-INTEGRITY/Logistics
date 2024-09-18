@@ -8,6 +8,7 @@ import lombok.Builder;
 
 @Builder(access = PRIVATE)
 public record UserResponseDto(
+    Long userId,
     String username,
     UserRole role,
     String phoneNumber,
@@ -17,6 +18,7 @@ public record UserResponseDto(
     public static UserResponseDto from(User user) {
 
         return UserResponseDto.builder()
+            .userId(user.getId())
             .username(user.getUsername())
             .role(user.getRole())
             .phoneNumber(user.getPhoneNumber().getPhoneNumber())

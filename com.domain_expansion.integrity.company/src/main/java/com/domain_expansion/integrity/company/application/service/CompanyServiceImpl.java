@@ -16,6 +16,8 @@ import com.domain_expansion.integrity.company.prsentation.request.CompanyUpdateR
 import com.domain_expansion.integrity.company.prsentation.response.CompanyResponseDto;
 import com.domain_expansion.integrity.company.prsentation.response.CompanyValidateResponseDto;
 import com.github.ksuid.Ksuid;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -142,6 +144,21 @@ public class CompanyServiceImpl implements CompanyService{
 
         return CompanyResponseDto.from(existedCompany);
 
+    }
+
+    @Override
+    public CompanyResponseDto getCompanyByUserId(Long userId) {
+
+        return CompanyResponseDto.from(companyRepository.findByUserId(userId).orElseThrow(
+                () -> new CompanyException(ExceptionMessage.NOT_FOUND_COMPANY_ID)
+        ));
+    }
+
+    @Override
+    public List<CompanyResponseDto> getCompanyByHubId(String hubId) {
+
+        return companyRepository.findAllByHubId(hubId)
+                .stream().map(CompanyResponseDto::from).collect(Collectors.toList());
     }
 
     /***

@@ -18,11 +18,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.SQLRestriction;
 
 @Getter
 @Entity
 @Table(name = "p_user")
 @NoArgsConstructor(access = PROTECTED)
+@SQLRestriction("is_delete IS FALSE")
 public class User extends BaseDateEntity {
 
     @Id
@@ -71,11 +73,26 @@ public class User extends BaseDateEntity {
             .build();
     }
 
+
     /**
      * 비밀번호 생성
      */
     public void updatePassword(String encodedPassword) {
         this.password = encodedPassword;
+    }
+
+    /**
+     * 유저 정보 일괄 업데이트
+     */
+    public void updateUser(UserRole role, String slackId, String phoneNumber) {
+        this.role = role;
+        this.slackId = slackId;
+        this.phoneNumber = new UserPhoneNumber(phoneNumber);
+    }
+
+    public void deleteEntity() {
+        super.deleteEntity();
+        this.isDelete = true;
     }
 
 

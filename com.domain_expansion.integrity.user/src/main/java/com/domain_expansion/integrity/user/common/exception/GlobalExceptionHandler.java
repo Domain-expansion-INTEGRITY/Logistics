@@ -2,21 +2,25 @@ package com.domain_expansion.integrity.user.common.exception;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
+import com.domain_expansion.integrity.user.common.message.ExceptionMessage;
 import com.domain_expansion.integrity.user.common.response.CommonResponse;
 import com.domain_expansion.integrity.user.common.response.ErrorResponse;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = UserException.class)
     public ResponseEntity<? extends CommonResponse> handleProductException(UserException e) {
-
-        //TODO: 로깅 범위 조장
 
         return ResponseEntity.status(e.getHttpStatus())
             .body(ErrorResponse.of(e.getMessage()));
@@ -25,6 +29,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<? extends CommonResponse> handleMethodArgumentNotValidException(
         MethodArgumentNotValidException e) {
+
+        if (e.getCause() instanceof UserException) {
+            return ResponseEntity.status(BAD_REQUEST)
+                .body(ErrorResponse.of(ExceptionMessage.USER_NOT_FOUND.getMessage()));
+        }
 
         List<InvalidMethodResponseDto> invalidInputResList = e.getBindingResult()
             .getFieldErrors()
@@ -37,13 +46,28 @@ public class GlobalExceptionHandler {
             .body(ErrorResponse.of(invalidInputResList.toString()));
     }
 
+    @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<? extends CommonResponse> handleMethodArgumentTypeMismatchException(
+        MethodArgumentTypeMismatchException e) {
+
+        return ResponseEntity.status(BAD_REQUEST)
+            .body(ErrorResponse.of(e.getMessage()));
+    }
+
+    @ExceptionHandler(value = AuthorizationDeniedException.class)
+    public ResponseEntity<? extends CommonResponse> handleAuthDeniedException(
+        AuthorizationDeniedException e) {
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+            .body(ErrorResponse.of(e.getMessage()));
+    }
+
 
     // 전체 에러 핸들링
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<? extends CommonResponse> handleException(Exception e) {
 
-        //TODO: 로깅 범위 조장
-        e.printStackTrace();
+        log.error("An exception occurred ", e);
 
         return ResponseEntity.status(BAD_REQUEST).body(ErrorResponse.of(e.getMessage()));
     }

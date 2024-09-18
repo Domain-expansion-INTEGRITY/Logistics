@@ -5,6 +5,6 @@ import com.domain_expansion.integrity.order.presentation.response.OrderResponseD
 
 public interface OrderUpdateService {
 
-    OrderResponseDto updateOrder(OrderUpdateRequestDto requestDto, String OrderId);
+    OrderResponseDto updateOrder(OrderUpdateRequestDto requestDto, String orderId);
 
 }

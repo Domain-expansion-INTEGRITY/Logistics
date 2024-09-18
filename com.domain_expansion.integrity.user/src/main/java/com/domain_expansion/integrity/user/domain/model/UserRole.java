@@ -15,4 +15,15 @@ public enum UserRole {
     ;
 
     private final String authority;
+
+    public static class Authority {
+
+        public static final String MASTER = "ROLE_MASTER";
+        public static final String HUB_MANAGER = "ROLE_HUB_MANAGER";
+        public static final String HUB_COMPANY = "ROLE_HUB_COMPANY";
+        public static final String HUB_DELIVERY_MAN = "ROLE_HUB_DELIVERY_MAN";
+        public static final String COMPANY_DELIVERY_MAN = "ROLE_COMPANY_DELIVERY_MAN";
+
+
+    }
 }

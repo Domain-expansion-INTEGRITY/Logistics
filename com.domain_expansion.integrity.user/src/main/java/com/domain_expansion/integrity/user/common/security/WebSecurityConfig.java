@@ -1,5 +1,7 @@
-package com.domain_expansion.integrity.user.infrastructure.config;
+package com.domain_expansion.integrity.user.common.security;
 
+import com.domain_expansion.integrity.user.common.jwt.JwtUtils;
+import com.domain_expansion.integrity.user.presentation.filter.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -11,15 +13,23 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @RequiredArgsConstructor
-@EnableMethodSecurity
+@EnableMethodSecurity(securedEnabled = true)
 @Configuration
 public class WebSecurityConfig {
+
+    private final JwtUtils jwtUtils;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public JwtAuthorizationFilter jwtAuthorizationFilter() {
+        return new JwtAuthorizationFilter(jwtUtils);
     }
 
     @Bean
@@ -42,6 +52,8 @@ public class WebSecurityConfig {
                     .anyRequest()
                     .authenticated() // 나머지는 막아둠
         );
+
+        http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

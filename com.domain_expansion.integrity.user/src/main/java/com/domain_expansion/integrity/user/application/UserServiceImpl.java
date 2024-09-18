@@ -4,13 +4,18 @@ import com.domain_expansion.integrity.user.application.mapper.UserMapper;
 import com.domain_expansion.integrity.user.common.exception.UserException;
 import com.domain_expansion.integrity.user.common.message.ExceptionMessage;
 import com.domain_expansion.integrity.user.domain.model.User;
+import com.domain_expansion.integrity.user.domain.repository.UserQueryRepository;
 import com.domain_expansion.integrity.user.domain.repository.UserRepository;
 import com.domain_expansion.integrity.user.domain.service.UserDomainService;
 import com.domain_expansion.integrity.user.presentation.request.UserCreateRequestDto;
 import com.domain_expansion.integrity.user.presentation.request.UserLoginRequestDto;
+import com.domain_expansion.integrity.user.presentation.request.UserSearchCondition;
+import com.domain_expansion.integrity.user.presentation.request.UserUpdateRequestDto;
 import com.domain_expansion.integrity.user.presentation.response.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +28,11 @@ public class UserServiceImpl implements UserService {
 
     // Domain
     private final UserDomainService userDomainService;
+
+    // Repo
     private final UserRepository userRepository;
+    private final UserQueryRepository userQueryRepository;
+
     private final UserMapper userMapper;
 
     // password encode
@@ -32,6 +41,7 @@ public class UserServiceImpl implements UserService {
     /**
      * 유저 생성
      */
+    @Override
     @Transactional
     public Long createUser(UserCreateRequestDto requestDto) {
 
@@ -47,25 +57,51 @@ public class UserServiceImpl implements UserService {
     /**
      * 유저 단일 조회
      */
+    @Override
     public UserResponseDto findUserById(Long userId) {
         User userInfo = findUserByIdAndCheck(userId);
         return UserResponseDto.from(userInfo);
     }
 
     /**
-     * 유저 업데이트
+     * 유저 목록 조회
      */
     @Override
-    public UserResponseDto updateUserById(Long userId) {
+    public Page<UserResponseDto> findUserList(Pageable pageable,
+        UserSearchCondition searchCondition) {
+        Page<User> userList = userQueryRepository.findAllUserByCondition(pageable, searchCondition);
+
+        return userList.map(UserResponseDto::from);
+    }
+
+    /**
+     * 유저 업데이트
+     */
+    @Transactional
+    @Override
+    public UserResponseDto updateUserById(Long userId, UserUpdateRequestDto requestDto) {
         User userInfo = findUserByIdAndCheck(userId);
-        return null;
+
+        Boolean isExist = userDomainService.checkPhoneNumber(userId,
+            requestDto.phoneNumber(),
+            requestDto.slackId());
+
+        // count 확인
+        if (isExist) {
+            throw new UserException(ExceptionMessage.ALREADY_EXIST_DATA);
+        }
+
+        userInfo.updateUser(requestDto.role(), requestDto.slackId(), requestDto.phoneNumber());
+
+        return UserResponseDto.from(userInfo);
     }
 
     /**
      * 유저 삭제
      */
+    @Transactional
     @Override
-    public Long DeleteUserById(Long userId) {
+    public Long deleteUserById(Long userId) {
 
         User userInfo = findUserByIdAndCheck(userId);
         userInfo.deleteEntity();
