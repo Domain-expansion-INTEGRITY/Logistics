@@ -4,19 +4,23 @@ import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 @RequiredArgsConstructor
 public class BearerTokenRequestInterceptor implements RequestInterceptor {
 
-    private final HttpServletRequest request;
-
     @Override
     public void apply(RequestTemplate template) {
-        String authorizationHeader = request.getHeader(
-                "Authorization");
-        if (authorizationHeader != null) {
-            template.header("Authorization",
-                    authorizationHeader);
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (attributes != null) {
+            HttpServletRequest request = attributes.getRequest();
+            String authorizationHeader = request.getHeader(
+                    "Authorization");
+            if (authorizationHeader != null) {
+                template.header("Authorization",
+                        authorizationHeader);
+            }
         }
     }
 }

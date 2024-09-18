@@ -4,7 +4,6 @@ import com.domain_expansion.integrity.delivery.application.client.decoder.FeignC
 import com.domain_expansion.integrity.delivery.application.client.interceptor.BearerTokenRequestInterceptor;
 import feign.RequestInterceptor;
 import feign.codec.ErrorDecoder;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,8 +17,8 @@ public class FeignClientConfig {
     }
 
     @Bean
-    public RequestInterceptor bearerTokenRequestInterceptor(HttpServletRequest httpServletRequest) {
+    public RequestInterceptor bearerTokenRequestInterceptor() {
 
-        return new BearerTokenRequestInterceptor(httpServletRequest);
+        return new BearerTokenRequestInterceptor();
     }
 }

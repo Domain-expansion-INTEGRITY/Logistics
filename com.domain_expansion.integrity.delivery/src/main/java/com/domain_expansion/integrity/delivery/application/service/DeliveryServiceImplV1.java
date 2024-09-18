@@ -1,5 +1,7 @@
 package com.domain_expansion.integrity.delivery.application.service;
 
+import static com.domain_expansion.integrity.delivery.domain.model.constant.DeliveryStatus.*;
+
 import com.domain_expansion.integrity.delivery.application.client.HubClient;
 import com.domain_expansion.integrity.delivery.application.client.response.DeliveryManResponseData;
 import com.domain_expansion.integrity.delivery.application.client.response.DeliveryManResponseData.DeliveryManResponseDto;
@@ -8,10 +10,13 @@ import com.domain_expansion.integrity.delivery.common.exception.DeliveryExceptio
 import com.domain_expansion.integrity.delivery.common.message.ExceptionMessage;
 import com.domain_expansion.integrity.delivery.common.security.UserDetailsImpl;
 import com.domain_expansion.integrity.delivery.domain.model.Delivery;
+import com.domain_expansion.integrity.delivery.domain.model.DeliveryHistory;
+import com.domain_expansion.integrity.delivery.domain.model.constant.DeliveryStatus;
 import com.domain_expansion.integrity.delivery.domain.repository.DeliveryQueryRepository;
 import com.domain_expansion.integrity.delivery.domain.repository.DeliveryRepository;
 import com.domain_expansion.integrity.delivery.domain.service.DeliveryDomainService;
 import com.domain_expansion.integrity.delivery.presentation.request.DeliveryDeliveryManUpdateRequestDto;
+import com.domain_expansion.integrity.delivery.presentation.request.DeliveryHistoryUpdateRequestDto;
 import com.domain_expansion.integrity.delivery.presentation.request.DeliveryHubDeliveryManUpdateRequestDto;
 import com.domain_expansion.integrity.delivery.presentation.request.DeliverySearchCondition;
 import com.domain_expansion.integrity.delivery.presentation.request.DeliveryCreateRequestDto;
@@ -129,5 +134,20 @@ public class DeliveryServiceImplV1 implements DeliveryService {
         delivery.updateHubDeliveryMan(requestDto.deliveryManId());
 
         return DeliveryResponseDto.from(delivery);
+    }
+
+    @Override
+    public void updateDeliveryHistory(DeliveryHistoryUpdateRequestDto requestDto,
+            String deliveryId) {
+
+        Delivery delivery = deliveryRepository.findById(deliveryId).orElseThrow(
+                () -> new DeliveryException(ExceptionMessage.NOT_FOUND_DELIVERY)
+        );
+
+        String deliveryHistoryId = deliveryDomainService.createDeliveryHistoryId();
+        DeliveryHistory deliveryHistory = deliveryMapper.toDeliveryHistory(requestDto, delivery, deliveryHistoryId);
+
+        delivery.updateDeliveryHistory(deliveryHistory);
+        delivery.updateStatus(DELIVERING_FOR_COMPANY);
     }
 }

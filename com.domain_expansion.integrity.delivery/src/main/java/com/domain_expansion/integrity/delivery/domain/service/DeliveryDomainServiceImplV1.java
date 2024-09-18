@@ -15,4 +15,10 @@ public class DeliveryDomainServiceImplV1 implements DeliveryDomainService {
 
         return Ksuid.newKsuid().toString();
     }
+
+    @Override
+    public String createDeliveryHistoryId() {
+
+        return Ksuid.newKsuid().toString();
+    }
 }

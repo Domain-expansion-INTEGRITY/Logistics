@@ -12,6 +12,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
@@ -62,8 +63,8 @@ public class Delivery extends BaseDateEntity {
     @Column(nullable = false)
     private Boolean isDelete;
 
-    @OneToMany(mappedBy = "delivery", cascade = CascadeType.PERSIST)
-    private Set<DeliveryHistory> deliveryHistories = new HashSet<>();
+    @OneToOne(mappedBy = "delivery", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private DeliveryHistory deliveryHistory;
 
     @OneToMany(mappedBy = "delivery", cascade = CascadeType.PERSIST)
     private Set<HubDeliveryHistory> hubDeliveryHistories = new HashSet<>();
@@ -121,5 +122,16 @@ public class Delivery extends BaseDateEntity {
     public void updateHubDeliveryMan(String hubDeliveryManId) {
 
         this.hubDeliveryManId = hubDeliveryManId;
+    }
+
+    public void updateDeliveryHistory(DeliveryHistory deliveryHistory) {
+
+        this.deliveryHistory = deliveryHistory;
+        deliveryHistory.setDelivery(this);
+    }
+
+    public void updateStatus(DeliveryStatus deliveryStatus) {
+
+        this.status = deliveryStatus;
     }
 }

@@ -1,12 +1,10 @@
 package com.domain_expansion.integrity.delivery.infrastructure.repository;
 
-import static com.domain_expansion.integrity.delivery.domain.model.QDelivery.*;
-import static com.domain_expansion.integrity.delivery.domain.model.QDeliveryHistory.*;
-import static com.domain_expansion.integrity.delivery.domain.model.QHubDeliveryHistory.*;
+import static com.domain_expansion.integrity.delivery.domain.model.QDelivery.delivery;
+import static com.domain_expansion.integrity.delivery.domain.model.QDeliveryHistory.deliveryHistory;
+import static com.domain_expansion.integrity.delivery.domain.model.QHubDeliveryHistory.hubDeliveryHistory;
 
 import com.domain_expansion.integrity.delivery.domain.model.Delivery;
-import com.domain_expansion.integrity.delivery.domain.model.QDeliveryHistory;
-import com.domain_expansion.integrity.delivery.domain.model.QHubDeliveryHistory;
 import com.domain_expansion.integrity.delivery.domain.model.constant.DeliveryStatus;
 import com.domain_expansion.integrity.delivery.domain.repository.DeliveryQueryRepository;
 import com.domain_expansion.integrity.delivery.presentation.request.DeliverySearchCondition;

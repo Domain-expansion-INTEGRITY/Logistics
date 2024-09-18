@@ -1,6 +1,7 @@
 package com.domain_expansion.integrity.delivery.application.service;
 
 import com.domain_expansion.integrity.delivery.presentation.request.DeliveryDeliveryManUpdateRequestDto;
+import com.domain_expansion.integrity.delivery.presentation.request.DeliveryHistoryUpdateRequestDto;
 import com.domain_expansion.integrity.delivery.presentation.request.DeliveryHubDeliveryManUpdateRequestDto;
 import com.domain_expansion.integrity.delivery.presentation.request.DeliveryUpdateRequestDto;
 import com.domain_expansion.integrity.delivery.presentation.response.DeliveryResponseDto;
@@ -13,4 +14,6 @@ public interface DeliveryUpdateService {
 
     DeliveryResponseDto updateDeliveryHubDeliveryMan(
             DeliveryHubDeliveryManUpdateRequestDto requestDto, String deliveryId);
+
+    void updateDeliveryHistory(DeliveryHistoryUpdateRequestDto requestDto, String deliveryId);
 }

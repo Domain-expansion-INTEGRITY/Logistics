@@ -20,6 +20,9 @@ spring:
     consumer:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
   jpa:
     hibernate:
@@ -36,3 +39,8 @@ eureka:
 
 server:
   port: 19097
+
+direction:
+  baseUrl: https://naveropenapi.apigw.ntruss.com/map-direction/v1/driving
+  key: ${DIRECTION_SECRET_KEY}
+  id: ${DIRECTION_CLIENT_ID}
