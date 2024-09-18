@@ -1,6 +1,7 @@
 package com.domain_expansion.integrity.hub.domain.model;
 
 
+import com.domain_expansion.integrity.hub.common.entity.BaseDateEntity;
 import com.domain_expansion.integrity.hub.domain.model.vo.hub.HubStock;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -19,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "p_hub_stock_request")
-public class HubStockRequest {
+public class HubStockRequest extends BaseDateEntity {
 
     @Id
     @Column(name = "hub_stock_request_id")

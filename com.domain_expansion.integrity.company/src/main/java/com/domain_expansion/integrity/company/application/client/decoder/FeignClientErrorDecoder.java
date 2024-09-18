@@ -15,6 +15,10 @@ public class FeignClientErrorDecoder implements ErrorDecoder {
     @Override
     public Exception decode(String methodKey, Response response) {
 
+        if (response.body() == null) {
+            return new ClientException(HttpStatus.resolve(response.status()), "인증권한을 다시 한번 확인해주세요.");
+        }
+
         try {
             ErrorResponse errorResponse = objectMapper.readValue(response.body().asInputStream(),
                     ErrorResponse.class);
@@ -25,7 +29,8 @@ public class FeignClientErrorDecoder implements ErrorDecoder {
                         errorResponse.message());
             }
 
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new RuntimeException(e);
         }
 
