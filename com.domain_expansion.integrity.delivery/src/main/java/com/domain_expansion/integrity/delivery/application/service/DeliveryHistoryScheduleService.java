@@ -7,15 +7,12 @@ import com.domain_expansion.integrity.delivery.application.client.response.AiRes
 import com.domain_expansion.integrity.delivery.application.client.response.AiResponseData.AiResponseDto.AiResponseAnswerDto;
 import com.domain_expansion.integrity.delivery.application.client.response.DirectionResponseDto;
 import com.domain_expansion.integrity.delivery.application.client.response.DirectionResponseDto.DirectionResponseDtoRoute.DirectionResponseDtoRouteTraoptimal;
-import com.domain_expansion.integrity.delivery.application.client.response.DirectionResponseDto.DirectionResponseDtoRoute.DirectionResponseDtoRouteTraoptimal.DirectionResponseDtoRouteTraoptimalSummary;
 import com.domain_expansion.integrity.delivery.application.client.response.HubResponseData.HubResponseDto;
 import com.domain_expansion.integrity.delivery.common.exception.DeliveryException;
 import com.domain_expansion.integrity.delivery.common.message.ExceptionMessage;
 import com.domain_expansion.integrity.delivery.domain.model.Delivery;
-import com.domain_expansion.integrity.delivery.domain.model.DeliveryHistory;
-import com.domain_expansion.integrity.delivery.domain.repository.DeliveryQueryRepository;
+import com.domain_expansion.integrity.delivery.domain.model.constant.DeliveryStatus;
 import com.domain_expansion.integrity.delivery.domain.repository.DeliveryRepository;
-import com.domain_expansion.integrity.delivery.presentation.request.DeliveryCreateRequestDto;
 import com.domain_expansion.integrity.delivery.presentation.request.DeliveryHistoryUpdateRequestDto;
 import com.domain_expansion.integrity.delivery.presentation.request.SlackCreateRequestDto;
 import java.net.URLEncoder;
@@ -23,24 +20,19 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
 public class DeliveryHistoryScheduleService {
 
     private final DeliveryRepository deliveryRepository;
-    private final DeliveryQueryRepository deliveryQueryRepository;
     private final AiClient aiClient;
     private final HubClient hubClient;
     private final DirectionService directionService;
@@ -51,25 +43,29 @@ public class DeliveryHistoryScheduleService {
     @Transactional
     public void scheduleDeliveryHistory() {
 
-        List<Delivery> deliveries = deliveryRepository.findAll();
+        // 임시 쿼리
+        List<Delivery> deliveries = deliveryRepository.findAll()
+                .stream()
+                .filter(o -> o.getStatus() == DeliveryStatus.WAITING_FOR_COMPANY)
+                .toList();
 
         Map<String, Map<String, Map<String, List<Delivery>>>> groupedDeliveries = deliveries.stream()
                 .filter(o -> o.getHubDeliveryManId() != null)
                 .collect(Collectors.groupingBy(
-                        Delivery::getHubDeliveryManId,
+                        Delivery::getEndHubId,
                         Collectors.groupingBy(
-                                Delivery::getEndHubId,
+                                Delivery::getHubDeliveryManId,
                                 Collectors.groupingBy(Delivery::getAddress)
                         )
                 ));
 
-        for (String hubDeliveryManId : groupedDeliveries.keySet()) {
+        for (String endHubId : groupedDeliveries.keySet()) {
             Map<String, Map<String, List<Delivery>>> endHubGroupedDeliveries = groupedDeliveries.get(
-                    hubDeliveryManId);
+                    endHubId);
 
-            for (String endHubId : endHubGroupedDeliveries.keySet()) {
+            for (String hubDeliveryManId : endHubGroupedDeliveries.keySet()) {
                 Map<String, List<Delivery>> addressGroupedDeliveries = endHubGroupedDeliveries.get(
-                        endHubId);
+                        hubDeliveryManId);
 
                 List<Delivery> hubDeliveries = new ArrayList<>();
 
