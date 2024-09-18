@@ -107,7 +107,7 @@ public class DeliveryHistoryScheduleService {
                             .append(name).append(":");
                 }
 
-                String deliveryDirectionInfo = directionService.getDeliveryDirectionInfo(
+                DirectionResponseDto deliveryDirectionInfo = directionService.getDeliveryDirectionInfo(
                         startSb.toString(), endSb.toString());
 
                 System.out.println(deliveryDirectionInfo);
