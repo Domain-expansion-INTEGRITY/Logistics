@@ -23,29 +23,34 @@ public class AiHistory extends BaseDateEntity {
     @Column(name = "ai_id")
     private String id;
 
-    @Column(nullable = false)
+    @Column(length = 1500, nullable = false)
     private String question;
 
-    @Column
+    @Column(length = 500)
     private String answer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ai_prompt")
     private AiPrompt aiPrompt;
 
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
+
     @Builder(access = AccessLevel.PROTECTED)
-    private AiHistory(String id, String question, AiPrompt aiPrompt) {
+    private AiHistory(String id, String question, AiPrompt aiPrompt, Long userId) {
         this.id = id;
         this.question = question;
         this.aiPrompt = aiPrompt;
+        this.userId = userId;
     }
 
-    public static AiHistory from(String id, String question, AiPrompt aiPrompt) {
+    public static AiHistory from(String id, String question, AiPrompt aiPrompt, Long userId) {
 
         return AiHistory.builder()
             .id(id)
             .question(question)
             .aiPrompt(aiPrompt)
+            .userId(userId)
             .build();
     }
 
