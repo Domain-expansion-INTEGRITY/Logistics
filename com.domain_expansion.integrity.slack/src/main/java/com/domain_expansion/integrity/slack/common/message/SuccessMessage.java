@@ -9,7 +9,8 @@ import org.springframework.http.HttpStatus;
 public enum SuccessMessage {
     //TODO: 슬랙 성공 메세지
     SUCCESS_CREATE_SLACK(HttpStatus.CREATED, "슬랙 생성에 성공하였습니다."),
-    SUCCESS_FIND_SLACKLIST(HttpStatus.CREATED, "슬랙 목록 조회에 성공하였습니다."),
+    SUCCESS_FIND_SLACKLIST(HttpStatus.OK, "슬랙 목록 조회에 성공하였습니다."),
+    SUCCESS_FIND_SLACK(HttpStatus.OK, "슬랙 단일 조회에 성공하였습니다."),
     ;
 
     private final HttpStatus httpStatus;

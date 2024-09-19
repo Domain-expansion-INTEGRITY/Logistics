@@ -2,6 +2,7 @@ package com.domain_expansion.integrity.hub.domain.model.vo.hub;
 
 import com.domain_expansion.integrity.hub.common.exception.HubException;
 import com.domain_expansion.integrity.hub.common.message.ExceptionMessage;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -17,14 +18,15 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class HubStock {
 
-    private Integer stock;
+    @Column(nullable = false,name = "stock")
+    private Integer value;
 
-    public HubStock(Integer stock) {
+    public HubStock(Integer value) {
 
-        if(stock <= 0 ) {
+        if(value <= 0 ) {
             throw new HubException(ExceptionMessage.STOCK_MUST_NOT_MINUS);
         }
 
-        this.stock = stock;
+        this.value = value;
     }
 }

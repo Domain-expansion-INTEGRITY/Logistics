@@ -61,6 +61,11 @@ public class Company extends BaseDateEntity {
                 .build();
     }
 
+    public void disconnectHub()
+    {
+        this.hubId = null;
+    }
+
     public void deleteCompany(Long userId)
     {
         super.setDeletedBy(userId);

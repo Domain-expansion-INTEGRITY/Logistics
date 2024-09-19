@@ -7,6 +7,8 @@ import com.domain_expansion.integrity.user.presentation.response.UserResponseDto
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  * MSa 내부용 EndPoint
  */
 @RequiredArgsConstructor
-@RequestMapping("users")
+@RequestMapping("users") //TODO: 추후 version진행
 @RestController
 public class UserEndpoint {
 
@@ -34,6 +36,17 @@ public class UserEndpoint {
 
         UserResponseDto responseDto = userService.findUserByUsernameAndPassword(
             requestDto);
+
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(SuccessResponse.of("유저 정보 전달", responseDto));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<SuccessResponse<UserResponseDto>> findUserById(
+        @PathVariable Long id
+    ) {
+
+        UserResponseDto responseDto = userService.findUserById(id);
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(SuccessResponse.of("유저 정보 전달", responseDto));
