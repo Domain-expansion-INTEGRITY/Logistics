@@ -8,7 +8,7 @@ spring:
     driver-class-name: org.postgresql.Driver
   data:
     redis:
-      host: localhost
+      host: ${DEV_REDIS_HOST}
       port: 6379
       username: ${DEV_REDIS_USERNAME}
       password: ${DEV_REDIS_PASSWORD}
@@ -23,20 +23,34 @@ spring:
   #        database-platform: org.hibernate.dialect.PostgreSQLDialect
 
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
 
+server:
+  port: 19099
 
+springdoc:
+  api-docs:
+    enabled: true
+    path: /slack-service/v3/api-docs
+  swagger-ui:
+    path: /slack-service/swagger-ui.html
 
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:19090/eureka/
+      defaultZone: ${EUREKA_DEFAULTZONE}
 jwt:
   secret:
     key: ${JWT_SECRET_KEY}
 
+management:
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_URL}
+  tracing:
+    sampling:
+      probability: 1.0
+
 slack:
   url: ${SLACK_WEBHOOK_URL}
 
-server:
-  port: 19099
