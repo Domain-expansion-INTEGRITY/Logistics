@@ -43,7 +43,6 @@ public class AiDomainServiceImpl implements AiDomainService {
 
     }
 
-
     @Override
     @Cacheable(cacheNames = "promptCache", key = "args[0]")
     public AiPrompt findByTypeAndCheck(PromptType promptType) {

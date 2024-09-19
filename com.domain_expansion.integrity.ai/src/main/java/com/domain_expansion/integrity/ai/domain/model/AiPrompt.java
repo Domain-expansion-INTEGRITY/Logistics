@@ -27,7 +27,7 @@ public class AiPrompt extends BaseDateEntity implements Serializable {
     @Column(unique = true, nullable = false)
     private PromptType name;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String prompt;
 
     @Builder(access = AccessLevel.PROTECTED)

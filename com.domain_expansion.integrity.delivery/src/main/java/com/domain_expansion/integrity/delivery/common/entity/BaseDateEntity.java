@@ -1,5 +1,6 @@
 package com.domain_expansion.integrity.delivery.common.entity;
 
+import com.domain_expansion.integrity.delivery.common.entity.auditor.UserAuditorAware;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
@@ -38,9 +39,9 @@ public abstract class BaseDateEntity {
     @Column(name = "deleted_by")
     protected Long deletedUser;
 
-    public void deleteEntity() {
+    protected void deleteEntity() {
+        UserAuditorAware userAuditorAware = new UserAuditorAware();
         this.deletedAt = LocalDateTime.now();
-        //TODO: 이것도 audit으로 넣어줄 수 있음
-        this.deletedUser = null;
+        this.deletedUser = userAuditorAware.getCurrentAuditor().orElse(null);
     }
 }

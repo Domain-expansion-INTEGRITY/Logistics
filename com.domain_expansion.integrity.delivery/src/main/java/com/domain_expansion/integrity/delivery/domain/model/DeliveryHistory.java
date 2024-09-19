@@ -1,5 +1,6 @@
 package com.domain_expansion.integrity.delivery.domain.model;
 
+import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
 
 import com.domain_expansion.integrity.delivery.common.entity.BaseDateEntity;
@@ -10,8 +11,9 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -24,8 +26,8 @@ public class DeliveryHistory extends BaseDateEntity {
     @Id
     private String deliveryHistoryId;
 
-    @ManyToOne
-    @JoinColumn(name = "delivery_id", updatable = false)
+    @OneToOne
+    @JoinColumn(name = "delivery_id")
     private Delivery delivery;
 
     @Column(updatable = false)
@@ -49,4 +51,32 @@ public class DeliveryHistory extends BaseDateEntity {
 
     @Column(nullable = false)
     private Boolean isDelete;
+
+    @Builder(access = PRIVATE)
+    public DeliveryHistory(String deliveryHistoryId, String deliveryManId, DeliveryStatus status,
+            Integer exDistance, Integer exDuration, Boolean isDelete) {
+        this.deliveryHistoryId = deliveryHistoryId;
+        this.deliveryManId = deliveryManId;
+        this.status = status;
+        this.exDistance = exDistance;
+        this.exDuration = exDuration;
+        this.isDelete = isDelete;
+    }
+
+    public static DeliveryHistory of(Integer exDistance, Integer exDuration, Boolean isDelete, String deliveryManId, String deliveryHistoryId) {
+
+        return DeliveryHistory.builder()
+                .exDistance(exDistance)
+                .exDuration(exDuration)
+                .isDelete(isDelete)
+                .status(DeliveryStatus.DELIVERING_FOR_COMPANY)
+                .deliveryManId(deliveryManId)
+                .deliveryHistoryId(deliveryHistoryId)
+                .build();
+    }
+
+    public void setDelivery(Delivery delivery) {
+
+        this.delivery = delivery;
+    }
 }
