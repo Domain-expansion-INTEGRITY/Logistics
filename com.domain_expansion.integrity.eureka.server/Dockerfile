@@ -1,0 +1,13 @@
+FROM gradle:8.10-jdk17 AS builder
+
+WORKDIR /app
+COPY . /app
+
+# Build the application using Gradle
+RUN gradle clean build --no-daemon
+
+FROM openjdk:17-jdk-slim
+
+COPY --from=builder /app/build/libs/*.jar app.jar
+
+ENTRYPOINT ["java","-jar","/app.jar"]

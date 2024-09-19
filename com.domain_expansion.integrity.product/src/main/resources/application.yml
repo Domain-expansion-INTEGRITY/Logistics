@@ -10,7 +10,7 @@ spring:
 
   data:
     redis:
-      host: localhost
+      host: ${DEV_REDIS_HOST}
       port: 6379
       username: ${DEV_REDIS_USERNAME}
       password: ${DEV_REDIS_PASSWORD}
@@ -26,7 +26,14 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:19090/eureka/
+      defaultZone: ${EUREKA_DEFAULTZONE}
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /product-service/v3/api-docs
+  swagger-ui:
+    path: /product-service/swagger-ui.html
 
 server:
   port: 19095

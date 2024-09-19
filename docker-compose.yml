@@ -1,0 +1,224 @@
+services:
+  eureka-server:
+    build: ./com.domain_expansion.integrity.eureka.server/.
+    ports:
+      - "19090:19090"
+    networks:
+      - spring-network  # Spring 서버가 기본적으로 사용할 네트워크
+    restart: always
+
+  gateway-service:
+    build: ./com.domain_expansion.integrity.gateway/.
+    ports:
+      - "19091:19091"
+    environment:
+      - DEV_REDIS_HOST=${DEV_REDIS_HOST}
+      - DEV_REDIS_USERNAME=${DEV_REDIS_USERNAME}
+      - DEV_REDIS_PASSWORD=${DEV_REDIS_PASSWORD}
+      - EUREKA_DEFAULTZONE=${EUREKA_DEFAULTZONE}
+      - ZIPKIN_URL=${ZIPKIN_URL}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+    networks:
+      - spring-network  # Spring 서버가 기본적으로 사용할 네트워크
+    #      - postgresql_default  # 이미 존재하는 PostgreSQL 네트워크에 연결
+    #      - redis_default  # 이미 존재하는 Redis 네트워크에 연결
+    restart: always
+    depends_on:
+      - eureka-server
+
+  user-service:
+    build: ./com.domain_expansion.integrity.user/.
+    ports:
+      - "19092:19092"
+    environment:
+      - DEV_DB_URL=${DEV_DB_URL}
+      - DEV_DB_USERNAME=${DEV_DB_USERNAME}
+      - DEV_DB_PASSWORD=${DEV_DB_PASSWORD}
+      - DEV_REDIS_HOST=${DEV_REDIS_HOST}
+      - DEV_REDIS_USERNAME=${DEV_REDIS_USERNAME}
+      - DEV_REDIS_PASSWORD=${DEV_REDIS_PASSWORD}
+      - EUREKA_DEFAULTZONE=${EUREKA_DEFAULTZONE}
+      - ZIPKIN_URL=${ZIPKIN_URL}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+    networks:
+      - spring-network  # Spring 서버가 기본적으로 사용할 네트워크
+    #      - postgresql_default  # 이미 존재하는 PostgreSQL 네트워크에 연결
+    #      - redis_default  # 이미 존재하는 Redis 네트워크에 연결
+    restart: always
+    depends_on:
+      - eureka-server
+
+
+  auth-service:
+    build: ./com.domain_expansion.integrity.auth/.
+    ports:
+      - "19100:19100"
+    environment:
+      - DEV_DB_URL=${DEV_DB_URL}
+      - DEV_DB_USERNAME=${DEV_DB_USERNAME}
+      - DEV_DB_PASSWORD=${DEV_DB_PASSWORD}
+      - DEV_REDIS_HOST=${DEV_REDIS_HOST}
+      - DEV_REDIS_USERNAME=${DEV_REDIS_USERNAME}
+      - DEV_REDIS_PASSWORD=${DEV_REDIS_PASSWORD}
+      - EUREKA_DEFAULTZONE=${EUREKA_DEFAULTZONE}
+      - ZIPKIN_URL=${ZIPKIN_URL}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+    networks:
+      - spring-network  # Spring 서버가 기본적으로 사용할 네트워크
+    depends_on:
+      - user-service
+
+
+  ai-service:
+    build: ./com.domain_expansion.integrity.ai/.
+    ports:
+      - "19098:19098"
+    environment:
+      - DEV_DB_URL=${DEV_DB_URL}
+      - DEV_DB_USERNAME=${DEV_DB_USERNAME}
+      - DEV_DB_PASSWORD=${DEV_DB_PASSWORD}
+      - DEV_REDIS_HOST=${DEV_REDIS_HOST}
+      - DEV_REDIS_USERNAME=${DEV_REDIS_USERNAME}
+      - DEV_REDIS_PASSWORD=${DEV_REDIS_PASSWORD}
+      - KAFKA_BOOTSTRAP_SERVERS=${KAFKA_BOOTSTRAP_SERVERS}
+      - EUREKA_DEFAULTZONE=${EUREKA_DEFAULTZONE}
+      - ZIPKIN_URL=${ZIPKIN_URL}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - DEV_GEMINI_KEY=${DEV_GEMINI_KEY}
+      - DEV_WEATHER_KEY=${DEV_WEATHER_KEY}
+    networks:
+      - spring-network  # Spring 서버가 기본적으로 사용할 네트워크
+    depends_on:
+      - user-service
+
+  slack-service:
+    build: ./com.domain_expansion.integrity.slack/.
+    ports:
+      - "19099:19099"
+    environment:
+      - DEV_DB_URL=${DEV_DB_URL}
+      - DEV_DB_USERNAME=${DEV_DB_USERNAME}
+      - DEV_DB_PASSWORD=${DEV_DB_PASSWORD}
+      - DEV_REDIS_HOST=${DEV_REDIS_HOST}
+      - DEV_REDIS_USERNAME=${DEV_REDIS_USERNAME}
+      - DEV_REDIS_PASSWORD=${DEV_REDIS_PASSWORD}
+      - KAFKA_BOOTSTRAP_SERVERS=${KAFKA_BOOTSTRAP_SERVERS}
+      - EUREKA_DEFAULTZONE=${EUREKA_DEFAULTZONE}
+      - ZIPKIN_URL=${ZIPKIN_URL}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}
+    networks:
+      - spring-network  # Spring 서버가 기본적으로 사용할 네트워크
+    depends_on:
+      - user-service
+
+  hub-service:
+    build: ./com.domain_expansion.integrity.hub/.
+    ports:
+      - "19093:19093"
+    environment:
+      - DEV_DB_URL=${DEV_DB_URL}
+      - DEV_DB_USERNAME=${DEV_DB_USERNAME}
+      - DEV_DB_PASSWORD=${DEV_DB_PASSWORD}
+      - DEV_REDIS_HOST=${DEV_REDIS_HOST}
+      - DEV_REDIS_USERNAME=${DEV_REDIS_USERNAME}
+      - DEV_REDIS_PASSWORD=${DEV_REDIS_PASSWORD}
+      - KAFKA_BOOTSTRAP_SERVERS=${KAFKA_BOOTSTRAP_SERVERS}
+      - EUREKA_DEFAULTZONE=${EUREKA_DEFAULTZONE}
+      - ZIPKIN_URL=${ZIPKIN_URL}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+    networks:
+      - spring-network  # Spring 서버가 기본적으로 사용할 네트워크
+    depends_on:
+      - eureka-server
+      - user-service
+
+  company-service:
+    build: ./com.domain_expansion.integrity.company/.
+    ports:
+      - "19094:19094"
+    environment:
+      - DEV_DB_URL=${DEV_DB_URL}
+      - DEV_DB_USERNAME=${DEV_DB_USERNAME}
+      - DEV_DB_PASSWORD=${DEV_DB_PASSWORD}
+      - DEV_REDIS_HOST=${DEV_REDIS_HOST}
+      - DEV_REDIS_USERNAME=${DEV_REDIS_USERNAME}
+      - DEV_REDIS_PASSWORD=${DEV_REDIS_PASSWORD}
+      - EUREKA_DEFAULTZONE=${EUREKA_DEFAULTZONE}
+      - KAFKA_BOOTSTRAP_SERVERS=${KAFKA_BOOTSTRAP_SERVERS}
+      - ZIPKIN_URL=${ZIPKIN_URL}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+    networks:
+      - spring-network  # Spring 서버가 기본적으로 사용할 네트워크
+    depends_on:
+      - hub-service
+
+  product-service:
+    build: ./com.domain_expansion.integrity.product/.
+    ports:
+      - "19095:19095"
+    environment:
+      - DEV_DB_URL=${DEV_DB_URL}
+      - DEV_DB_USERNAME=${DEV_DB_USERNAME}
+      - DEV_DB_PASSWORD=${DEV_DB_PASSWORD}
+      - DEV_REDIS_HOST=${DEV_REDIS_HOST}
+      - DEV_REDIS_USERNAME=${DEV_REDIS_USERNAME}
+      - DEV_REDIS_PASSWORD=${DEV_REDIS_PASSWORD}
+      - EUREKA_DEFAULTZONE=${EUREKA_DEFAULTZONE}
+      - ZIPKIN_URL=${ZIPKIN_URL}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+    networks:
+      - spring-network  # Spring 서버가 기본적으로 사용할 네트워크
+    depends_on:
+      - company-service
+
+
+  order-service:
+    build: ./com.domain_expansion.integrity.order/.
+    ports:
+      - "19096:19096"
+    environment:
+      - DEV_DB_URL=${DEV_DB_URL}
+      - DEV_DB_USERNAME=${DEV_DB_USERNAME}
+      - DEV_DB_PASSWORD=${DEV_DB_PASSWORD}
+      - DEV_REDIS_HOST=${DEV_REDIS_HOST}
+      - DEV_REDIS_USERNAME=${DEV_REDIS_USERNAME}
+      - DEV_REDIS_PASSWORD=${DEV_REDIS_PASSWORD}
+      - EUREKA_DEFAULTZONE=${EUREKA_DEFAULTZONE}
+      - KAFKA_BOOTSTRAP_SERVERS=${KAFKA_BOOTSTRAP_SERVERS}
+      - ZIPKIN_URL=${ZIPKIN_URL}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+    networks:
+      - spring-network  # Spring 서버가 기본적으로 사용할 네트워크
+    depends_on:
+      - product-service
+
+  delivery-service:
+    build: ./com.domain_expansion.integrity.delivery/.
+    ports:
+      - "19097:19097"
+    environment:
+      - DEV_DB_URL=${DEV_DB_URL}
+      - DEV_DB_USERNAME=${DEV_DB_USERNAME}
+      - DEV_DB_PASSWORD=${DEV_DB_PASSWORD}
+      - DEV_REDIS_HOST=${DEV_REDIS_HOST}
+      - DEV_REDIS_USERNAME=${DEV_REDIS_USERNAME}
+      - DEV_REDIS_PASSWORD=${DEV_REDIS_PASSWORD}
+      - EUREKA_DEFAULTZONE=${EUREKA_DEFAULTZONE}
+      - ZIPKIN_URL=${ZIPKIN_URL}
+      - KAFKA_BOOTSTRAP_SERVERS=${KAFKA_BOOTSTRAP_SERVERS}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - DIRECTION_SECRET_KEY=${DIRECTION_SECRET_KEY}
+      - DIRECTION_CLIENT_ID=${DIRECTION_CLIENT_ID}
+    networks:
+      - spring-network  # Spring 서버가 기본적으로 사용할 네트워크
+    depends_on:
+      - ai-service
+      - hub-service
+      - order-service
+
+networks:
+  spring-network:
+    driver: bridge
+#  kafka_default:
+#    external: true  # 외부 네트워크이므로 'external: true'로 설정

@@ -3,7 +3,7 @@ spring:
     name: auth-service
   data:
     redis:
-      host: localhost
+      host: ${DEV_REDIS_HOST}
       port: 6379
       username: ${DEV_REDIS_USERNAME}
       password: ${DEV_REDIS_PASSWORD}
@@ -11,10 +11,25 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:19090/eureka/
+      defaultZone: ${EUREKA_DEFAULTZONE}
 
 server:
   port: 19100
+
+management:
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_URL}
+  tracing:
+    sampling:
+      probability: 1.0
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /auth-service/v3/api-docs
+  swagger-ui:
+    path: /auth-service/swagger-ui.html
 
 jwt:
   secret:
