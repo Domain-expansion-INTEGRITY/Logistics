@@ -30,8 +30,7 @@ spring:
         - id: delivery-service  # 배송
           uri: lb://delivery-service
           predicates:
-            - Path=/api/v1/deliveries/**
-            - Path=/api/v1/delivery/**, /delivery-service/v3/api-docs
+            - Path=/api/v1/deliveries/**, /delivery-service/v3/api-docs
         - id: hub-service # 허브
           uri: lb://hub-service
           predicates:
