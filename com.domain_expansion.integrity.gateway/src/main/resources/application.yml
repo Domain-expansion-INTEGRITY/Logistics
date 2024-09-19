@@ -26,23 +26,23 @@ spring:
         - id: order-service  # 주문
           uri: lb://order-service
           predicates:
-            - Path=/api/v1/orders/**
+            - Path=/api/v1/orders/**, /order-service/v3/api-docs
         - id: delivery-service  # 배송
           uri: lb://delivery-service
           predicates:
-            - Path=/api/v1/delivery/**
+            - Path=/api/v1/delivery/**, /delivery-service/v3/api-docs
         - id: hub-service # 허브
           uri: lb://hub-service
           predicates:
-            - Path=/api/v1/hubs/**
+            - Path=/api/v1/hubs/**, /hub-service/v3/api-docs
         - id: product-service # 상품
           uri: lb://product-service
           predicates:
-            - Path=/api/v1/products/**
+            - Path=/api/v1/products/**, /product-service/v3/api-docs
         - id: company-service # 업체
           uri: lb://company-service
           predicates:
-            - Path=/api/v1/companies/**
+            - Path=/api/v1/companies/**, /company-service/v3/api-docs
         - id: ai-service  # AI
           uri: lb://ai-service
           predicates:
@@ -71,8 +71,16 @@ springdoc:
         name: AUTH SERVICE
       - url: /slack-service/v3/api-docs
         name: SLACK SERVICE
-      - url: /ai-service/v3/api-docs
-        name: AI SERVICE
+      - url: /hub-service/v3/api-docs
+        name: HUB SERVICE
+      - url: /company-service/v3/api-docs
+        name: COMPANY SERVICE
+      - url: /product-service/v3/api-docs
+        name: PRODUCT SERVICE
+      - url: /order-service/v3/api-docs
+        name: ORDER SERVICE
+      - url: /delivery-service/v3/api-docs
+        name: DELIVERY SERVICE
 
 jwt:
   secret:

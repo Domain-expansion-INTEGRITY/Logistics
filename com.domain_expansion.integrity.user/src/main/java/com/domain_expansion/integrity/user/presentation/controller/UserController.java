@@ -18,6 +18,7 @@ import com.domain_expansion.integrity.user.presentation.request.UserSearchCondit
 import com.domain_expansion.integrity.user.presentation.request.UserUpdateRequestDto;
 import com.domain_expansion.integrity.user.presentation.response.UserIdResponseDto;
 import com.domain_expansion.integrity.user.presentation.response.UserResponseDto;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -36,6 +37,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "유저")
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
 @RestController
@@ -122,6 +124,35 @@ public class UserController {
         return ResponseEntity.status(SUCCESS_UPDATE_USER.getHttpStatus())
             .body(SuccessResponse.of(SUCCESS_UPDATE_USER.getMessage(), responseDto));
     }
+
+    /**
+     * 비밀번호 변경 요청
+     */
+//    @PostMapping("/{id}}/password/otp-request")
+//    public ResponseEntity<? extends CommonResponse> requestChangePassword(
+//        HttpServletRequest request,
+//        @PathVariable("id") Long id
+//    ) {
+//        String isSuccess = userService.requestPasswordOtp(id);
+//
+//        return ResponseEntity.status(SUCCESS_UPDATE_USER.getHttpStatus())
+//            .body(SuccessResponse.of(SUCCESS_UPDATE_USER.getMessage(), isSuccess));
+//    }
+
+    /**
+     * 비밀 번호와 랜덤 코드 입력
+     */
+//    @PatchMapping("/{id}/reset-password")
+//    public ResponseEntity<? extends CommonResponse> changePassword(
+//        HttpServletRequest request,
+//        @PathVariable("id") Long id,
+//        @RequestBody UserResetPasswordRequestDto requestDto
+//    ) {
+//        UserResponseDto responseDto = userService.updateUserPassword(id, requestDto);
+//
+//        return ResponseEntity.status(SUCCESS_UPDATE_USER.getHttpStatus())
+//            .body(SuccessResponse.of(SUCCESS_UPDATE_USER.getMessage(), responseDto));
+//    }
 
     /**
      * 유저 삭제

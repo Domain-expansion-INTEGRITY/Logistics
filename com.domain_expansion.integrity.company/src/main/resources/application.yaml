@@ -15,7 +15,7 @@ spring:
       show_sql: true
       database-platform: org.hibernate.dialect.PostgreSQLDialect
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
     consumer:
       group-id: ${spring.application.name}-group
       auto-offset-reset: earliest
@@ -32,7 +32,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:19090/eureka/
+      defaultZone: ${EUREKA_DEFAULTZONE}
 
 server:
   port: 19094
@@ -40,7 +40,7 @@ server:
 management:
   zipkin:
     tracing:
-      endpoint: "http://localhost:9411/api/v2/spans"
+      endpoint: ${ZIPKIN_URL}
   tracing:
     sampling:
       probability: 1.0
@@ -48,7 +48,14 @@ logging:
   level:
     org.springframework.security: DEBUG
 
+springdoc:
+  api-docs:
+    enabled: true
+    path: /company-service/v3/api-docs
+  swagger-ui:
+    path: /company-service/swagger-ui.html
+
 jwt:
   secret:
-    key: 7Leo7JeF7Leo7JeF7Leo7JeF7Leo7JeF7Leo7JeF7Leo7JeF7Leo7JeF7Leo7JeF7Leo7JeF7Leo7JeF7Leo7JeF7Leo7JeF7Leo7JeF7Leo7JeF7Leo7JeF
+    key: ${JWT_SECRET_KEY}
 

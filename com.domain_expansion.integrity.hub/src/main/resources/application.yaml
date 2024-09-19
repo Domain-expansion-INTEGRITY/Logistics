@@ -10,7 +10,7 @@ spring:
 
   data:
     redis:
-      host: localhost
+      host: ${DEV_REDIS_HOST}
       port: 6379
       username: ${DEV_REDIS_USERNAME}
       password: ${DEV_REDIS_PASSWORD}
@@ -24,7 +24,7 @@ spring:
         highlight_sql: true # SQL 문 색 부여
       database-platform: org.hibernate.dialect.PostgreSQLDialect
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
     consumer:
       group-id: ${spring.application.name}-group
       auto-offset-reset: earliest
@@ -39,7 +39,14 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:19090/eureka/
+      defaultZone: ${EUREKA_DEFAULTZONE}
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /hub-service/v3/api-docs
+  swagger-ui:
+    path: /hub-service/swagger-ui.html
 
 server:
   port: 19093

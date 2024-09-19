@@ -45,6 +45,8 @@ public class WebSecurityConfig {
                     .requestMatchers(
                         PathRequest.toStaticResources().atCommonLocations())
                     .permitAll() // resources 접근 허용 설정
+                    .requestMatchers("/user-service/v3/api-docs", "/user-service/swagger-ui.html")
+                    .permitAll() // swagger 설정
                     .requestMatchers("/api/v1/users/**")
                     .permitAll() // users Rest api 접근 허용 설정
                     .requestMatchers("/users/**")

@@ -45,6 +45,10 @@ public class WebSecurityConfig {
                     .requestMatchers(
                         PathRequest.toStaticResources().atCommonLocations())
                     .permitAll() // resources 접근 허용 설정
+                    .requestMatchers("/actuator/**") // 모니터링 접근 허용
+                    .permitAll()
+                    .requestMatchers("/ai-service/v3/api-docs", "/ai-service/swagger-ui.html")
+                    .permitAll() // swagger 설정
                     .requestMatchers(
                         "/api/v1/ais/hub-delivery/slack", "/api/v1/ais/company-delivery/slack",
                         "/api/v1/ais/company-delivery/sequence"

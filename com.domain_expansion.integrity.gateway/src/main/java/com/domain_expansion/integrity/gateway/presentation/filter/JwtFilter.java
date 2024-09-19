@@ -45,7 +45,10 @@ public class JwtFilter implements GlobalFilter {
 
         // auth 및 회원가입으로 가는 요청은 막지 않는다.
         if (exchange.getRequest().getURI().getPath().startsWith("/api/v1/auth")
-            || exchange.getRequest().getURI().getPath().startsWith("/api/v1/users/sign-up")) {
+            // 유저에서 회원가입
+            || exchange.getRequest().getURI().getPath().startsWith("/api/v1/users/sign-up")
+            // swagger
+            || exchange.getRequest().getURI().getPath().endsWith("api-docs")) {
             return chain.filter(exchange);
         }
 
