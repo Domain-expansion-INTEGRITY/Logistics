@@ -6,7 +6,7 @@ spring:
     name: gateway-service
   data:
     redis:
-      host: localhost
+      host: ${DEV_REDIS_HOST}
       port: 6379
       username: ${DEV_REDIS_USERNAME}
       password: ${DEV_REDIS_PASSWORD}
@@ -18,42 +18,69 @@ spring:
         - id: auth-service  #인증
           uri: lb://auth-service
           predicates:
-            - Path=/api/v1/auth/**
+            - Path=/api/v1/auth/**, /auth-service/v3/api-docs
         - id: user-service  # 유저
           uri: lb://user-service
           predicates:
-            - Path=/api/v1/users/**
+            - Path=/api/v1/users/**, /user-service/v3/api-docs
         - id: order-service  # 주문
           uri: lb://order-service
           predicates:
-            - Path=/api/v1/orders/**
+            - Path=/api/v1/orders/**, /order-service/v3/api-docs
         - id: delivery-service  # 배송
           uri: lb://delivery-service
           predicates:
-            - Path=/api/v1/delivery/**
+            - Path=/api/v1/delivery/**, /delivery-service/v3/api-docs
         - id: hub-service # 허브
           uri: lb://hub-service
           predicates:
-            - Path=/api/v1/hubs/**
+            - Path=/api/v1/hubs/**, /hub-service/v3/api-docs
         - id: product-service # 상품
           uri: lb://product-service
           predicates:
-            - Path=/api/v1/products/**
+            - Path=/api/v1/products/**, /product-service/v3/api-docs
         - id: company-service # 업체
           uri: lb://company-service
           predicates:
-            - Path=/api/v1/companies/**
+            - Path=/api/v1/companies/**, /company-service/v3/api-docs
         - id: ai-service  # AI
           uri: lb://ai-service
           predicates:
-            - Path=/api/v1/ais/**
+            - Path=/api/v1/ais/**, /ai-service/v3/api-docs
         - id: slack-service # slack
           uri: lb://slack-service
           predicates:
-            - Path=/api/v1/slacks/**
+            - Path=/api/v1/slacks/**, /slack-service/v3/api-docs
       discovery:
         locator:
           enabled: true
+
+springdoc:
+  enable-native-support: true
+  api-docs:
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    config-url: /v3/api-docs/swagger-config
+    urls:
+      - url: /v3/api-docs
+        name: GATEWAY SERVICE
+      - url: /user-service/v3/api-docs
+        name: USER SERVICE
+      - url: /auth-service/v3/api-docs
+        name: AUTH SERVICE
+      - url: /slack-service/v3/api-docs
+        name: SLACK SERVICE
+      - url: /hub-service/v3/api-docs
+        name: HUB SERVICE
+      - url: /company-service/v3/api-docs
+        name: COMPANY SERVICE
+      - url: /product-service/v3/api-docs
+        name: PRODUCT SERVICE
+      - url: /order-service/v3/api-docs
+        name: ORDER SERVICE
+      - url: /delivery-service/v3/api-docs
+        name: DELIVERY SERVICE
 
 jwt:
   secret:
@@ -62,4 +89,4 @@ jwt:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:19090/eureka/
+      defaultZone: ${EUREKA_DEFAULTZONE}
