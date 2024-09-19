@@ -106,8 +106,6 @@ public class DeliveryHistoryScheduleService {
                 DirectionResponseDto deliveryDirectionInfo = directionService.getDeliveryDirectionInfo(
                         startSb.toString(), endSb.toString());
 
-                System.out.println(deliveryDirectionInfo);
-
                 for (int i = 0; i < deliveryDirectionInfo.route().traoptimal().size(); i++) {
                     DirectionResponseDtoRouteTraoptimal traoptimal = deliveryDirectionInfo.route()
                             .traoptimal().get(i);
@@ -154,7 +152,6 @@ public class DeliveryHistoryScheduleService {
                 SlackCreateRequestDto slackCreateRequestDto = new SlackCreateRequestDto(
                         hubDeliveryManId, slackSb.toString());
 
-                System.out.println(slackSb);
                 slackKafkaTemplate.send("ai.slack", slackCreateRequestDto);
             }
         }
