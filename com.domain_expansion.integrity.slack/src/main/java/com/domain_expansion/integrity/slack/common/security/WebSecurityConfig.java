@@ -50,6 +50,8 @@ public class WebSecurityConfig {
 //                        "/api/v1/ais/company-delivery/sequence"
 //                    ) // 내부 서비스에서 ai 호출
 //                    .permitAll()
+                    .requestMatchers("/slack-service/v3/api-docs", "/slack-service/swagger-ui.html")
+                    .permitAll() // swagger 설정
                     .anyRequest()
                     .authenticated()
         );
