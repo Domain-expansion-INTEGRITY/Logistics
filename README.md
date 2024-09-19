@@ -85,7 +85,7 @@ docker-compose up -d
 
 ## ERD Diagram
 
-![ERD v1.png](..%2F..%2F..%2F..%2F..%2FDownloads%2FERD%20v1.png)
+![ERD v1](https://github.com/user-attachments/assets/fc3ea786-90d6-43dd-981a-93d90ada1777)
 
 ## 트러블 슈팅
 
