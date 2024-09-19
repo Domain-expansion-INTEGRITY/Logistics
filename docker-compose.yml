@@ -110,13 +110,12 @@ services:
     networks:
       - spring-network  # Spring 서버가 기본적으로 사용할 네트워크
     depends_on:
-      - eureka-server
       - user-service
 
   hub-service:
     build: ./com.domain_expansion.integrity.hub/.
     ports:
-      - "19099:19093"
+      - "19093:19093"
     environment:
       - DEV_DB_URL=${DEV_DB_URL}
       - DEV_DB_USERNAME=${DEV_DB_USERNAME}
