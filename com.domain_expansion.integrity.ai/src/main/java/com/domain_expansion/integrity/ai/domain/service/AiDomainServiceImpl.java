@@ -25,7 +25,7 @@ public class AiDomainServiceImpl implements AiDomainService {
     private final AiPromptRepository aiPromptRepository;
 
     @Override
-//    @Cacheable(cacheNames = "gemini", key = "args[1]")
+    @Cacheable(cacheNames = "gemini", key = "args[1]")
     public String generateAiAnswer(String question, String redisKey) {
         String geminiKey = geminiProperty.key();
 
@@ -44,7 +44,7 @@ public class AiDomainServiceImpl implements AiDomainService {
     }
 
     @Override
-//    @Cacheable(cacheNames = "promptCache", key = "args[0]")
+    @Cacheable(cacheNames = "promptCache", key = "args[0]")
     public AiPrompt findByTypeAndCheck(PromptType promptType) {
         return aiPromptRepository.findByName(promptType)
             .orElseThrow(() -> new AiException(
