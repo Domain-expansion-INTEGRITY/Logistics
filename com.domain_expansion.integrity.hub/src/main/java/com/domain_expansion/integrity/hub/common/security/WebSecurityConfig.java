@@ -1,4 +1,5 @@
 package com.domain_expansion.integrity.hub.common.security;
+
 import com.domain_expansion.integrity.hub.common.jwt.JwtUtils;
 import com.domain_expansion.integrity.hub.infrastructure.filter.JwtAuthorizationFilter;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -27,9 +28,10 @@ public class WebSecurityConfig {
     public WebSecurityConfig(JwtUtils jwtUtils) {
         this.jwtUtils = jwtUtils;
     }
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)
-            throws Exception {
+        throws Exception {
         return configuration.getAuthenticationManager();
     }
 
@@ -45,17 +47,19 @@ public class WebSecurityConfig {
 
         // 기본 설정인 Session 방식은 사용하지 않고 JWT 방식을 사용하기 위한 설정
         http.sessionManagement(
-                (sessionManagement) ->
-                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+            (sessionManagement) ->
+                sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.authorizeHttpRequests(
-                (authorizeHttpRequests) ->
-                        authorizeHttpRequests
-                                .requestMatchers(
-                                        PathRequest.toStaticResources().atCommonLocations())
-                                .permitAll() // resources 접근 허용 설정
-                                .anyRequest()
-                                .authenticated() // 그 외 모든 요청 인증처리
+            (authorizeHttpRequests) ->
+                authorizeHttpRequests
+                    .requestMatchers(
+                        PathRequest.toStaticResources().atCommonLocations())
+                    .permitAll() // resources 접근 허용 설정
+                    .requestMatchers("/hub-service/v3/api-docs", "/hub-service/swagger-ui.html")
+                    .permitAll() // swagger 설정
+                    .anyRequest()
+                    .authenticated() // 그 외 모든 요청 인증처리
         );
 
         http.cors(Customizer.withDefaults());
